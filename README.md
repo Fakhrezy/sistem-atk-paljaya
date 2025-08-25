@@ -1,8 +1,9 @@
-Admin:
+## Admin
 
-Email: admin@example.com
-Password: password
-User:
+- **Email:** `admin@example.com`
+- **Password:** `password`
 
-Email: user@example.com
-Password: password
+## User
+
+- **Email:** `user@example.com`
+- **Password:** `password`
