@@ -27,6 +27,11 @@
                         </div>
 
                         <div>
+                            <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
+                            <input type="number" name="stok" id="stok" value="{{ $barang->stok }}" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                        </div>
+
+                        <div>
                             <label for="jenis" class="block text-sm font-medium text-gray-700">Jenis</label>
                             <select name="jenis" id="jenis" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 <option value="atk" {{ $barang->jenis == 'atk' ? 'selected' : '' }}>ATK</option>

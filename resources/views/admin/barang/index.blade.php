@@ -36,19 +36,20 @@
                         <table class="w-full table-fixed border-collapse">
                             <thead>
                                 <tr class="bg-gray-100">
-                                    <th scope="col" class="w-[12%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">ID Barang</th>
-                                    <th scope="col" class="w-[18%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Nama Barang</th>
-                                    <th scope="col" class="w-[10%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Satuan</th>
-                                    <th scope="col" class="w-[15%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Harga</th>
+                                    <th scope="col" class="w-[10%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">ID Barang</th>
+                                    <th scope="col" class="w-[16%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Nama Barang</th>
+                                    <th scope="col" class="w-[8%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Satuan</th>
+                                    <th scope="col" class="w-[12%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Harga</th>
+                                    <th scope="col" class="w-[8%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Stok</th>
                                     <th scope="col" class="w-[10%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Jenis</th>
-                                    <th scope="col" class="w-[15%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Foto</th>
+                                    <th scope="col" class="w-[16%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Foto</th>
                                     <th scope="col" class="w-[20%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($barang as $item)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200 ease-in-out">
-                                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-300">
+                                                                        <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-300">
                                         <span class="font-mono text-sm">{{ $item->id_barang }}</span>
                                     </td>
                                     <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
@@ -57,12 +58,17 @@
                                     <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
                                         <span class="px-2 py-1 text-sm text-gray-600 bg-gray-100 rounded-full">{{ $item->satuan }}</span>
                                     </td>
-                                    <td class="px-4 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
                                         <span class="text-sm font-semibold text-green-600">
                                             Rp {{ number_format($item->harga_barang, 0, ',', '.') }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                        <span class="text-sm font-medium {{ $item->stok > 10 ? 'text-green-600' : ($item->stok > 0 ? 'text-yellow-600' : 'text-red-600') }}">
+                                            {{ $item->stok }}
+                                        </span>
+                                    </td>
+                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
                                         <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                             {{ ucfirst($item->jenis) }}
                                         </span>
