@@ -32,47 +32,47 @@
                         </a>
                     </div>
 
-                    <div class="overflow-x-auto bg-white rounded-lg shadow-md w-full">
+                    <div class="bg-white rounded-lg shadow-md w-full">
                         <table class="w-full table-fixed border-collapse">
                             <thead>
                                 <tr class="bg-gray-100">
-                                    <th scope="col" class="w-[12%] px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">ID Barang</th>
-                                    <th scope="col" class="w-[20%] px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Nama Barang</th>
-                                    <th scope="col" class="w-[12%] px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Satuan</th>
-                                    <th scope="col" class="w-[15%] px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Harga</th>
-                                    <th scope="col" class="w-[12%] px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Jenis</th>
-                                    <th scope="col" class="w-[12%] px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Foto</th>
-                                    <th scope="col" class="w-[17%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Aksi</th>
+                                    <th scope="col" class="w-[12%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">ID Barang</th>
+                                    <th scope="col" class="w-[18%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Nama Barang</th>
+                                    <th scope="col" class="w-[10%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Satuan</th>
+                                    <th scope="col" class="w-[15%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Harga</th>
+                                    <th scope="col" class="w-[10%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Jenis</th>
+                                    <th scope="col" class="w-[15%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Foto</th>
+                                    <th scope="col" class="w-[20%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($barang as $item)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200 ease-in-out">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-300">
-                                        <span class="font-mono">{{ $item->id_barang }}</span>
+                                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-300">
+                                        <span class="font-mono text-sm">{{ $item->id_barang }}</span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
                                         <div class="text-sm font-medium text-gray-900">{{ $item->nama_barang }}</div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        <span class="px-3 py-1 text-sm text-gray-600 bg-gray-100 rounded-full">{{ $item->satuan }}</span>
+                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                        <span class="px-2 py-1 text-sm text-gray-600 bg-gray-100 rounded-full">{{ $item->satuan }}</span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-4 py-4 whitespace-nowrap border border-gray-300">
                                         <span class="text-sm font-semibold text-green-600">
                                             Rp {{ number_format($item->harga_barang, 0, ',', '.') }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    <td class="px-4 py-4 whitespace-nowrap border border-gray-300">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                             {{ ucfirst($item->jenis) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
                                         @if($item->foto)
-                                            <div class="flex justify-center">
+                                            <div class="flex justify-center p-1">
                                                 <img src="{{ asset('storage/'.$item->foto) }}"
                                                      alt="{{ $item->nama_barang }}"
-                                                     class="h-7.5 w-7.5 object-cover rounded-md shadow-sm hover:shadow-md transition-shadow duration-200">
+                                                     style="width: 90px; height: 90px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
                                             </div>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
