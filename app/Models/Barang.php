@@ -47,4 +47,10 @@ class Barang extends Model
             }
         });
     }
+
+    // Relationship dengan tabel monitoring
+    public function monitoring()
+    {
+        return $this->hasMany(Monitoring::class, 'id_barang', 'id_barang');
+    }
 }
