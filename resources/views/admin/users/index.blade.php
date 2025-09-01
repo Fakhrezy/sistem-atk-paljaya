@@ -75,45 +75,60 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-lg shadow-md w-full overflow-x-auto">
-                        <table class="w-full table-fixed border-collapse min-w-max">
+                    <div class="bg-white rounded-lg shadow-md w-full">
+                        <table class="w-full border-collapse">
                             <thead>
                                 <tr class="bg-gray-100">
-                                    <th scope="col" class="w-[5%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">ID</th>
-                                    <th scope="col" class="w-[25%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Nama</th>
-                                    <th scope="col" class="w-[30%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Email</th>
-                                    <th scope="col" class="w-[10%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Role</th>
-                                    <th scope="col" class="w-[15%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Bergabung</th>
-                                    <th scope="col" class="w-[15%] px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Aksi</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">ID</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Nama</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Email</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Role</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Bidang</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Bergabung</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($users as $user)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200 ease-in-out">
-                                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-300">
+                                    <td class="px-3 py-4 text-sm font-medium text-gray-900 border border-gray-300">
                                         <span class="font-mono text-sm">{{ $user->id }}</span>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 border border-gray-300">
                                         <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
-                                        <div class="text-sm text-gray-600">{{ $user->email }}</div>
+                                    <td class="px-3 py-4 border border-gray-300">
+                                        <div class="text-sm text-gray-600 break-all">{{ $user->email }}</div>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 border border-gray-300">
                                         <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' }}">
                                             {{ ucfirst($user->role) }}
                                         </span>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 border border-gray-300">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
+                                            @if($user->bidang === 'teknik')
+                                                bg-green-100 text-green-800
+                                            @elseif($user->bidang === 'pemasaran')
+                                                bg-purple-100 text-purple-800
+                                            @elseif($user->bidang === 'keuangan')
+                                                bg-yellow-100 text-yellow-800
+                                            @else
+                                                bg-gray-100 text-gray-800
+                                            @endif">
+                                            {{ ucfirst($user->bidang) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-3 py-4 border border-gray-300">
                                         <span class="text-sm text-gray-600">
                                             {{ $user->created_at->format('d/m/Y') }}
                                         </span>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium border border-gray-300">
-                                        <div class="flex items-center space-x-2">
+                                    <td class="px-3 py-4 text-sm font-medium border border-gray-300">
+                                        <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
                                             <a href="{{ route('admin.users.edit', $user) }}"
-                                               class="group inline-flex items-center px-3 py-1.5 border border-indigo-300 text-indigo-600 hover:bg-indigo-50 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out">
-                                                <svg class="w-4 h-4 mr-1 text-indigo-500 group-hover:text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                               class="group inline-flex items-center px-2 py-1 border border-indigo-300 text-indigo-600 hover:bg-indigo-50 rounded-md text-xs font-medium transition-colors duration-150 ease-in-out">
+                                                <svg class="w-3 h-3 mr-1 text-indigo-500 group-hover:text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                           d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                                 </svg>
@@ -127,8 +142,8 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
-                                                            class="group inline-flex items-center px-3 py-1.5 border border-red-300 text-red-600 hover:bg-red-50 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out">
-                                                        <svg class="w-4 h-4 mr-1 text-red-500 group-hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            class="group inline-flex items-center px-2 py-1 border border-red-300 text-red-600 hover:bg-red-50 rounded-md text-xs font-medium transition-colors duration-150 ease-in-out">
+                                                        <svg class="w-3 h-3 mr-1 text-red-500 group-hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                         </svg>
@@ -141,7 +156,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-8 text-center">
+                                    <td colspan="7" class="px-6 py-8 text-center">
                                         <div class="flex flex-col items-center justify-center">
                                             <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

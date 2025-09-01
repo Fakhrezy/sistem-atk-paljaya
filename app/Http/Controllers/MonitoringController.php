@@ -26,7 +26,7 @@ class MonitoringController extends Controller
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('id_monitoring', 'like', "%{$search}%")
-                  ->orWhere('keperluan', 'like', "%{$search}%")
+                  ->orWhere('bidang', 'like', "%{$search}%")
                   ->orWhere('pengambil', 'like', "%{$search}%")
                   ->orWhereHas('barang', function($q) use ($search) {
                       $q->where('nama_barang', 'like', "%{$search}%");
@@ -59,7 +59,6 @@ class MonitoringController extends Controller
     {
         $request->validate([
             'tanggal' => 'required|date',
-            'keperluan' => 'required|string|max:255',
             'pengambil' => 'required|string|max:255',
             'id_barang' => 'required|exists:barang,id_barang',
             'debit' => 'nullable|integer|min:0',
@@ -85,10 +84,10 @@ class MonitoringController extends Controller
             return back()->withErrors(['kredit' => 'Stok tidak mencukupi untuk pengeluaran ini'])->withInput();
         }
 
-        // Simpan monitoring
+        // Simpan monitoring dengan bidang otomatis dari user yang login
         Monitoring::create([
             'tanggal' => $request->tanggal,
-            'keperluan' => $request->keperluan,
+            'bidang' => auth()->user()->bidang, // Otomatis dari user login
             'pengambil' => $request->pengambil,
             'id_barang' => $request->id_barang,
             'debit' => $debit,
@@ -127,7 +126,6 @@ class MonitoringController extends Controller
     {
         $request->validate([
             'tanggal' => 'required|date',
-            'keperluan' => 'required|string|max:255',
             'pengambil' => 'required|string|max:255',
             'id_barang' => 'required|exists:barang,id_barang',
             'debit' => 'nullable|integer|min:0',
@@ -163,10 +161,10 @@ class MonitoringController extends Controller
             return back()->withErrors(['kredit' => 'Stok tidak mencukupi untuk pengeluaran ini'])->withInput();
         }
 
-        // Update monitoring
+        // Update monitoring dengan bidang otomatis dari user yang login
         $monitoring->update([
             'tanggal' => $request->tanggal,
-            'keperluan' => $request->keperluan,
+            'bidang' => auth()->user()->bidang, // Otomatis dari user login
             'pengambil' => $request->pengambil,
             'id_barang' => $request->id_barang,
             'debit' => $debit,

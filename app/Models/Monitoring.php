@@ -17,7 +17,7 @@ class Monitoring extends Model
     protected $fillable = [
         'id_monitoring',
         'tanggal',
-        'keperluan',
+        'bidang',
         'pengambil',
         'id_barang',
         'debit',

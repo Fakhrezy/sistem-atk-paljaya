@@ -91,6 +91,21 @@
                                     <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
                                 </select>
                             </div>
+
+                            <div>
+                                <label for="bidang" class="block text-sm font-medium text-gray-700">Bidang</label>
+                                <select name="bidang"
+                                        id="bidang"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                                        required>
+                                    <option value="">Pilih Bidang</option>
+                                    <option value="teknik" {{ old('bidang', $user->bidang) == 'teknik' ? 'selected' : '' }}>Teknik</option>
+                                    <option value="pemasaran" {{ old('bidang', $user->bidang) == 'pemasaran' ? 'selected' : '' }}>Pemasaran</option>
+                                    <option value="umum" {{ old('bidang', $user->bidang) == 'umum' ? 'selected' : '' }}>Umum</option>
+                                    <option value="keuangan" {{ old('bidang', $user->bidang) == 'keuangan' ? 'selected' : '' }}>Keuangan</option>
+                                    <option value="lainnya" {{ old('bidang', $user->bidang) == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-end space-x-4">

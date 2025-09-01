@@ -34,7 +34,7 @@
                         <div>
                             <label for="search" class="block text-sm font-medium text-gray-700">Pencarian</label>
                             <input type="text" name="search" id="search" value="{{ request('search') }}"
-                                   placeholder="Cari ID, keperluan, pengambil..."
+                                   placeholder="Cari ID, bidang, pengambil..."
                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div>
@@ -95,7 +95,7 @@
                                     Barang
                                 </th>
                                 <th class="px-4 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Keperluan
+                                    Bidang
                                 </th>
                                 <th class="px-4 py-3 border-b text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Pengambil
@@ -127,7 +127,7 @@
                                     {{ $item->barang->nama_barang ?? 'Barang tidak ditemukan' }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $item->keperluan }}
+                                    {{ $item->bidang }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ $item->pengambil }}

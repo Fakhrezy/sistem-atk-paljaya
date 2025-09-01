@@ -69,18 +69,21 @@
                             @enderror
                         </div>
 
-                        <!-- Keperluan -->
+                        <!-- Bidang -->
                         <div>
-                            <label for="keperluan" class="block text-sm font-medium text-gray-700">
-                                Keperluan <span class="text-red-500">*</span>
+                            <label for="bidang" class="block text-sm font-medium text-gray-700">
+                                Bidang <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="keperluan" id="keperluan"
-                                   value="{{ old('keperluan') }}"
-                                   placeholder="Masukkan keperluan..."
-                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('keperluan') border-red-500 @enderror">
-                            @error('keperluan')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                            <input type="text" name="bidang" id="bidang"
+                                   value="{{ auth()->user()->bidang }}"
+                                   readonly
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-600 cursor-not-allowed">
+                            <p class="mt-1 text-sm text-blue-600">
+                                <svg class="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Bidang otomatis terisi berdasarkan profil Anda
+                            </p>
                         </div>
 
                         <!-- Pengambil -->

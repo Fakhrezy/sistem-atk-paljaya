@@ -57,6 +57,7 @@ class AdminUserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:admin,user',
+            'bidang' => 'required|in:teknik,pemasaran,umum,keuangan,lainnya',
         ]);
 
         User::create([
@@ -64,6 +65,7 @@ class AdminUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'bidang' => $request->bidang,
             'email_verified_at' => now(),
         ]);
 
@@ -96,12 +98,14 @@ class AdminUserController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|in:admin,user',
+            'bidang' => 'required|in:teknik,pemasaran,umum,keuangan,lainnya',
         ]);
 
         $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
+            'bidang' => $request->bidang,
         ];
 
         if ($request->filled('password')) {
