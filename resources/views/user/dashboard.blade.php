@@ -15,7 +15,6 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-2xl font-semibold text-gray-800">Selamat Datang, {{ Auth::user()->name }}!</h2>
-                        <p class="mt-1 text-sm text-gray-600">Bidang: {{ ucfirst(Auth::user()->bidang) }}</p>
                     </div>
                     <div class="text-right">
                         @php

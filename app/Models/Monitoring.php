@@ -16,6 +16,7 @@ class Monitoring extends Model
 
     protected $fillable = [
         'id_monitoring',
+        'id_pengambilan',
         'tanggal',
         'bidang',
         'pengambil',
@@ -24,6 +25,7 @@ class Monitoring extends Model
         'kredit',
         'saldo',
         'keterangan',
+        'status',
     ];
 
     protected $casts = [
@@ -31,12 +33,19 @@ class Monitoring extends Model
         'debit' => 'integer',
         'kredit' => 'integer',
         'saldo' => 'integer',
+        'status' => 'string',
     ];
 
     // Relationship dengan tabel barang
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'id_barang', 'id_barang');
+    }
+
+    // Relationship dengan tabel pengambilan
+    public function pengambilan()
+    {
+        return $this->belongsTo(Pengambilan::class, 'id_pengambilan', 'id_pengambilan');
     }
 
     // Generate ID monitoring otomatis

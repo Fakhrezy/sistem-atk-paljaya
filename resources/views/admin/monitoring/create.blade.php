@@ -98,6 +98,21 @@
                             @enderror
                         </div>
 
+                        <!-- Status -->
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-700">
+                                Status
+                            </label>
+                            <select name="status" id="status"
+                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('status') border-red-500 @enderror">
+                                <option value="diajukan" {{ old('status', 'diajukan') == 'diajukan' ? 'selected' : '' }}>Diajukan</option>
+                                <option value="diterima" {{ old('status') == 'diterima' ? 'selected' : '' }}>Diterima</option>
+                            </select>
+                            @error('status')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Debit -->
                         <div>
                             <label for="debit" class="block text-sm font-medium text-gray-700">

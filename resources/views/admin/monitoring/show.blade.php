@@ -66,6 +66,20 @@
                         <span class="text-sm font-medium text-gray-600">Pengambil</span>
                         <span class="font-semibold text-gray-900">{{ $monitoring->pengambil }}</span>
                     </div>
+                    <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                        <span class="text-sm font-medium text-gray-600">Status</span>
+                        <span class="font-semibold">
+                            @if($monitoring->status === 'diterima')
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                    Diterima
+                                </span>
+                            @else
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    Diajukan
+                                </span>
+                            @endif
+                        </span>
+                    </div>
                     @if($monitoring->keterangan)
                     <div class="py-2">
                         <span class="block mb-2 text-sm font-medium text-gray-600">Keterangan</span>

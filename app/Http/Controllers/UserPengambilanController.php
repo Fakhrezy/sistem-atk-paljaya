@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Barang;
-use App\Models\Monitoring;
+use App\Models\Cart;
+use Illuminate\Support\Facades\Auth;
 
 class UserPengambilanController extends Controller
 {
@@ -14,7 +15,7 @@ class UserPengambilanController extends Controller
     }
 
     /**
-     * Display a listing of available items for user to take directly
+     * Display a listing of available items for user to add to cart
      */
     public function index(Request $request)
     {
@@ -43,6 +44,17 @@ class UserPengambilanController extends Controller
 
         $barang = $query->paginate($perPage);
 
+        // Calculate available stock (actual stock minus items in cart)
+        foreach ($barang as $item) {
+            $cartQuantity = Cart::where('id_barang', $item->id_barang)
+                ->sum('quantity');
+
+            $item->available_stock = $item->stok - $cartQuantity;
+
+            // Make sure available stock doesn't go below 0
+            $item->available_stock = max(0, $item->available_stock);
+        }
+
         // Get distinct jenis for filter dropdown
         $jenisBarang = Barang::where('stok', '>', 0)
             ->distinct()
@@ -53,49 +65,19 @@ class UserPengambilanController extends Controller
     }
 
     /**
-     * Show the form for creating a new pengambilan
+     * Get current available stock for a specific item
      */
-    public function create(Request $request)
+    public function getStock(Barang $barang)
     {
-        $barang_id = $request->input('barang_id');
-        $barang = Barang::findOrFail($barang_id);
+        $cartQuantity = Cart::where('id_barang', $barang->id_barang)
+            ->sum('quantity');
 
-        return view('user.pengambilan.create', compact('barang'));
-    }
+        $availableStock = max(0, $barang->stok - $cartQuantity);
 
-    /**
-     * Store a newly created pengambilan in storage
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'barang_id' => 'required|exists:barang,id',
-            'jumlah' => 'required|integer|min:1',
-            'bidang' => 'required|in:umum,perencanaan,keuangan,operasional,lainnya',
-            'keterangan' => 'nullable|string|max:255',
+        return response()->json([
+            'available_stock' => $availableStock,
+            'original_stock' => $barang->stok,
+            'cart_quantity' => $cartQuantity
         ]);
-
-        $barang = Barang::findOrFail($request->barang_id);
-
-        // Cek apakah stok mencukupi
-        if ($barang->stok < $request->jumlah) {
-            return back()->withErrors(['jumlah' => 'Stok tidak mencukupi. Stok tersedia: ' . $barang->stok]);
-        }
-
-        // Buat record monitoring
-        Monitoring::create([
-            'user_id' => auth()->id(),
-            'barang_id' => $request->barang_id,
-            'jumlah' => $request->jumlah,
-            'bidang' => $request->bidang,
-            'keterangan' => $request->keterangan,
-            'tanggal_pengambilan' => now(),
-        ]);
-
-        // Update stok barang
-        $barang->decrement('stok', $request->jumlah);
-
-        return redirect()->route('user.pengambilan.index')
-            ->with('success', 'Berhasil mengambil barang: ' . $barang->nama_barang . ' sebanyak ' . $request->jumlah . ' ' . $barang->satuan);
     }
 }

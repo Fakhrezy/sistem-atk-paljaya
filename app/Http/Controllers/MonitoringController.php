@@ -34,6 +34,11 @@ class MonitoringController extends Controller
             });
         }
 
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
         // Filter berdasarkan tanggal
         if ($request->filled('tanggal_dari') && $request->filled('tanggal_sampai')) {
             $query->whereBetween('tanggal', [$request->tanggal_dari, $request->tanggal_sampai]);
@@ -64,6 +69,7 @@ class MonitoringController extends Controller
             'debit' => 'nullable|integer|min:0',
             'kredit' => 'nullable|integer|min:0',
             'keterangan' => 'nullable|string',
+            'status' => 'nullable|in:diajukan,diterima',
         ]);
 
         // Pastikan salah satu dari debit atau kredit diisi
@@ -94,6 +100,7 @@ class MonitoringController extends Controller
             'kredit' => $kredit,
             'saldo' => $saldoBaru,
             'keterangan' => $request->keterangan,
+            'status' => $request->status ?? 'diajukan', // Default status diajukan
         ]);
 
         // Update stok barang
@@ -131,6 +138,7 @@ class MonitoringController extends Controller
             'debit' => 'nullable|integer|min:0',
             'kredit' => 'nullable|integer|min:0',
             'keterangan' => 'nullable|string',
+            'status' => 'nullable|in:diajukan,diterima',
         ]);
 
         // Pastikan salah satu dari debit atau kredit diisi
@@ -171,6 +179,7 @@ class MonitoringController extends Controller
             'kredit' => $kredit,
             'saldo' => $saldoBaru,
             'keterangan' => $request->keterangan,
+            'status' => $request->status ?? $monitoring->status,
         ]);
 
         // Update stok barang baru
