@@ -86,9 +86,9 @@
             <!-- Main Content -->
             <div class="flex-1 flex flex-col overflow-hidden">
                 <!-- Top Navigation -->
-                <div class="bg-white shadow">
-                    <div class="px-4 py-6">
-                        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                <div class="bg-blue-500 shadow">
+                    <div class="px-4 py-5">
+                        <h2 class="text-xl font-bold leading-tight text-white">
                             @yield('header', 'Dashboard')
                         </h2>
                     </div>
@@ -100,6 +100,9 @@
                 </main>
             </div>
         </div>
+    </div>
+    <div>
+        <ul
     </div>
 </body>
 </html>

@@ -3,9 +3,7 @@
 @section('title', 'Edit Monitoring')
 
 @section('header')
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Edit Monitoring Barang') }}
-    </h2>
+    SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
 @endsection
 
 @section('content')

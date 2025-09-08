@@ -47,15 +47,6 @@
                             </a>
 
                             <!-- Cart Link -->
-                            <a href="{{ route('user.cart.index') }}"
-                               class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-blue-700 {{ request()->routeIs('user.cart*') ? 'bg-blue-700' : '' }} relative">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8.5m-8.5 0L12 21"/>
-                                </svg>
-                                Keranjang
-                                <span id="sidebar-cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center" style="display: none; font-size: 10px;">0</span>
-                            </a>
-
                             <!-- History/Riwayat Link (future feature) -->
                             <a href="#"
                                class="flex items-center px-4 py-2 text-sm font-medium text-blue-300 rounded-lg opacity-50 cursor-not-allowed">
@@ -129,35 +120,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Update cart count on page load for sidebar -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            updateSidebarCartCount();
-        });
-
-        function updateSidebarCartCount() {
-            fetch('/user/cart/count')
-            .then(response => response.json())
-            .then(data => {
-                const sidebarCartBadge = document.getElementById('sidebar-cart-count');
-                if (sidebarCartBadge) {
-                    sidebarCartBadge.textContent = data.count;
-                    sidebarCartBadge.style.display = data.count > 0 ? 'flex' : 'none';
-                }
-
-                // Also update main cart count if exists
-                const cartBadge = document.getElementById('cart-count');
-                if (cartBadge) {
-                    cartBadge.textContent = data.count;
-                    cartBadge.style.display = data.count > 0 ? 'inline' : 'none';
-                }
-            })
-            .catch(error => console.error('Error updating cart count:', error));
-        }
-
-        // Make function available globally
-        window.updateCartCount = updateSidebarCartCount;
-    </script>
 </body>
 </html>

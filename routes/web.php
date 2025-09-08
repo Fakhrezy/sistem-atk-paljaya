@@ -71,20 +71,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', [App\Http\Controllers\UserController::class, 'dashboard'])->name('user.dashboard');
 
-    // Pengambilan Barang Routes (hanya index untuk browse barang)
+    // Pengambilan Barang Routes (direct pengambilan)
     Route::controller(App\Http\Controllers\UserPengambilanController::class)->group(function () {
         Route::get('/user/pengambilan', 'index')->name('user.pengambilan.index');
-    });
-
-    // Cart Routes
-    Route::controller(App\Http\Controllers\UserCartController::class)->group(function () {
-        Route::get('/user/cart', 'index')->name('user.cart.index');
-        Route::post('/user/cart/add', 'add')->name('user.cart.add');
-        Route::put('/user/cart/{cart}', 'update')->name('user.cart.update');
-        Route::delete('/user/cart/{cart}', 'remove')->name('user.cart.remove');
-        Route::delete('/user/cart', 'clear')->name('user.cart.clear');
-        Route::post('/user/cart/checkout', 'checkout')->name('user.cart.checkout');
-        Route::get('/user/cart/count', 'count')->name('user.cart.count');
+        Route::get('/user/pengambilan/create', 'create')->name('user.pengambilan.create');
+        Route::post('/user/pengambilan', 'store')->name('user.pengambilan.store');
     });
 });
 

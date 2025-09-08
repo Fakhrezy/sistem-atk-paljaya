@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Barang;
+use App\Models\Monitoring;
 
 class UserPengambilanController extends Controller
 {
@@ -13,7 +14,7 @@ class UserPengambilanController extends Controller
     }
 
     /**
-     * Display a listing of available items for user to add to cart
+     * Display a listing of available items for user to take directly
      */
     public function index(Request $request)
     {
@@ -49,5 +50,52 @@ class UserPengambilanController extends Controller
             ->sort();
 
         return view('user.pengambilan.index', compact('barang', 'jenisBarang'));
+    }
+
+    /**
+     * Show the form for creating a new pengambilan
+     */
+    public function create(Request $request)
+    {
+        $barang_id = $request->input('barang_id');
+        $barang = Barang::findOrFail($barang_id);
+
+        return view('user.pengambilan.create', compact('barang'));
+    }
+
+    /**
+     * Store a newly created pengambilan in storage
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'barang_id' => 'required|exists:barang,id',
+            'jumlah' => 'required|integer|min:1',
+            'bidang' => 'required|in:umum,perencanaan,keuangan,operasional,lainnya',
+            'keterangan' => 'nullable|string|max:255',
+        ]);
+
+        $barang = Barang::findOrFail($request->barang_id);
+
+        // Cek apakah stok mencukupi
+        if ($barang->stok < $request->jumlah) {
+            return back()->withErrors(['jumlah' => 'Stok tidak mencukupi. Stok tersedia: ' . $barang->stok]);
+        }
+
+        // Buat record monitoring
+        Monitoring::create([
+            'user_id' => auth()->id(),
+            'barang_id' => $request->barang_id,
+            'jumlah' => $request->jumlah,
+            'bidang' => $request->bidang,
+            'keterangan' => $request->keterangan,
+            'tanggal_pengambilan' => now(),
+        ]);
+
+        // Update stok barang
+        $barang->decrement('stok', $request->jumlah);
+
+        return redirect()->route('user.pengambilan.index')
+            ->with('success', 'Berhasil mengambil barang: ' . $barang->nama_barang . ' sebanyak ' . $request->jumlah . ' ' . $barang->satuan);
     }
 }

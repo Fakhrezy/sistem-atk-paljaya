@@ -3,7 +3,7 @@
 @section('title', 'Edit User')
 
 @section('header')
-    Edit User
+    SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
 @endsection
 
 @section('content')

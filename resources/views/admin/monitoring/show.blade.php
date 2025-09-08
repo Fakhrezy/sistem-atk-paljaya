@@ -3,7 +3,7 @@
 @section('title', 'Detail Monitoring')
 
 @section('header')
-    Detail Monitoring Barang
+    SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
 @endsection
 
 @section('content')

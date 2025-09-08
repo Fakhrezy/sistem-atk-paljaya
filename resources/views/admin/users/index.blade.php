@@ -3,7 +3,7 @@
 @section('title', 'Data Users')
 
 @section('header')
-    Data Users
+    SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
 @endsection
 
 @section('content')

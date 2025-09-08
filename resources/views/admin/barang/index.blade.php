@@ -3,7 +3,7 @@
 @section('title', 'Data Barang')
 
 @section('header')
-    Data Barang
+    SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
 @endsection
 
 @section('content')

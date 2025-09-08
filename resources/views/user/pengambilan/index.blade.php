@@ -15,17 +15,7 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Daftar Barang Tersedia</h2>
-                            <p class="mt-1 text-sm text-gray-600">Tambahkan barang ke keranjang untuk pengambilan</p>
-                        </div>
-                        <div>
-                            <a href="{{ route('user.cart.index') }}"
-                               class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 relative">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8.5m-8.5 0L12 21"/>
-                                </svg>
-                                Keranjang
-                                <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
-                            </a>
+                            <p class="mt-1 text-sm text-gray-600">Pilih barang untuk pengambilan langsung</p>
                         </div>
                     </div>
                 </div>
@@ -138,13 +128,13 @@
 
                                     <!-- Action Button -->
                                     @if($item->stok > 0)
-                                        <button onclick="addToCart('{{ $item->id_barang }}', '{{ $item->nama_barang }}')"
-                                                class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                        <a href="{{ route('user.pengambilan.create', ['barang_id' => $item->id_barang]) }}"
+                                           class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8.5m-8.5 0L12 21"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                             </svg>
-                                            Tambah ke Keranjang
-                                        </button>
+                                            Ambil Barang
+                                        </a>
                                     @else
                                         <button disabled
                                                 class="w-full inline-flex items-center justify-center px-4 py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest cursor-not-allowed">
@@ -213,131 +203,4 @@
 }
 </style>
 
-<!-- Add to Cart Modal -->
-<div id="addToCartModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3 text-center">
-            <h3 class="text-lg font-medium text-gray-900">Tambah ke Keranjang</h3>
-            <div class="mt-4">
-                <form id="addToCartForm">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
-                        <input type="number" id="cartQuantity" min="1" value="1"
-                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Bidang</label>
-                        <input type="text" id="cartBidang" value="{{ auth()->user()->bidang ?? '' }}"
-                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan (Opsional)</label>
-                        <textarea id="cartKeterangan" rows="3"
-                                  class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-                    <div class="flex space-x-3">
-                        <button type="button" onclick="closeAddToCartModal()"
-                                class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                            Batal
-                        </button>
-                        <button type="submit"
-                                class="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                            Tambah
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-let currentItemId = null;
-let currentItemName = null;
-
-// Load cart count on page load
-document.addEventListener('DOMContentLoaded', function() {
-    updateCartCount();
-});
-
-function addToCart(itemId, itemName) {
-    currentItemId = itemId;
-    currentItemName = itemName;
-
-    // Reset form
-    document.getElementById('cartQuantity').value = 1;
-    document.getElementById('cartKeterangan').value = '';
-
-    // Show modal
-    document.getElementById('addToCartModal').classList.remove('hidden');
-}
-
-function closeAddToCartModal() {
-    document.getElementById('addToCartModal').classList.add('hidden');
-    currentItemId = null;
-    currentItemName = null;
-}
-
-document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const quantity = document.getElementById('cartQuantity').value;
-    const bidang = document.getElementById('cartBidang').value;
-    const keterangan = document.getElementById('cartKeterangan').value;
-
-    if (!bidang.trim()) {
-        alert('Bidang harus diisi');
-        return;
-    }
-
-    // Send request to add to cart
-    fetch('/user/cart/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            id_barang: currentItemId,
-            quantity: parseInt(quantity),
-            bidang: bidang,
-            keterangan: keterangan
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(`${currentItemName} berhasil ditambahkan ke keranjang!`);
-            updateCartCount();
-            closeAddToCartModal();
-        } else {
-            alert(data.message || 'Terjadi kesalahan saat menambahkan ke keranjang');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menambahkan ke keranjang');
-    });
-});
-
-function updateCartCount() {
-    fetch('/user/cart/count')
-    .then(response => response.json())
-    .then(data => {
-        const cartBadge = document.getElementById('cart-count');
-        if (cartBadge) {
-            cartBadge.textContent = data.count;
-            cartBadge.style.display = data.count > 0 ? 'inline' : 'none';
-        }
-    })
-    .catch(error => console.error('Error updating cart count:', error));
-}
-
-// Close modal when clicking outside
-document.getElementById('addToCartModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeAddToCartModal();
-    }
-});
-</script>
 @endsection

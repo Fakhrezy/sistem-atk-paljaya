@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('header')
-    Admin Dashboard
+    SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
 @endsection
 
 @section('content')
