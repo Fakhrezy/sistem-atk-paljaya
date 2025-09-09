@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title>
+    <title>sismon paljaya</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-pal.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -89,13 +92,13 @@
             <!-- Main Content -->
             <div class="flex flex-col flex-1 overflow-hidden">
                 <!-- Header -->
-                <header class="bg-white shadow-sm">
+                <header class="bg-blue-500 shadow-sm">
                     <div class="flex items-center justify-between px-6 py-4">
-                        <h1 class="text-2xl font-semibold text-gray-900">
-                            @yield('header')
+                        <h1 class="text-2xl font-semibold text-white">
+                            SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
                         </h1>
                         <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-500">
+                            {{-- <span class="text-sm text-gray-500">
                                 @php
                                     $hari = [
                                         'Sunday' => 'Minggu',
@@ -110,7 +113,7 @@
                                     $namaHari = $hari[$now->format('l')];
                                 @endphp
                                 {{ $namaHari }}, {{ $now->format('d F Y') }}
-                            </span>
+                            </span> --}}
                         </div>
                     </div>
                 </header>

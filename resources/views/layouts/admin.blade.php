@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>sismon paljaya</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-pal.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -90,8 +93,8 @@
             <div class="flex-1 flex flex-col overflow-hidden">
                 <!-- Top Navigation -->
                 <div class="bg-blue-500 shadow">
-                    <div class="px-4 py-6">
-                        <h2 class="text-xl font-bold leading-tight text-white">
+                    <div class="px-6 py-4">
+                        <h2 class="text-2xl font-bold leading-tight text-white">
                             @yield('header', 'Dashboard')
                         </h2>
                     </div>

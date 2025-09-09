@@ -204,109 +204,112 @@
 
 <!-- Add to Cart Modal -->
 <div id="addToCartModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 items-center justify-center p-4 hidden">
-    <div class="relative max-w-lg w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
-
+    <div class="relative w-full max-w-lg mx-auto my-8 bg-white rounded-lg shadow-xl overflow-hidden">
         <!-- Modal Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+        <div class="bg-blue-600 px-6 py-4 border-b border-gray-200">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-white bg-opacity-20 p-2 rounded-xl">
-                        <i class="fas fa-cart-plus text-white text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white">Tambah Item untuk Diambil</h3>
-                </div>
-                <button onclick="closeModal()"
-                        class="text-white hover:text-gray-200 p-2 rounded-xl hover:bg-white hover:bg-opacity-20 transition-all duration-200">
-                    <i class="fas fa-times"></i>
+                <h3 class="text-lg font-semibold text-white">
+                    <i class="fas fa-cart-plus mr-2"></i>
+                    Tambah ke Keranjang
+                </h3>
+                <button onclick="closeModal()" class="text-blue-100 hover:text-white">
+                    <i class="fas fa-times text-lg"></i>
                 </button>
             </div>
         </div>
 
         <!-- Modal Body -->
-        <div class="p-6 space-y-6">
+        <div class="p-6">
             <form id="addToCartForm">
                 @csrf
                 <input type="hidden" id="id_barang" name="id_barang">
 
-                <!-- Nama Barang & Jumlah -->
-                <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-gray-700">Nama Barang & Jumlah</label>
-                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                            <!-- Nama Barang -->
-                            <div class="flex-1">
-                                <p class="text-lg font-bold text-gray-900 pr-4" id="barang_nama">Loading...</p>
-                            </div>
-
-                            <!-- Jumlah Controls -->
-                            <div class="flex items-center justify-center sm:justify-end space-x-2">
-                                <button type="button" onclick="decreaseQuantity()"
-                                        class="w-8 h-8 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-500">
-                                    <i class="fas fa-minus text-xs"></i>
-                                </button>
-
-                                <input type="number" id="quantity" name="quantity" min="1" value="1"
-                                       class="w-16 h-8 text-center text-sm font-bold border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-0 bg-white">
-
-                                <button type="button" onclick="increaseQuantity()"
-                                        class="w-8 h-8 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-blue-500">
-                                    <i class="fas fa-plus text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Max Stock Info -->
-                        <div class="mt-3 text-center sm:text-right">
-                            <p class="text-xs text-gray-500">
-                                Max: <span id="max_stock" class="font-semibold text-blue-600">0</span> <span id="satuan" class="font-medium">pcs</span>
-                            </p>
-                        </div>
+                <!-- Nama Barang -->
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                        <i class="fas fa-box mr-1"></i>
+                        Nama Barang
+                    </label>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <p id="barang_nama" class="text-base font-medium text-gray-900 mb-2">Loading...</p>
+                        <p class="text-sm text-gray-500">
+                            Stok tersedia: <span id="max_stock" class="font-semibold">0</span> <span id="satuan">pcs</span>
+                        </p>
                     </div>
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                        <i class="fas fa-calculator mr-1"></i>
+                        Jumlah yang Diambil
+                    </label>
+                    <div class="flex items-center justify-center space-x-4">
+                        <button type="button" onclick="decreaseQuantity()"
+                                class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full text-gray-700 flex items-center justify-center">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" id="quantity" name="quantity" min="1" value="1"
+                               class="w-20 h-10 text-center text-lg font-medium border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="button" onclick="increaseQuantity()"
+                                class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full text-gray-700 flex items-center justify-center">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pengambil -->
+                <div class="mb-5">
+                    <label for="pengambil" class="block text-sm font-medium text-gray-700 mb-3">
+                        <i class="fas fa-user mr-1"></i>
+                        Nama Pengambil <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="pengambil" name="pengambil" required
+                           class="w-full h-12 px-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Masukkan nama pengambil barang">
                 </div>
 
                 <!-- Bidang -->
-                <div class="space-y-2">
-                    <label for="bidang" class="block text-sm font-semibold text-gray-700">Bidang <span class="text-red-500">*</span></label>
-                    <div class="relative">
-                        <select id="bidang" name="bidang" required
-                                class="w-full h-12 px-4 pr-10 text-base border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-0 bg-white appearance-none">
-                            <option value="">-- Pilih Bidang --</option>
-                            <option value="umum">Umum</option>
-                            <option value="perencanaan">Perencanaan</option>
-                            <option value="keuangan">Keuangan</option>
-                            <option value="operasional">Operasional</option>
-                            <option value="lainnya">Lainnya</option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </div>
-                    </div>
+                <div class="mb-5">
+                    <label for="bidang" class="block text-sm font-medium text-gray-700 mb-3">
+                        <i class="fas fa-building mr-1"></i>
+                        Bidang <span class="text-red-500">*</span>
+                    </label>
+                    <select id="bidang" name="bidang" required
+                            class="w-full h-12 px-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">-- Pilih Bidang --</option>
+                        <option value="umum">Umum</option>
+                        <option value="perencanaan">Perencanaan</option>
+                        <option value="keuangan">Keuangan</option>
+                        <option value="operasional">Operasional</option>
+                        <option value="lainnya">Lainnya</option>
+                    </select>
                 </div>
 
                 <!-- Keterangan -->
-                <div class="space-y-2">
-                    <label for="keterangan" class="block text-sm font-semibold text-gray-700">Keterangan</label>
+                <div class="mb-5">
+                    <label for="keterangan" class="block text-sm font-medium text-gray-700 mb-3">
+                        <i class="fas fa-sticky-note mr-1"></i>
+                        Keterangan
+                    </label>
                     <textarea id="keterangan" name="keterangan" rows="3"
-                              class="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-0 resize-none bg-white"
-                              placeholder="Masukkan keterangan jika diperlukan (opsional)"></textarea>
+                              class="w-full px-3 py-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                              placeholder="Tambahkan keterangan jika diperlukan (opsional)"></textarea>
                 </div>
             </form>
         </div>
 
         <!-- Modal Footer -->
-        <div class="bg-gray-50 px-6 py-4 flex space-x-3 border-t border-gray-200">
+        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t border-gray-200">
             <button onclick="closeModal()"
-                    class="flex-1 h-12 px-4 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200">
+                    class="px-6 py-3 text-base font-medium text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50">
+                <i class="fas fa-times mr-2"></i>
                 Batal
             </button>
             <button id="addToCartBtn" onclick="addToCart()"
-                    class="flex-1 h-12 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] shadow-lg">
-                <span class="flex items-center justify-center space-x-2">
-                    <i class="fas fa-cart-plus"></i>
-                    <span>Tambah ke Keranjang</span>
-                </span>
+                    class="px-6 py-3 text-base font-medium text-white bg-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-700">
+                <i class="fas fa-cart-plus mr-2"></i>
+                Tambah ke Keranjang
             </button>
         </div>
     </div>
@@ -329,18 +332,6 @@
     display: none;
 }
 
-/* Modal animation */
-#addToCartModal .relative {
-    transform: scale(0.9) translateY(-10px);
-    opacity: 0;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-#addToCartModal.show .relative {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-}
-
 /* Custom input number controls */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -351,52 +342,7 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
-
-/* Focus states */
-.focus\:ring-0:focus {
-    box-shadow: none !important;
-}
-
-/* Select dropdown arrow */
-select {
-    background-image: none;
-}
-
-/* Responsive modal */
-@media (max-width: 640px) {
-    #addToCartModal .relative {
-        max-width: 95vw;
-        margin: 0.5rem;
-    }
-
-    /* Stack quantity controls vertically on very small screens */
-    @media (max-width: 480px) {
-        #addToCartModal .flex-col {
-            flex-direction: column;
-        }
-
-        #addToCartModal .space-x-2 {
-            flex-direction: row;
-            justify-content: center;
-        }
-    }
-}
-
-/* Button hover effects */
-button:hover {
-    transform: translateY(-1px);
-}
-
-#addToCartBtn:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* Loading state for button */
-#addToCartBtn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none !important;
-}
+</style>
 </style>
 
 <script>
@@ -463,6 +409,7 @@ function showAddToCartModal(barangId, namaBarang, satuan, stok) {
     document.getElementById('quantity').value = 1;
     document.getElementById('bidang').value = '';
     document.getElementById('keterangan').value = '';
+    document.getElementById('pengambil').value = '';
 
     const modal = document.getElementById('addToCartModal');
     modal.classList.remove('hidden');
@@ -544,21 +491,51 @@ function addToCart() {
         return;
     }
 
+    // Validate pengambil
+    if (!formData.get('pengambil')) {
+        // Show error state on input
+        const pengambilInput = document.getElementById('pengambil');
+        pengambilInput.classList.add('border-red-500');
+        pengambilInput.focus();
+
+        // Create error message
+        let errorMsg = document.getElementById('pengambil-error');
+        if (!errorMsg) {
+            errorMsg = document.createElement('p');
+            errorMsg.id = 'pengambil-error';
+            errorMsg.className = 'text-red-500 text-sm mt-1 font-medium';
+            errorMsg.textContent = 'Nama pengambil harus diisi';
+            pengambilInput.parentNode.appendChild(errorMsg);
+        }
+
+        // Remove error after user types
+        pengambilInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('border-red-500');
+                const errorMsg = document.getElementById('pengambil-error');
+                if (errorMsg) {
+                    errorMsg.remove();
+                }
+            }
+        });
+
+        return;
+    }
+
     // Log the data being sent
     console.log('Sending cart data:', {
         id_barang: formData.get('id_barang'),
         quantity: formData.get('quantity'),
         bidang: formData.get('bidang'),
         keterangan: formData.get('keterangan'),
+        pengambil: formData.get('pengambil'),
         csrf_token: csrfToken.getAttribute('content').substring(0, 10) + '...'
     });
 
     addBtn.disabled = true;
     addBtn.innerHTML = `
-        <span class="flex items-center justify-center space-x-2">
-            <i class="fas fa-spinner fa-spin"></i>
-            <span>Menambahkan...</span>
-        </span>
+        <i class="fas fa-spinner fa-spin mr-2"></i>
+        Menambahkan...
     `;
 
     fetch('{{ route("user.cart.add") }}', {
@@ -602,10 +579,8 @@ function addToCart() {
     .finally(() => {
         addBtn.disabled = false;
         addBtn.innerHTML = `
-            <span class="flex items-center justify-center space-x-2">
-                <i class="fas fa-cart-plus"></i>
-                <span>Tambah ke Keranjang</span>
-            </span>
+            <i class="fas fa-cart-plus mr-2"></i>
+            Tambah ke Keranjang
         `;
     });
 }

@@ -17,6 +17,7 @@ class Cart extends Model
         'quantity',
         'bidang',
         'keterangan',
+        'pengambil',
     ];
 
     protected $casts = [

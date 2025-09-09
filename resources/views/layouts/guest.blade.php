@@ -5,7 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>sismon paljaya</title>
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('images/logo-pal.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -16,10 +19,19 @@
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
+            <div class="text-center">
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <x-application-logo class="w-20 h-20 fill-current text-gray-500 mx-auto" />
                 </a>
+                <div class="mt-4">
+                    <h1 class="text-lg font-semibold text-gray-800 leading-tight">
+                        SISTEM INFORMASI
+                    </h1>
+                    <h2 class="text-lg font-semibold text-gray-800 leading-tight">
+                        MONITORING ATK, CETAKAN & TINTA
+                    </h2>
+                    <h2 class="text-lg font-semibold text-blue-800 leading-tight">PERUMDA PALJAYA</h2>
+                </div>
             </div>
 
             <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">

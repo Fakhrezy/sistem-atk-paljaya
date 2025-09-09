@@ -103,43 +103,6 @@
                 </form>
             </div>
 
-            <!-- Data Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div class="bg-blue-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-database text-blue-600 text-xl"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-blue-600">Total Data</p>
-                            <p class="text-lg font-semibold text-blue-900">{{ $monitoring->total() }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-green-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-green-600">Halaman</p>
-                            <p class="text-lg font-semibold text-green-900">{{ $monitoring->currentPage() }} dari {{ $monitoring->lastPage() }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-yellow-50 rounded-lg p-4">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <i class="fas fa-eye text-yellow-600 text-xl"></i>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-yellow-600">Menampilkan</p>
-                            <p class="text-lg font-semibold text-yellow-900">{{ $monitoring->firstItem() ?? 0 }} - {{ $monitoring->lastItem() ?? 0 }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Pagination Controls -->
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center space-x-2">

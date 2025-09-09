@@ -85,6 +85,7 @@ class CartController extends Controller
                 'quantity' => 'required|integer|min:1',
                 'bidang' => 'required|string',
                 'keterangan' => 'nullable|string',
+                'pengambil' => 'required|string|max:255',
             ]);
 
             $barang = Barang::where('id_barang', $request->id_barang)->first();
@@ -124,6 +125,7 @@ class CartController extends Controller
                 $existingCart->update([
                     'quantity' => $newQuantity,
                     'keterangan' => $request->keterangan,
+                    'pengambil' => $request->pengambil,
                 ]);
 
                 $message = 'Item berhasil diupdate untuk pengambilan bidang "' . $request->bidang . '"! Total: ' . $newQuantity;
@@ -146,6 +148,7 @@ class CartController extends Controller
                     'quantity' => $request->quantity,
                     'bidang' => $request->bidang,
                     'keterangan' => $request->keterangan,
+                    'pengambil' => $request->pengambil,
                 ]);
 
                 $message = 'Item berhasil ditambahkan untuk pengambilan bidang "' . $request->bidang . '"!';

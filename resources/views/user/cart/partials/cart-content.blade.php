@@ -57,6 +57,11 @@
                                             <p class="text-sm text-gray-500 flex items-center">
                                                 <i class="fas fa-ruler mr-1 text-gray-400"></i>Satuan: {{ $item->barang->satuan }}
                                             </p>
+                                            @if($item->pengambil)
+                                                <p class="text-sm text-gray-600 mt-1 flex items-center">
+                                                    <i class="fas fa-user mr-1 text-green-500"></i>Pengambil: {{ $item->pengambil }}
+                                                </p>
+                                            @endif
                                             @if($item->keterangan)
                                                 <p class="text-sm text-gray-600 mt-1 flex items-center">
                                                     <i class="fas fa-comment mr-1 text-blue-500"></i>{{ $item->keterangan }}
@@ -96,7 +101,7 @@
                                     </div>
 
                                     <!-- Edit Button -->
-                                    <button onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->quantity }}, '{{ $item->bidang }}', '{{ addslashes($item->keterangan ?? '') }}', {{ $item->barang->stok }}, '{{ $item->barang->satuan }}')"
+                                    <button onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->quantity }}, '{{ $item->bidang }}', '{{ addslashes($item->keterangan ?? '') }}', '{{ addslashes($item->pengambil ?? '') }}', {{ $item->barang->stok }}, '{{ $item->barang->satuan }}')"
                                             class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition ease-in-out duration-150 inline-flex items-center"
                                             title="Edit item dalam keranjang">
                                         <i class="fas fa-edit mr-1"></i>
@@ -114,24 +119,31 @@
                             </div>
                         @endforeach
                     </div>
+
+                    <!-- Bidang Action Section -->
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-600">
+                                <span class="font-medium">{{ $items->count() }} item</span> •
+                                <span class="font-medium">{{ $items->sum('quantity') }} unit</span> dalam bidang {{ ucfirst($bidang) }}
+                            </div>
+                            <button onclick="submitPengambilanBidang('{{ $bidang }}')"
+                                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-150 inline-flex items-center"
+                                    title="Ajukan pengambilan untuk bidang {{ ucfirst($bidang) }}">
+                                <i class="fas fa-paper-plane mr-2"></i>Ajukan Pengambilan
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endforeach
 
         <!-- Action Buttons -->
-        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+        <div class="flex justify-center items-center pt-6 border-t border-gray-200">
             <button onclick="clearCart()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-150 inline-flex items-center"
                     title="Hapus semua item dari keranjang">
-                <i class="fas fa-trash-alt mr-2"></i>Kosongkan Keranjang
+                <i class="fas fa-trash-alt mr-2"></i>Kosongkan Semua Keranjang
             </button>
-
-            <div class="text-right">
-                <p class="text-sm text-gray-600 mb-2">Total: {{ $cartByBidang->flatten()->sum('quantity') }} item</p>
-                <button onclick="submitPengambilan()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-150 inline-flex items-center"
-                        title="Ajukan semua item untuk pengambilan">
-                    <i class="fas fa-paper-plane mr-2"></i>Ajukan Pengambilan
-                </button>
-            </div>
         </div>
 
     @else

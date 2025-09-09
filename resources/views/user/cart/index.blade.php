@@ -88,6 +88,11 @@
                     </div>
 
                     <div class="mb-4">
+                        <label for="edit_pengambil" class="block text-sm font-medium text-gray-700 mb-2">Nama Pengambil:</label>
+                        <input type="text" id="edit_pengambil" name="pengambil" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150" placeholder="Masukkan nama pengambil...">
+                    </div>
+
+                    <div class="mb-4">
                         <label for="edit_keterangan" class="block text-sm font-medium text-gray-700 mb-2">Keterangan (opsional):</label>
                         <textarea id="edit_keterangan" name="keterangan" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150" placeholder="Keterangan tambahan..."></textarea>
                     </div>
@@ -113,6 +118,7 @@
             <div class="mt-2 px-7 py-3">
                 <form id="checkoutForm">
                     @csrf
+                    <input type="hidden" id="checkout_bidang" name="bidang" value="">
 
                     <div class="mb-4">
                         <label for="nama_pengambil" class="block text-sm font-medium text-gray-700 mb-2">Nama Pengambil:</label>
@@ -299,13 +305,14 @@ function clearCart() {
 }
 
 // Edit item modal functions
-function showEditModal(cartId, namaBarang, quantity, bidang, keterangan, maxStock, satuan) {
+function showEditModal(cartId, namaBarang, quantity, bidang, keterangan, pengambil, maxStock, satuan) {
     document.getElementById('edit_cart_id').value = cartId;
     document.getElementById('edit_barang_nama').textContent = namaBarang;
     document.getElementById('edit_quantity').value = quantity;
     document.getElementById('edit_quantity').max = maxStock;
     document.getElementById('edit_bidang').value = bidang;
     document.getElementById('edit_keterangan').value = keterangan || '';
+    document.getElementById('edit_pengambil').value = pengambil || '';
     document.getElementById('edit_max_stock').textContent = maxStock;
     document.getElementById('edit_satuan').textContent = satuan;
     document.getElementById('editItemModal').classList.remove('hidden');
@@ -377,6 +384,16 @@ function updateCartItem() {
 // Pengambilan modal functions
 function showCheckoutModal() {
     document.getElementById('nama_pengambil').value = '';
+    document.getElementById('checkout_bidang').value = ''; // Reset bidang untuk semua item
+
+    // Update modal title untuk semua item
+    const modalTitle = document.querySelector('#checkoutModal h3');
+    modalTitle.textContent = 'Ajukan Pengambilan ATK';
+
+    // Update description untuk semua item
+    const modalDescription = document.querySelector('#checkoutModal .mb-4 p');
+    modalDescription.textContent = 'Semua item dalam keranjang akan diproses untuk pengambilan ATK.';
+
     document.getElementById('checkoutModal').classList.remove('hidden');
 }
 
@@ -443,6 +460,27 @@ function showMessage(message, type) {
 // Direct submit pengambilan function (called from cart-content partial)
 function submitPengambilan() {
     showCheckoutModal();
+}
+
+// Submit pengambilan untuk bidang tertentu
+function submitPengambilanBidang(bidang) {
+    showCheckoutModalBidang(bidang);
+}
+
+// Show checkout modal untuk bidang tertentu
+function showCheckoutModalBidang(bidang) {
+    document.getElementById('nama_pengambil').value = '';
+    document.getElementById('checkout_bidang').value = bidang;
+
+    // Update modal title
+    const modalTitle = document.querySelector('#checkoutModal h3');
+    modalTitle.textContent = `Ajukan Pengambilan ATK - Bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}`;
+
+    // Update description
+    const modalDescription = document.querySelector('#checkoutModal .mb-4 p');
+    modalDescription.textContent = `Semua item dalam bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)} akan diproses untuk pengambilan ATK.`;
+
+    document.getElementById('checkoutModal').classList.remove('hidden');
 }
 
 // Close modals when clicking outside
