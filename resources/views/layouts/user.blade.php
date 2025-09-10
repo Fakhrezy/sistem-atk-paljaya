@@ -17,6 +17,9 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -95,7 +98,7 @@
                 <header class="bg-blue-500 shadow-sm">
                     <div class="flex items-center justify-between px-6 py-4">
                         <h1 class="text-2xl font-semibold text-white">
-                            SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
+                            SISTEM INFORMASI MONITORING BARANG ATK, CETAKAN & TINTA
                         </h1>
                         <div class="flex items-center space-x-4">
                             {{-- <span class="text-sm text-gray-500">

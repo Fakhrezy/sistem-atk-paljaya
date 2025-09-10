@@ -110,40 +110,6 @@
     </div>
 </div>
 
-<!-- Checkout Modal -->
-<div id="checkoutModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3 text-center">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">Ajukan Pengambilan ATK</h3>
-            <div class="mt-2 px-7 py-3">
-                <form id="checkoutForm">
-                    @csrf
-                    <input type="hidden" id="checkout_bidang" name="bidang" value="">
-
-                    <div class="mb-4">
-                        <label for="nama_pengambil" class="block text-sm font-medium text-gray-700 mb-2">Nama Pengambil:</label>
-                        <input type="text" id="nama_pengambil" name="nama_pengambil" required
-                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150"
-                               placeholder="Masukkan nama pengambil...">
-                    </div>
-
-                    <div class="mb-4">
-                        <p class="text-sm text-gray-600">Semua item dalam keranjang akan diproses untuk pengambilan ATK.</p>
-                    </div>
-                </form>
-            </div>
-            <div class="items-center px-4 py-3">
-                <button id="checkoutBtn" onclick="processCheckout()" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition ease-in-out duration-150">
-                    Ajukan Pengambilan
-                </button>
-                <button onclick="closeCheckoutModal()" class="mt-3 px-4 py-2 bg-gray-300 text-black text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition ease-in-out duration-150">
-                    Batal
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 // Load cart content when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -381,38 +347,41 @@ function updateCartItem() {
     });
 }
 
-// Pengambilan modal functions
-function showCheckoutModal() {
-    document.getElementById('nama_pengambil').value = '';
-    document.getElementById('checkout_bidang').value = ''; // Reset bidang untuk semua item
-
-    // Update modal title untuk semua item
-    const modalTitle = document.querySelector('#checkoutModal h3');
-    modalTitle.textContent = 'Ajukan Pengambilan ATK';
-
-    // Update description untuk semua item
-    const modalDescription = document.querySelector('#checkoutModal .mb-4 p');
-    modalDescription.textContent = 'Semua item dalam keranjang akan diproses untuk pengambilan ATK.';
-
-    document.getElementById('checkoutModal').classList.remove('hidden');
+// Submit pengambilan untuk bidang tertentu
+function submitPengambilanBidang(bidang) {
+    // Tampilkan SweetAlert konfirmasi
+    Swal.fire({
+        title: 'Konfirmasi Pengambilan',
+        text: `Apakah Anda yakin ingin mengajukan pengambilan untuk semua item di bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#16a34a',
+        cancelButtonColor: '#dc2626',
+        confirmButtonText: '<i class="fas fa-check mr-2"></i>Ya, Ajukan!',
+        cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            processCheckoutDirect(bidang);
+        }
+    });
 }
 
-function closeCheckoutModal() {
-    document.getElementById('checkoutModal').classList.add('hidden');
-}
+// Process checkout langsung tanpa modal input nama pengambil
+function processCheckoutDirect(bidang) {
+    const formData = new FormData();
+    formData.append('bidang', bidang);
 
-function processCheckout() {
-    const form = document.getElementById('checkoutForm');
-    const formData = new FormData(form);
-    const checkoutBtn = document.getElementById('checkoutBtn');
-
-    if (!formData.get('nama_pengambil')) {
-        alert('Silakan masukkan nama pengambil.');
-        return;
-    }
-
-    checkoutBtn.disabled = true;
-    checkoutBtn.textContent = 'Mengajukan...';
+    // Tampilkan loading
+    Swal.fire({
+        title: 'Memproses Pengajuan...',
+        text: 'Mohon tunggu sebentar',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
 
     fetch('{{ route("user.cart.checkout") }}', {
         method: 'POST',
@@ -424,75 +393,43 @@ function processCheckout() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            closeCheckoutModal();
-            loadCartContent();
-            showMessage(data.message, 'success');
+            Swal.fire({
+                title: 'Berhasil!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonColor: '#16a34a',
+                confirmButtonText: '<i class="fas fa-check mr-2"></i>OK'
+            }).then(() => {
+                loadCartContent(); // Refresh cart content
+            });
         } else {
-            alert(data.message || 'Terjadi kesalahan saat mengajukan pengambilan.');
+            Swal.fire({
+                title: 'Gagal!',
+                text: data.message || 'Terjadi kesalahan saat mengajukan pengambilan.',
+                icon: 'error',
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+            });
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengajukan pengambilan.');
-    })
-    .finally(() => {
-        checkoutBtn.disabled = false;
-        checkoutBtn.textContent = 'Ajukan Pengambilan';
+        Swal.fire({
+            title: 'Error!',
+            text: 'Terjadi kesalahan saat mengajukan pengambilan.',
+            icon: 'error',
+            confirmButtonColor: '#dc2626',
+            confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+        });
     });
-}
-
-// Utility function to show messages
-function showMessage(message, type) {
-    const alertClass = type === 'success' ? 'bg-blue-100 border-blue-500 text-blue-700' : 'bg-red-100 border-red-500 text-red-700';
-    const alertDiv = document.createElement('div');
-    alertDiv.className = `mb-4 ${alertClass} border-l-4 p-4 rounded relative`;
-    alertDiv.innerHTML = `<span class="block sm:inline">${message}</span>`;
-
-    const contentDiv = document.querySelector('.p-6.text-gray-900');
-    contentDiv.insertBefore(alertDiv, contentDiv.children[1]);
-
-    // Remove alert after 3 seconds
-    setTimeout(() => {
-        alertDiv.remove();
-    }, 3000);
-}
-
-// Direct submit pengambilan function (called from cart-content partial)
-function submitPengambilan() {
-    showCheckoutModal();
-}
-
-// Submit pengambilan untuk bidang tertentu
-function submitPengambilanBidang(bidang) {
-    showCheckoutModalBidang(bidang);
-}
-
-// Show checkout modal untuk bidang tertentu
-function showCheckoutModalBidang(bidang) {
-    document.getElementById('nama_pengambil').value = '';
-    document.getElementById('checkout_bidang').value = bidang;
-
-    // Update modal title
-    const modalTitle = document.querySelector('#checkoutModal h3');
-    modalTitle.textContent = `Ajukan Pengambilan ATK - Bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}`;
-
-    // Update description
-    const modalDescription = document.querySelector('#checkoutModal .mb-4 p');
-    modalDescription.textContent = `Semua item dalam bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)} akan diproses untuk pengambilan ATK.`;
-
-    document.getElementById('checkoutModal').classList.remove('hidden');
 }
 
 // Close modals when clicking outside
 window.onclick = function(event) {
     const editModal = document.getElementById('editItemModal');
-    const checkoutModal = document.getElementById('checkoutModal');
 
     if (event.target == editModal) {
         closeEditModal();
-    }
-    if (event.target == checkoutModal) {
-        closeCheckoutModal();
     }
 }
 </script>

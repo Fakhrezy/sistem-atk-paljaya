@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Barang;
 use App\Models\Pengambilan;
 use App\Models\Monitoring;
+use App\Models\MonitoringBarang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -149,6 +150,7 @@ class CartController extends Controller
                     'bidang' => $request->bidang,
                     'keterangan' => $request->keterangan,
                     'pengambil' => $request->pengambil,
+                    'jenis_barang' => $barang->jenis, // Simpan jenis barang dari tabel barang
                 ]);
 
                 $message = 'Item berhasil ditambahkan untuk pengambilan bidang "' . $request->bidang . '"!';
@@ -206,7 +208,8 @@ class CartController extends Controller
         }
 
         $cart->update([
-            'quantity' => $request->quantity
+            'quantity' => $request->quantity,
+            'jenis_barang' => $barang->jenis, // Update jenis barang dari tabel barang
         ]);
 
         return response()->json([
@@ -265,12 +268,17 @@ class CartController extends Controller
     public function checkout(Request $request)
     {
         $request->validate([
-            'nama_pengambil' => 'required|string|max:255',
+            'bidang' => 'nullable|string' // bidang bisa dikirim dari frontend untuk checkout bidang tertentu
         ]);
 
-        $cartItems = Cart::with('barang')
-            ->where('user_id', auth()->id())
-            ->get();
+        $query = Cart::with('barang')->where('user_id', auth()->id());
+
+        // Jika ada bidang yang dipilih, filter hanya bidang tersebut
+        if ($request->bidang) {
+            $query->where('bidang', $request->bidang);
+        }
+
+        $cartItems = $query->get();
 
         if ($cartItems->isEmpty()) {
             return response()->json([
@@ -279,14 +287,21 @@ class CartController extends Controller
             ]);
         }
 
+        // Validasi bahwa semua cart item memiliki nama pengambil
+        $itemsWithoutPengambil = $cartItems->filter(function($item) {
+            return empty($item->pengambil);
+        });
+
+        if ($itemsWithoutPengambil->isNotEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Semua item harus memiliki nama pengambil. Silakan edit item yang belum memiliki nama pengambil.'
+            ]);
+        }
+
         DB::beginTransaction();
 
         try {
-            // Create pengambilan record
-            $pengambilan = Pengambilan::create([
-                'nama_pengambil' => $request->nama_pengambil,
-            ]);
-
             // Process each cart item
             foreach ($cartItems as $cartItem) {
                 $barang = $cartItem->barang;
@@ -296,31 +311,41 @@ class CartController extends Controller
                     throw new \Exception("Stok {$barang->nama_barang} tidak mencukupi. Stok tersedia: {$barang->stok}");
                 }
 
-                // Create monitoring record
-                Monitoring::create([
-                    'id_pengambilan' => $pengambilan->id_pengambilan,
-                    'tanggal' => now(),
+                // Hitung saldo (stok sebelum kredit) dan saldo_akhir (stok setelah kredit)
+                $saldo = $barang->stok; // stok sebelum dikurangi
+                $kredit = $cartItem->quantity; // jumlah yang diambil
+                $saldo_akhir = $saldo - $kredit; // stok setelah dikurangi
+
+                // Create monitoring_barang record
+                MonitoringBarang::create([
+                    'nama_barang' => $barang->nama_barang,
+                    'jenis_barang' => $barang->jenis,
+                    'nama_pengambil' => $cartItem->pengambil, // menggunakan pengambil dari cart item
                     'bidang' => $cartItem->bidang,
-                    'pengambil' => $request->nama_pengambil,
-                    'id_barang' => $cartItem->id_barang,
-                    'debit' => $cartItem->quantity,
-                    'kredit' => 0,
-                    'saldo' => $barang->stok - $cartItem->quantity,
-                    'keterangan' => $cartItem->keterangan,
+                    'tanggal_ambil' => now()->toDateString(),
+                    'saldo' => $saldo,
+                    'saldo_akhir' => $saldo_akhir,
+                    'kredit' => $kredit,
+                    'status' => 'diajukan'
                 ]);
 
                 // Update barang stock
                 $barang->decrement('stok', $cartItem->quantity);
             }
 
-            // Clear cart
-            Cart::where('user_id', auth()->id())->delete();
+            // Clear cart items that were processed
+            $cartIds = $cartItems->pluck('id');
+            Cart::whereIn('id', $cartIds)->delete();
 
             DB::commit();
 
+            $messageDetail = $request->bidang
+                ? "untuk bidang " . ucfirst($request->bidang)
+                : "semua bidang";
+
             return response()->json([
                 'success' => true,
-                'message' => 'Pengambilan ATK berhasil diajukan! ID Pengambilan: ' . $pengambilan->id_pengambilan
+                'message' => "Pengambilan ATK {$messageDetail} berhasil diajukan dan sedang menunggu persetujuan!"
             ]);
 
         } catch (\Exception $e) {

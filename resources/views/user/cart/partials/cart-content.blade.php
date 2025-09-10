@@ -54,6 +54,21 @@
                                             <h4 class="text-lg font-medium text-gray-900 flex items-center">
                                                 <i class="fas fa-box mr-2 text-gray-500"></i>{{ $item->barang->nama_barang }}
                                             </h4>
+                                            <p class="text-sm text-gray-600 mt-1 flex items-center">
+                                                @switch($item->barang->jenis)
+                                                    @case('atk')
+                                                        <i class="fas fa-pen mr-1 text-blue-500"></i>Jenis: ATK
+                                                        @break
+                                                    @case('cetak')
+                                                        <i class="fas fa-print mr-1 text-green-500"></i>Jenis: Cetakan
+                                                        @break
+                                                    @case('tinta')
+                                                        <i class="fas fa-tint mr-1 text-purple-500"></i>Jenis: Tinta
+                                                        @break
+                                                    @default
+                                                        <i class="fas fa-tag mr-1 text-gray-500"></i>Jenis: {{ ucfirst($item->barang->jenis) }}
+                                                @endswitch
+                                            </p>
                                             <p class="text-sm text-gray-500 flex items-center">
                                                 <i class="fas fa-ruler mr-1 text-gray-400"></i>Satuan: {{ $item->barang->satuan }}
                                             </p>

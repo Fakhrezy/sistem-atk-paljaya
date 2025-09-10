@@ -66,6 +66,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/admin/monitoring/{monitoring}', 'update')->name('admin.monitoring.update');
         Route::delete('/admin/monitoring/{monitoring}', 'destroy')->name('admin.monitoring.destroy');
     });
+
+    // Monitoring Barang Routes
+    Route::controller(App\Http\Controllers\MonitoringBarangController::class)->group(function () {
+        Route::get('/admin/monitoring-barang', 'index')->name('admin.monitoring-barang.index');
+        Route::post('/admin/monitoring-barang/{id}/update-status', 'updateStatus')->name('admin.monitoring-barang.update-status');
+        Route::delete('/admin/monitoring-barang/{id}', 'destroy')->name('admin.monitoring-barang.destroy');
+    });
 });
 
 // User Routes
