@@ -15,6 +15,15 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if(auth()->user()->role === 'user')
+                        <x-nav-link :href="route('user.pengambilan.index')" :active="request()->routeIs('user.pengambilan.*')">
+                            {{ __('Pengambilan Barang') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('user.monitoring.index')" :active="request()->routeIs('user.monitoring.*')">
+                            {{ __('Usulan Pengadaan') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +79,15 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if(auth()->user()->role === 'user')
+                <x-responsive-nav-link :href="route('user.pengambilan.index')" :active="request()->routeIs('user.pengambilan.*')">
+                    {{ __('Pengambilan Barang') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('user.monitoring.index')" :active="request()->routeIs('user.monitoring.*')">
+                    {{ __('Usulan Pengadaan') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

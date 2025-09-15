@@ -55,7 +55,15 @@
                                 Pengambilan Barang
                             </a>
 
-                            <!-- Cart Link -->
+                            <!-- Usulan Pengadaan Link -->
+                            <a href="{{ route('user.usulan.index') }}"
+                               class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-blue-700 {{ request()->routeIs('user.usulan*') ? 'bg-blue-700' : '' }}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Usulan Pengadaan
+                            </a>
+
                             <!-- History/Riwayat Link (future feature) -->
                             <a href="#"
                                class="flex items-center px-4 py-2 text-sm font-medium text-blue-300 rounded-lg opacity-50 cursor-not-allowed">
@@ -98,7 +106,7 @@
                 <header class="bg-blue-500 shadow-sm">
                     <div class="flex items-center justify-between px-6 py-4">
                         <h1 class="text-2xl font-semibold text-white">
-                            SISTEM INFORMASI MONITORING BARANG ATK, CETAKAN & TINTA
+                            SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         </h1>
                         <div class="flex items-center space-x-4">
                             {{-- <span class="text-sm text-gray-500">

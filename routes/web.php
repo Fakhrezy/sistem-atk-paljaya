@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserMonitoringController;
+use App\Http\Controllers\UserPengambilanController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -33,11 +37,11 @@ Route::get('/dashboard', function () {
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::controller(App\Http\Controllers\AdminController::class)->group(function () {
+    Route::controller(\App\Http\Controllers\AdminController::class)->group(function () {
         Route::get('/admin/dashboard', 'dashboard')->name('admin.dashboard');
     });
 
-    Route::controller(App\Http\Controllers\BarangController::class)->group(function () {
+    Route::controller(\App\Http\Controllers\BarangController::class)->group(function () {
         Route::get('/admin/barang', 'index')->name('admin.barang');
         Route::get('/admin/barang/print', 'print')->name('admin.barang.print');
         Route::get('/admin/barang/export', 'export')->name('admin.barang.export');
@@ -70,23 +74,54 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Monitoring Barang Routes
     Route::controller(App\Http\Controllers\MonitoringBarangController::class)->group(function () {
         Route::get('/admin/monitoring-barang', 'index')->name('admin.monitoring-barang.index');
+        Route::get('/admin/monitoring-barang/{id}/edit', 'edit')->name('admin.monitoring-barang.edit');
+        Route::put('/admin/monitoring-barang/{id}', 'update')->name('admin.monitoring-barang.update');
         Route::post('/admin/monitoring-barang/{id}/update-status', 'updateStatus')->name('admin.monitoring-barang.update-status');
         Route::delete('/admin/monitoring-barang/{id}', 'destroy')->name('admin.monitoring-barang.destroy');
+    });
+
+    // Monitoring Pengadaan Routes
+    Route::controller(App\Http\Controllers\Admin\MonitoringPengadaanController::class)->group(function () {
+        Route::get('/admin/monitoring-pengadaan', 'index')->name('admin.monitoring-pengadaan.index');
+        Route::post('/admin/monitoring-pengadaan/{id}/status', 'updateStatus')->name('admin.monitoring-pengadaan.update-status');
     });
 });
 
 // User Routes
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/user/dashboard', [App\Http\Controllers\UserController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+
+    // Route untuk monitoring barang user
+    Route::get('/user/monitoring', [UserMonitoringController::class, 'index'])
+        ->name('user.monitoring.index');
+
+    // Cart Routes for Regular Items
 
     // Pengambilan Barang Routes (view items for cart)
-    Route::controller(App\Http\Controllers\UserPengambilanController::class)->group(function () {
+    Route::controller(UserPengambilanController::class)->group(function () {
         Route::get('/user/pengambilan', 'index')->name('user.pengambilan.index');
         Route::get('/user/pengambilan/stock/{barang}', 'getStock')->name('user.pengambilan.stock');
     });
 
+    // Usulan Routes
+    Route::controller(App\Http\Controllers\User\UsulanController::class)->group(function () {
+        Route::get('/user/usulan', 'index')->name('user.usulan.index');
+        Route::post('/user/usulan', 'store')->name('user.usulan.store');
+    });
+
+    // Usulan Cart Routes
+    Route::controller(App\Http\Controllers\User\KeranjangUsulanController::class)->group(function () {
+        Route::get('/user/usulan/cart', 'index')->name('user.usulan.cart.index');
+        Route::post('/user/usulan/cart/add', 'add')->name('user.usulan.cart.add');
+        Route::post('/user/usulan/cart/update/{cart}', 'update')->name('user.usulan.cart.update');
+        Route::delete('/user/usulan/cart/remove/{cart}', 'remove')->name('user.usulan.cart.remove');
+        Route::delete('/user/usulan/cart/clear', 'clear')->name('user.usulan.cart.clear');
+        Route::get('/user/usulan/cart/count', 'count')->name('user.usulan.cart.count');
+        Route::post('/user/usulan/cart/submit', 'submit')->name('user.usulan.cart.submit');
+    });
+
     // Cart Routes
-    Route::controller(App\Http\Controllers\CartController::class)->group(function () {
+    Route::controller(CartController::class)->group(function () {
         Route::get('/user/cart', 'index')->name('user.cart.index');
         Route::post('/user/cart/add', 'add')->name('user.cart.add');
         Route::post('/user/cart/update/{cart}', 'update')->name('user.cart.update');
@@ -96,142 +131,56 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::post('/user/cart/checkout', 'checkout')->name('user.cart.checkout');
     });
 
-        // Debug route - can be removed later
-    Route::get('/user/test-cart', function() {
-        $user = auth()->user();
-        $barang = \App\Models\Barang::first();
+    // Debug & Testing Routes - Only available in local environment
+    if (app()->environment('local')) {
+        Route::prefix('test')->name('test.')->middleware(['auth', 'role:admin'])->group(function () {
+            Route::get('/cart', function() {
+                $user = auth()->user();
+                $barang = \App\Models\Barang::first();
 
-        if (!$user) {
-            return response()->json(['error' => 'Not authenticated'], 401);
-        }
+                if (!$user) {
+                    return response()->json(['error' => 'Not authenticated'], 401);
+                }
 
-        $cartItems = \App\Models\Cart::with('barang')->where('user_id', $user->id)->get();
-        $cartByBidang = $cartItems->groupBy('bidang');
+                $cartItems = \App\Models\Cart::with('barang')->where('user_id', $user->id)->get();
+                return response()->json([
+                    'user_id' => $user->id,
+                    'cart_count' => $cartItems->count(),
+                    'cart_items' => $cartItems->map(fn($item) => [
+                        'id' => $item->id,
+                        'barang_nama' => $item->barang?->nama_barang,
+                        'quantity' => $item->quantity
+                    ])
+                ]);
+            })->name('cart.view');
 
-        return response()->json([
-            'user_id' => $user->id,
-            'user_role' => $user->role,
-            'user_name' => $user->name,
-            'is_authenticated' => auth()->check(),
-            'sample_barang' => $barang ? [
-                'id' => $barang->id_barang,
-                'nama' => $barang->nama_barang,
-                'stok' => $barang->stok
-            ] : null,
-            'cart_count' => $cartItems->count(),
-            'cart_items' => $cartItems->map(function($item) {
-                return [
-                    'id' => $item->id,
-                    'barang_id' => $item->id_barang,
-                    'barang_nama' => $item->barang ? $item->barang->nama_barang : 'N/A',
-                    'quantity' => $item->quantity,
-                    'bidang' => $item->bidang,
-                    'keterangan' => $item->keterangan
-                ];
-            }),
-            'cart_by_bidang' => $cartByBidang->map(function($items, $bidang) {
-                return [
-                    'bidang' => $bidang,
-                    'count' => $items->count(),
-                    'items' => $items->map(function($item) {
-                        return [
-                            'id' => $item->id,
-                            'barang_nama' => $item->barang ? $item->barang->nama_barang : 'N/A',
-                            'quantity' => $item->quantity
-                        ];
-                    })
-                ];
-            })
-        ]);
-    })->name('user.test.cart');
+            Route::post('/cart/add', function(Request $request) {
+                try {
+                    $barang = \App\Models\Barang::first();
+                    if (!$barang) {
+                        return response()->json(['error' => 'No barang found'], 404);
+                    }
 
-    Route::post('/user/test-cart-add', function(Request $request) {
-        try {
-            $user = auth()->user();
-            if (!$user) {
-                return response()->json(['error' => 'Not authenticated'], 401);
-            }
+                    $cart = \App\Models\Cart::create([
+                        'user_id' => auth()->id(),
+                        'id_barang' => $barang->id_barang,
+                        'quantity' => 1,
+                        'bidang' => 'test',
+                        'keterangan' => 'Test item'
+                    ]);
 
-            $barang = \App\Models\Barang::first();
-            if (!$barang) {
-                return response()->json(['error' => 'No barang found'], 404);
-            }
+                    return response()->json([
+                        'success' => true,
+                        'cart_id' => $cart->id
+                    ]);
+                } catch (\Exception $e) {
+                    return response()->json(['error' => $e->getMessage()], 500);
+                }
+            })->name('cart.add');
 
-            $cart = \App\Models\Cart::create([
-                'user_id' => $user->id,
-                'id_barang' => $barang->id_barang,
-                'quantity' => 1,
-                'bidang' => 'test',
-                'keterangan' => 'test item via debug route'
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Test cart item added successfully',
-                'cart_id' => $cart->id,
-                'user_id' => $user->id,
-                'barang_id' => $barang->id_barang,
-                'total_cart_items' => \App\Models\Cart::where('user_id', $user->id)->count()
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Exception: ' . $e->getMessage(),
-                'trace' => config('app.debug') ? $e->getTraceAsString() : 'Set APP_DEBUG=true to see trace'
-            ], 500);
-        }
-    })->name('user.test.cart.add')->withoutMiddleware(['auth']);
-
-    // Quick login route for testing
-    Route::get('/quick-login/{role?}', function($role = 'user') {
-        $user = \App\Models\User::where('role', $role)->first();
-        if ($user) {
-            auth()->login($user);
-            return redirect()->route('user.cart.index');
-        }
-        return redirect()->route('login')->with('error', 'User not found');
-    })->name('quick.login')->withoutMiddleware(['auth']);
-
-    // Test cart add via GET for debugging
-    Route::get('/user/test-cart-add', function() {
-        $user = auth()->user();
-        $barang = \App\Models\Barang::first();
-
-        if (!$user || $user->role !== 'user') {
-            return response()->json(['error' => 'Must be logged in as user']);
-        }
-
-        if (!$barang) {
-            return response()->json(['error' => 'No barang found']);
-        }
-
-        try {
-            $cart = \App\Models\Cart::create([
-                'user_id' => $user->id,
-                'id_barang' => $barang->id_barang,
-                'quantity' => 1,
-                'bidang' => 'umum',
-                'keterangan' => 'test via GET',
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Cart item created successfully!',
-                'cart_id' => $cart->id,
-                'cart_data' => $cart->toArray()
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage()
-            ]);
-        }
-    })->name('user.test.cart.add');
-
-    // Cart test page
-    Route::get('/cart-test', function() {
-        return view('cart-test');
-    })->name('cart.test');
+            Route::view('/cart-test', 'cart-test')->name('cart.page');
+        });
+    }
 });
 
 

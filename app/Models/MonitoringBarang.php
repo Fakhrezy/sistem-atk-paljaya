@@ -11,6 +11,11 @@ class MonitoringBarang extends Model
 
     protected $table = 'monitoring_barang';
 
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'id_barang', 'id_barang');
+    }
+
     protected $fillable = [
         'nama_barang',
         'jenis_barang',

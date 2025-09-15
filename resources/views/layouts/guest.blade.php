@@ -25,11 +25,8 @@
                 </a>
                 <div class="mt-4">
                     <h1 class="text-lg font-semibold text-gray-800 leading-tight">
-                        SISTEM INFORMASI
+                        SISTEM INFORMASI BARANG HABIS PAKAI
                     </h1>
-                    <h2 class="text-lg font-semibold text-gray-800 leading-tight">
-                        MONITORING ATK, CETAKAN & TINTA
-                    </h2>
                     <h2 class="text-lg font-semibold text-blue-800 leading-tight">PERUMDA PALJAYA</h2>
                 </div>
             </div>

@@ -68,6 +68,55 @@ class MonitoringBarangController extends Controller
     }
 
     /**
+     * Show the form for editing the specified monitoring barang
+     */
+    public function edit($id)
+    {
+        try {
+            $monitoringBarang = MonitoringBarang::findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => $monitoringBarang
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data monitoring tidak ditemukan'
+            ], 404);
+        }
+    }
+
+    /**
+     * Update the specified monitoring barang in storage
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'kredit' => 'required|numeric|min:0'
+        ]);
+
+        try {
+            $monitoringBarang = MonitoringBarang::findOrFail($id);
+
+            // Hanya update field kredit
+            $monitoringBarang->update([
+                'kredit' => $request->kredit
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Kredit berhasil diperbarui!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui kredit: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Delete monitoring barang record
      */
     public function destroy($id)

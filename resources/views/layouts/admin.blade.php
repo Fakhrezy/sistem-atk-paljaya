@@ -72,6 +72,15 @@
                                 </svg>
                                 Monitoring Barang
                             </a>
+
+                            <!-- Monitoring Pengadaan Link -->
+                            <a href="{{ route('admin.monitoring-pengadaan.index') }}"
+                               class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-pengadaan*') ? 'bg-gray-700' : '' }}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                                Monitoring Pengadaan
+                            </a>
                         </div>
 
                         <!-- Logout -->

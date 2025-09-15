@@ -24,15 +24,15 @@
                 <div class="mb-6 bg-gray-50 p-4 rounded-lg">
                     <form method="GET" action="{{ route('admin.monitoring-barang.index') }}" class="flex flex-wrap gap-4 items-end">
                         <div class="flex-1 min-w-64">
-                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
+                            <label for="search" class="block text-sm font-medium text-gray-700">Pencarian</label>
                             <input type="text" id="search" name="search" value="{{ request('search') }}"
-                                   class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
+                                   class="mt-1 h-9 w-full border border-gray-300 rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                    placeholder="Cari nama barang atau pengambil...">
                         </div>
 
                         <div class="min-w-48">
-                            <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                            <select id="status" name="status" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                            <select id="status" name="status" class="mt-1 h-9 w-full border border-gray-300 rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Semua Status</option>
                                 <option value="diajukan" {{ request('status') == 'diajukan' ? 'selected' : '' }}>Diajukan</option>
                                 <option value="diterima" {{ request('status') == 'diterima' ? 'selected' : '' }}>Diterima</option>
@@ -40,8 +40,8 @@
                         </div>
 
                         <div class="min-w-48">
-                            <label for="bidang" class="block text-sm font-medium text-gray-700 mb-1">Bidang</label>
-                            <select id="bidang" name="bidang" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <label for="bidang" class="block text-sm font-medium text-gray-700">Bidang</label>
+                            <select id="bidang" name="bidang" class="mt-1 h-9 w-full border border-gray-300 rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Semua Bidang</option>
                                 <option value="umum" {{ request('bidang') == 'umum' ? 'selected' : '' }}>Umum</option>
                                 <option value="perencanaan" {{ request('bidang') == 'perencanaan' ? 'selected' : '' }}>Perencanaan</option>
@@ -52,8 +52,8 @@
                         </div>
 
                         <div class="min-w-48">
-                            <label for="jenis_barang" class="block text-sm font-medium text-gray-700 mb-1">Jenis Barang</label>
-                            <select id="jenis_barang" name="jenis_barang" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            <label for="jenis_barang" class="block text-sm font-medium text-gray-700">Jenis Barang</label>
+                            <select id="jenis_barang" name="jenis_barang" class="mt-1 h-9 w-full border border-gray-300 rounded-md px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Semua Jenis</option>
                                 <option value="atk" {{ request('jenis_barang') == 'atk' ? 'selected' : '' }}>ATK</option>
                                 <option value="cetak" {{ request('jenis_barang') == 'cetak' ? 'selected' : '' }}>Cetakan</option>
@@ -61,13 +61,17 @@
                             </select>
                         </div>
 
-                        <div class="flex gap-2">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition duration-150">
-                                <i class="fas fa-search mr-2"></i>Filter
+                        <div class="flex items-end space-x-2">
+                            <button type="submit" class="inline-flex items-center h-9 px-4 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
                             </button>
-                            <a href="{{ route('admin.monitoring-barang.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-medium transition duration-150">
-                                <i class="fas fa-times mr-2"></i>Reset
-                            </a>
+                            @if(request('search') || request('bidang') || request('jenis_barang') || request('status'))
+                                <a href="{{ route('admin.monitoring-barang.index') }}" class="inline-flex items-center h-9 px-4 bg-white border border-gray-300 rounded-md font-medium text-xs text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Reset
+                                </a>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -117,7 +121,7 @@
                                     <div><span class="font-medium">Pengambil:</span> {{ $item->nama_pengambil }}</div>
                                     <div><span class="font-medium">Bidang:</span> {{ ucfirst($item->bidang) }}</div>
                                     <div><span class="font-medium">Tanggal:</span> {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}</div>
-                                    <div><span class="font-medium">Kredit:</span> <span class="text-red-600 font-medium">-{{ number_format($item->kredit, 0, ',', '.') }}</span></div>
+                                    <div><span class="font-medium">Kredit:</span> <span class="text-red-600 font-medium">{{ number_format($item->kredit, 0, ',', '.') }}</span></div>
                                 </div>
                                 <div class="flex justify-between items-center">
                                     @if($item->status == 'diajukan')
@@ -128,6 +132,10 @@
                                             <button onclick="updateStatus({{ $item->id }}, 'diterima')"
                                                     class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs transition duration-150">
                                                 <i class="fas fa-check mr-1"></i>Terima
+                                            </button>
+                                            <button onclick="editMonitoring({{ $item->id }})"
+                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition duration-150">
+                                                <i class="fas fa-edit mr-1"></i>Edit
                                             </button>
                                             <button onclick="deleteMonitoring({{ $item->id }})"
                                                     class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition duration-150">
@@ -142,6 +150,10 @@
                                             <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
                                                     class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-xs transition duration-150">
                                                 <i class="fas fa-undo mr-1"></i>Batalkan
+                                            </button>
+                                            <button onclick="editMonitoring({{ $item->id }})"
+                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition duration-150">
+                                                <i class="fas fa-edit mr-1"></i>Edit
                                             </button>
                                             <button onclick="deleteMonitoring({{ $item->id }})"
                                                     class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition duration-150">
@@ -233,7 +245,7 @@
                                     {{ number_format($item->saldo, 0, ',', '.') }}
                                 </td>
                                 <td class="px-3 py-3 text-sm text-red-600 border text-right font-medium">
-                                    -{{ number_format($item->kredit, 0, ',', '.') }}
+                                    {{ number_format($item->kredit, 0, ',', '.') }}
                                 </td>
                                 <td class="px-3 py-3 text-sm text-gray-900 border text-right font-medium">
                                     {{ number_format($item->saldo_akhir, 0, ',', '.') }}
@@ -264,6 +276,11 @@
                                                 <i class="fas fa-undo"></i>
                                             </button>
                                         @endif
+                                        <button onclick="editMonitoring({{ $item->id }})"
+                                                class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs transition duration-150"
+                                                title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                         <button onclick="deleteMonitoring({{ $item->id }})"
                                                 class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs transition duration-150"
                                                 title="Hapus">
@@ -442,6 +459,174 @@ function deleteMonitoring(id) {
                 });
             });
         }
+    });
+}
+
+// Edit monitoring function
+function editMonitoring(id) {
+    // Fetch current data
+    fetch(`{{ url('/admin/monitoring-barang') }}/${id}/edit`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const monitoring = data.data;
+
+            Swal.fire({
+                title: 'Edit Kredit - Data Monitoring',
+                html: `
+                    <div class="text-left">
+                        <div class="mb-4 p-3 bg-gray-50 rounded-md">
+                            <h4 class="font-medium text-gray-800 mb-3 flex items-center">
+                                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                                Informasi Data
+                            </h4>
+                            <div class="text-sm text-gray-600 space-y-2">
+                                <p class="flex items-center">
+                                    <i class="fas fa-box text-gray-500 mr-2 w-4"></i>
+                                    <strong>Nama Barang:</strong> <span class="ml-2">${monitoring.nama_barang}</span>
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="fas fa-tags text-gray-500 mr-2 w-4"></i>
+                                    <strong>Jenis Barang:</strong> <span class="ml-2">${monitoring.jenis_barang.toUpperCase()}</span>
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="fas fa-user text-gray-500 mr-2 w-4"></i>
+                                    <strong>Nama Pengambil:</strong> <span class="ml-2">${monitoring.nama_pengambil}</span>
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="fas fa-building text-gray-500 mr-2 w-4"></i>
+                                    <strong>Bidang:</strong> <span class="ml-2">${monitoring.bidang}</span>
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-gray-500 mr-2 w-4"></i>
+                                    <strong>Tanggal Ambil:</strong> <span class="ml-2">${new Date(monitoring.tanggal_ambil).toLocaleDateString('id-ID')}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <i class="fas fa-money-bill-wave text-green-500 mr-2"></i>
+                                Kredit <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" id="edit_kredit" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="${monitoring.kredit}" min="0" step="1" placeholder="Masukkan jumlah kredit">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500 mb-2 flex items-center">
+                                    <i class="fas fa-wallet text-gray-400 mr-2"></i>
+                                    Saldo
+                                </label>
+                                <input type="number" class="w-full border border-gray-200 rounded-md px-3 py-2 bg-gray-100 text-gray-500" value="${monitoring.saldo}" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-500 mb-2 flex items-center">
+                                    <i class="fas fa-calculator text-gray-400 mr-2"></i>
+                                    Saldo Akhir
+                                </label>
+                                <input type="number" class="w-full border border-gray-200 rounded-md px-3 py-2 bg-gray-100 text-gray-500" value="${monitoring.saldo_akhir}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#3b82f6',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="fas fa-save mr-2"></i>Simpan',
+                cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+                width: '500px',
+                preConfirm: () => {
+                    const kredit = document.getElementById('edit_kredit').value;
+
+                    if (!kredit || kredit < 0) {
+                        Swal.showValidationMessage('Kredit harus diisi dan tidak boleh negatif!');
+                        return false;
+                    }
+
+                    return {
+                        kredit: parseFloat(kredit)
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading
+                    Swal.fire({
+                        title: 'Menyimpan...',
+                        text: 'Sedang menyimpan perubahan kredit',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Send update request
+                    fetch(`{{ url('/admin/monitoring-barang') }}/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify(result.value)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: data.message || 'Kredit berhasil diperbarui',
+                                icon: 'success',
+                                confirmButtonColor: '#16a34a',
+                                confirmButtonText: '<i class="fas fa-check mr-2"></i>OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: data.message || 'Tidak dapat memperbarui kredit',
+                                icon: 'error',
+                                confirmButtonColor: '#dc2626',
+                                confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Terjadi kesalahan saat memperbarui kredit',
+                            icon: 'error',
+                            confirmButtonColor: '#dc2626',
+                            confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+                        });
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'Gagal!',
+                text: data.message || 'Tidak dapat mengambil data monitoring',
+                icon: 'error',
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Terjadi kesalahan saat mengambil data',
+            icon: 'error',
+            confirmButtonColor: '#dc2626',
+            confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+        });
     });
 }
 </script>

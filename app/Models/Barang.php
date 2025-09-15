@@ -53,4 +53,10 @@ class Barang extends Model
     {
         return $this->hasMany(Monitoring::class, 'id_barang', 'id_barang');
     }
+
+    // Relationship dengan tabel monitoring_barang
+    public function monitoring_barang()
+    {
+        return $this->hasMany(MonitoringBarang::class, 'id_barang', 'id_barang');
+    }
 }

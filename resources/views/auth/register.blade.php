@@ -39,6 +39,19 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- Bidang -->
+        <div class="mt-4">
+            <x-input-label for="bidang" :value="__('Bidang')" />
+            <select id="bidang" name="bidang" class="block mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>
+                <option value="">Pilih Bidang</option>
+                <option value="teknik">Teknik</option>
+                <option value="pemasaran">Pemasaran</option>
+                <option value="umum">Umum</option>
+                <option value="keuangan">Keuangan</option>
+            </select>
+            <x-input-error :messages="$errors->get('bidang')" class="mt-2" />
+        </div>
+
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Sudah daftar? login disini') }}
