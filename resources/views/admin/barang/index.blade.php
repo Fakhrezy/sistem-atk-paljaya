@@ -6,117 +6,93 @@
     SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 @endsection
 
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
+
 @section('content')
+<script>
+function deleteBarang(url) {
+    Swal.fire({
+        title: 'Hapus Barang?',
+        text: 'Apakah Anda yakin ingin menghapus barang ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#6B7280',
+        cancelButtonColor: '#dc2626',
+        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Hapus!',
+        cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Show loading state
+            Swal.fire({
+                title: 'Menghapus Barang...',
+                text: 'Mohon tunggu sebentar',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Create form
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = url;
+
+            // Add CSRF token
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            form.appendChild(csrfToken);
+
+            // Add method override
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+            form.appendChild(methodInput);
+
+            // Submit form
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
+</script>
 
     <div class="h-full">
         <div class="max-w-full">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 w-full">
+            <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                <div class="w-full p-6 text-gray-900">
                     <div class="mb-6">
-                        <div class="flex justify-between items-center">
+                        <div class="flex items-center justify-between">
                             <div>
                                 <h2 class="text-2xl font-semibold text-gray-800">Daftar Barang</h2>
-                                <p class="mt-1 text-sm text-gray-600">Kelola data barang ATK, Cetak, dan Tinta</p>
+
                             </div>
                         </div>
                     </div>
 
                     @if(session('success'))
-                        <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded relative">
+                        <div class="relative p-4 mb-4 text-green-700 bg-green-100 border-l-4 border-green-500 rounded">
                             <span class="block sm:inline">{{ session('success') }}</span>
                         </div>
                     @endif
 
-                    <!-- Statistics Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        <!-- Total Barang -->
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 overflow-hidden shadow rounded-lg">
-                            <div class="p-5">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-5 w-0 flex-1">
-                                        <dl>
-                                            <dt class="text-sm font-medium text-blue-100 truncate">Total Barang</dt>
-                                            <dd class="text-lg font-medium text-white">{{ $stats['total'] }}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ATK -->
-                        <div class="bg-gradient-to-r from-green-500 to-green-600 overflow-hidden shadow rounded-lg">
-                            <div class="p-5">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-5 w-0 flex-1">
-                                        <dl>
-                                            <dt class="text-sm font-medium text-green-100 truncate">ATK</dt>
-                                            <dd class="text-lg font-medium text-white">{{ $stats['atk'] }}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Cetak -->
-                        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 overflow-hidden shadow rounded-lg">
-                            <div class="p-5">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-5 w-0 flex-1">
-                                        <dl>
-                                            <dt class="text-sm font-medium text-yellow-100 truncate">Cetak</dt>
-                                            <dd class="text-lg font-medium text-white">{{ $stats['cetak'] }}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tinta -->
-                        <div class="bg-gradient-to-r from-purple-500 to-purple-600 overflow-hidden shadow rounded-lg">
-                            <div class="p-5">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0">
-                                        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17v4a2 2 0 002 2h4M15 8l-5 5"></path>
-                                        </svg>
-                                    </div>
-                                    <div class="ml-5 w-0 flex-1">
-                                        <dl>
-                                            <dt class="text-sm font-medium text-purple-100 truncate">Tinta</dt>
-                                            <dd class="text-lg font-medium text-white">{{ $stats['tinta'] }}</dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4 flex justify-between items-center">
+                    <div class="flex items-center justify-between mb-4">
                         <div class="flex-1 max-w-2xl">
                             <form action="{{ route('admin.barang') }}" method="GET" class="flex gap-2">
                                 <input type="hidden" name="per_page" value="{{ request('per_page', 10) }}">
                                 <div class="flex-1">
                                     <input type="text" name="search" value="{{ request('search') }}"
                                            placeholder="Cari nama barang..."
-                                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                                           class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500">
                                 </div>
                                 <div class="w-44">
-                                    <select name="jenis" class="w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                                    <select name="jenis" class="w-full border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500">
                                         <option value="">Semua Jenis</option>
                                         <option value="atk" {{ request('jenis') == 'atk' ? 'selected' : '' }}>ATK</option>
                                         <option value="cetak" {{ request('jenis') == 'cetak' ? 'selected' : '' }}>Cetak</option>
@@ -124,14 +100,14 @@
                                     </select>
                                 </div>
                                 <button type="submit"
-                                        class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                 </button>
                                 @if(request('search') || request('jenis'))
                                     <a href="{{ route('admin.barang', ['per_page' => request('per_page', 10)]) }}"
-                                       class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                         Reset
                                     </a>
                                 @endif
@@ -140,8 +116,8 @@
 
                         <div class="flex items-center space-x-3">
                             <a href="{{ route('admin.barang.export') }}{{ request()->has('search') || request()->has('jenis') ? '?' . http_build_query(request()->all()) : '' }}"
-                               class="inline-flex items-center px-4 py-2 bg-white border border-emerald-500 rounded-md font-semibold text-sm text-emerald-600 tracking-widest hover:bg-emerald-50 focus:bg-emerald-50 active:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm hover:shadow">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest transition duration-150 ease-in-out bg-white border rounded-md shadow-sm border-emerald-500 text-emerald-600 hover:bg-emerald-50 focus:bg-emerald-50 active:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 hover:shadow">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                                 Export Excel
@@ -149,16 +125,16 @@
 
                             <a href="{{ route('admin.barang.print') }}{{ request()->has('search') || request()->has('jenis') ? '?' . http_build_query(request()->all()) : '' }}"
                                target="_blank"
-                               class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-sm text-gray-600 tracking-widest hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm hover:shadow">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-gray-600 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 hover:shadow">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                                 </svg>
                                 Print
                             </a>
 
                             <a href="{{ route('admin.barang.create') }}"
-                               class="inline-flex items-center px-4 py-2 bg-white border border-green-500 rounded-md font-semibold text-sm text-green-600 tracking-widest hover:bg-green-50 focus:bg-green-50 active:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm hover:shadow">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-green-600 transition duration-150 ease-in-out bg-white border border-green-500 rounded-md shadow-sm hover:bg-green-50 focus:bg-green-50 active:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hover:shadow">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
                                 Tambah Barang
@@ -166,48 +142,48 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-lg shadow-md w-full overflow-x-auto">
-                        <table class="w-full table-fixed border-collapse min-w-max">
+                    <div class="w-full overflow-x-auto bg-white rounded-lg shadow-md">
+                        <table class="w-full border-collapse table-fixed min-w-max">
                             <thead>
                                 <tr class="bg-gray-100">
-                                    <th scope="col" class="w-28 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">ID Barang</th>
-                                    <th scope="col" class="w-48 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Nama Barang</th>
-                                    <th scope="col" class="w-20 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Satuan</th>
-                                    <th scope="col" class="w-32 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Harga</th>
-                                    <th scope="col" class="w-16 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Stok</th>
-                                    <th scope="col" class="w-24 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Jenis</th>
-                                    <th scope="col" class="w-32 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Foto</th>
-                                    <th scope="col" class="w-20 px-3 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">Aksi</th>
+                                    <th scope="col" class="px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300 w-28">ID Barang</th>
+                                    <th scope="col" class="w-48 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">Nama Barang</th>
+                                    <th scope="col" class="w-20 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">Satuan</th>
+                                    <th scope="col" class="w-32 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">Harga</th>
+                                    <th scope="col" class="w-16 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">Stok</th>
+                                    <th scope="col" class="w-24 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">Jenis</th>
+                                    <th scope="col" class="w-32 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">Foto</th>
+                                    <th scope="col" class="w-20 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($barang as $item)
-                                <tr class="hover:bg-gray-50 transition-colors duration-200 ease-in-out">
-                                                                        <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-300">
+                                <tr class="transition-colors duration-200 ease-in-out hover:bg-gray-50">
+                                                                        <td class="px-3 py-4 text-sm font-medium text-gray-900 border border-gray-300 whitespace-nowrap">
                                         <span class="font-mono text-sm">{{ $item->id_barang }}</span>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">{{ $item->nama_barang }}</div>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
                                         <span class="px-2 py-1 text-sm text-gray-600 bg-gray-100 rounded-full">{{ $item->satuan }}</span>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
                                         <span class="text-sm font-semibold text-green-600">
                                             Rp {{ number_format($item->harga_barang, 0, ',', '.') }}
                                         </span>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
                                         <span class="text-sm font-medium {{ $item->stok > 10 ? 'text-green-600' : ($item->stok > 0 ? 'text-yellow-600' : 'text-red-600') }}">
                                             {{ $item->stok }}
                                         </span>
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap border border-gray-300">
-                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
                                             {{ ucfirst($item->jenis) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap border border-gray-300">
+                                    <td class="px-6 py-4 border border-gray-300 whitespace-nowrap">
                                         @if($item->foto)
                                             <div class="flex justify-center p-1">
                                                 <img src="{{ asset('storage/'.$item->foto) }}"
@@ -223,25 +199,18 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-3 py-4 whitespace-nowrap text-sm font-medium border border-gray-300">
+                                    <td class="px-3 py-4 text-sm font-medium border border-gray-300 whitespace-nowrap">
                                         <div class="flex gap-1">
                                             <a href="{{ route('admin.barang.edit', $item) }}"
-                                               class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs transition duration-150"
+                                               class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
                                                title="Edit Barang">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form onsubmit="return confirm('Apakah Anda yakin ingin menghapus barang ini?')"
-                                                  action="{{ route('admin.barang.destroy', $item) }}"
-                                                  method="POST"
-                                                  class="inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs transition duration-150"
-                                                        title="Hapus Barang">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                            <button onclick="deleteBarang('{{ route('admin.barang.destroy', $item) }}')"
+                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600"
+                                                    title="Hapus Barang">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -252,8 +221,8 @@
                                             <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                             </svg>
-                                            <p class="mt-2 text-gray-500 text-base font-medium">Belum ada data barang</p>
-                                            <p class="mt-1 text-gray-400 text-sm">Silakan tambahkan barang baru menggunakan tombol di atas</p>
+                                            <p class="mt-2 text-base font-medium text-gray-500">Belum ada data barang</p>
+                                            <p class="mt-1 text-sm text-gray-400">Silakan tambahkan barang baru menggunakan tombol di atas</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -264,11 +233,11 @@
 
                     <!-- Pagination -->
                     <div class="mt-4">
-                        <div class="flex items-center space-x-2 mb-4">
+                        <div class="flex items-center mb-4 space-x-2">
                             <span class="text-sm text-gray-700">Tampilkan</span>
                             <select name="per_page"
                                     onchange="window.location.href = '{{ route('admin.barang') }}?per_page=' + this.value + '&search={{ request('search') }}&jenis={{ request('jenis') }}'"
-                                    class="rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm">
+                                    class="text-sm border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500">
                                 @foreach([10, 25, 50, 100] as $perPage)
                                     <option value="{{ $perPage }}" {{ request('per_page', 10) == $perPage ? 'selected' : '' }}>
                                         {{ $perPage }}

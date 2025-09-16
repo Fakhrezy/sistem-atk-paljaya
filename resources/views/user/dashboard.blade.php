@@ -58,36 +58,39 @@
                     <div class="mt-4">
                         <a href="{{ route('user.pengambilan.index') }}"
                            class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <i class="fas fa-box-open mr-2"></i>
                             Lihat Barang Tersedia
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Riwayat Card (Future Feature) -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg opacity-50">
+            <!-- Usulan Pengadaan Card -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow duration-200">
                 <div class="p-6">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                             </div>
                         </div>
                         <div class="ml-4 flex-1">
-                            <h3 class="text-lg font-semibold text-gray-900">Riwayat Pengambilan</h3>
-                            <p class="text-sm text-gray-600">Lihat riwayat pengambilan barang</p>
+                            <h3 class="text-lg font-semibold text-gray-900">Usulan Pengadaan</h3>
+                            <p class="text-sm text-gray-600">Buat usulan pengadaan barang</p>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <button disabled
-                                class="w-full inline-flex items-center justify-center px-4 py-2 bg-gray-400 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest cursor-not-allowed">
-                            Segera Tersedia
-                        </button>
+                        <a href="{{ route('user.usulan.index') }}"
+                           class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <i class="fas fa-file-alt mr-2"></i>
+                            Buat Usulan Baru
+                        </a>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

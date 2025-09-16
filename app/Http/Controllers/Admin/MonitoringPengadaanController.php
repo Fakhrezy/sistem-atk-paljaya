@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MonitoringPengadaan;
+use App\Models\Barang;
+use Illuminate\Support\Facades\DB;
 
 class MonitoringPengadaanController extends Controller
 {
@@ -44,13 +46,47 @@ class MonitoringPengadaanController extends Controller
             'status' => 'required|in:proses,terima'
         ]);
 
-        $pengadaan = MonitoringPengadaan::findOrFail($id);
-        $pengadaan->status = $request->status;
-        $pengadaan->save();
+        try {
+            DB::beginTransaction();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Status berhasil diperbarui'
-        ]);
+            $pengadaan = MonitoringPengadaan::with('barang')->findOrFail($id);
+            $oldStatus = $pengadaan->status;
+            $newStatus = $request->status;
+            $jumlahPengadaan = $pengadaan->debit;
+
+            // Update barang stock based on status change
+            if ($oldStatus === 'proses' && $newStatus === 'terima') {
+                // When accepting pengadaan, increase stock
+                $pengadaan->barang->stok += $jumlahPengadaan;
+                $pengadaan->barang->save();
+                $message = 'Pengadaan berhasil diterima dan stok barang telah ditambahkan';
+            } elseif ($oldStatus === 'terima' && $newStatus === 'proses') {
+                // When cancelling acceptance, decrease stock
+                if ($pengadaan->barang->stok < $jumlahPengadaan) {
+                    throw new \Exception('Stok tidak mencukupi untuk pembatalan. Pastikan stok barang cukup.');
+                }
+                $pengadaan->barang->stok -= $jumlahPengadaan;
+                $pengadaan->barang->save();
+                $message = 'Status pengadaan dibatalkan dan stok barang telah dikurangi';
+            }
+
+            // Update pengadaan status
+            $pengadaan->status = $newStatus;
+            $pengadaan->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

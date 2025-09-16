@@ -23,15 +23,15 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased h-full overflow-hidden">
+<body class="h-full overflow-hidden font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div class="w-64 bg-gray-800 shadow-lg overflow-y-auto flex-shrink-0">
+            <div class="flex-shrink-0 w-64 overflow-y-auto bg-gray-800 shadow-lg">
                 <div class="flex flex-col h-full">
                     <!-- Logo -->
-                    <div class="flex items-center justify-center h-16 bg-gray-900 px-4">
-                        <img src="{{ asset('images/paljaya-logo.png') }}" alt="Logo" class="h-7 w-auto">
+                    <div class="flex items-center justify-center h-16 px-4 bg-gray-900">
+                        <img src="{{ asset('images/paljaya-logo.png') }}" alt="Logo" class="w-auto h-7">
                     </div>
 
                     <!-- Navigation -->
@@ -64,13 +64,13 @@
                                 Kelola Users
                             </a>
 
-                            <!-- Monitoring Barang Link -->
+                            <!-- Monitoring Pengambilan Link -->
                             <a href="{{ route('admin.monitoring-barang.index') }}"
                                class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*') ? 'bg-gray-700' : '' }}">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                                 </svg>
-                                Monitoring Barang
+                                Monitoring Pengambilan
                             </a>
 
                             <!-- Monitoring Pengadaan Link -->
@@ -102,7 +102,7 @@
             </div>
 
             <!-- Main Content -->
-            <div class="flex-1 flex flex-col overflow-hidden">
+            <div class="flex flex-col flex-1 overflow-hidden">
                 <!-- Top Navigation -->
                 <div class="bg-blue-500 shadow">
                     <div class="px-6 py-4">
@@ -113,11 +113,12 @@
                 </div>
 
                 <!-- Page Content -->
-                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
+                <main class="flex-1 p-4 overflow-x-hidden overflow-y-auto bg-gray-100">
                     @yield('content')
                 </main>
             </div>
         </div>
     </div>
+    @stack('scripts')
 </body>
 </html>

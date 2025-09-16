@@ -13,18 +13,17 @@
 @section('content')
 <div class="h-full">
     <div class="max-w-full">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900">
                 <div class="mb-6">
-                    <div class="flex justify-between items-center">
+                    <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Keranjang Usulan Pengadaan</h2>
-                            <p class="mt-1 text-sm text-gray-600">Kelola barang yang diusulkan untuk pengadaan</p>
                         </div>
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('user.usulan.index') }}"
-                               class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                 </svg>
                                 Kembali ke Katalog
@@ -34,13 +33,13 @@
                 </div>
 
                 @if(session('success'))
-                    <div class="mb-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded relative">
+                    <div class="relative p-4 mb-4 text-blue-700 bg-blue-100 border-l-4 border-blue-500 rounded">
                         <span class="block sm:inline">{{ session('success') }}</span>
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded relative">
+                    <div class="relative p-4 mb-4 text-red-700 bg-red-100 border-l-4 border-red-500 rounded">
                         <span class="block sm:inline">{{ session('error') }}</span>
                     </div>
                 @endif
@@ -48,10 +47,10 @@
                 <div id="cart-container">
                     @if($items->count() > 0)
                         <!-- Summary -->
-                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                        <div class="p-4 mb-6 border-l-4 border-blue-400 bg-blue-50">
                             <div class="flex">
                                 <div class="flex-shrink-0">
-                                    <i class="fas fa-info-circle text-blue-400"></i>
+                                    <i class="text-blue-400 fas fa-info-circle"></i>
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm text-blue-700">
@@ -68,76 +67,74 @@
                                     <div class="flex-1">
                                         <div class="flex items-start justify-between">
                                             <div>
-                                                <h4 class="text-lg font-medium text-gray-900 flex items-center">
-                                                    <i class="fas fa-box mr-2 text-gray-500"></i>{{ $item->barang->nama_barang }}
+                                                <h4 class="flex items-center text-lg font-medium text-gray-900">
+                                                    <i class="mr-2 text-gray-500 fas fa-box"></i>{{ $item->barang->nama_barang }}
                                                 </h4>
-                                                <p class="text-sm text-gray-600 mt-1 flex items-center">
+                                                <p class="flex items-center mt-1 text-sm text-gray-600">
                                                     @switch($item->barang->jenis)
                                                         @case('atk')
-                                                            <i class="fas fa-pen mr-1 text-blue-500"></i>Jenis: ATK
+                                                            <i class="mr-1 text-blue-500 fas fa-pen"></i>Jenis: ATK
                                                             @break
                                                         @case('cetak')
-                                                            <i class="fas fa-print mr-1 text-green-500"></i>Jenis: Cetakan
+                                                            <i class="mr-1 text-green-500 fas fa-print"></i>Jenis: Cetakan
                                                             @break
                                                         @case('tinta')
-                                                            <i class="fas fa-tint mr-1 text-purple-500"></i>Jenis: Tinta
+                                                            <i class="mr-1 text-purple-500 fas fa-tint"></i>Jenis: Tinta
                                                             @break
                                                         @default
-                                                            <i class="fas fa-tag mr-1 text-gray-500"></i>Jenis: {{ ucfirst($item->barang->jenis) }}
+                                                            <i class="mr-1 text-gray-500 fas fa-tag"></i>Jenis: {{ ucfirst($item->barang->jenis) }}
                                                     @endswitch
                                                 </p>
-                                                <p class="text-sm text-gray-500 flex items-center">
-                                                    <i class="fas fa-ruler mr-1 text-gray-400"></i>Satuan: {{ $item->barang->satuan }}
+                                                <p class="flex items-center text-sm text-gray-500">
+                                                    <i class="mr-1 text-gray-400 fas fa-ruler"></i>Satuan: {{ $item->barang->satuan }}
                                                 </p>
                                                 @if($item->keterangan)
-                                                    <p class="text-sm text-gray-600 mt-1 flex items-center">
-                                                        <i class="fas fa-comment mr-1 text-blue-500"></i>{{ $item->keterangan }}
+                                                    <p class="flex items-center mt-1 text-sm text-gray-600">
+                                                        <i class="mr-1 text-blue-500 fas fa-comment"></i>{{ $item->keterangan }}
                                                     </p>
                                                 @endif
-                                                <p class="text-xs text-gray-400 mt-1 flex items-center">
-                                                    <i class="fas fa-clock mr-1"></i>Ditambahkan: {{ $item->created_at->format('d/m/Y H:i') }}
+                                                <p class="flex items-center mt-1 text-xs text-gray-400">
+                                                    <i class="mr-1 fas fa-clock"></i>Ditambahkan: {{ $item->created_at->format('d/m/Y H:i') }}
                                                 </p>
                                             </div>
                                             <div class="text-right">
-                                                <span class="text-lg font-semibold text-gray-900 flex items-center justify-end">
-                                                    <i class="fas fa-shopping-cart mr-2 text-blue-500"></i>{{ $item->jumlah }} {{ $item->barang->satuan }}
+                                                <span class="flex items-center justify-end text-lg font-semibold text-gray-900">
+                                                    <i class="mr-2 text-blue-500 fas fa-shopping-cart"></i>{{ $item->jumlah }} {{ $item->barang->satuan }}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- Action Buttons -->
-                                    <div class="flex items-center space-x-2 ml-4">
+                                    <div class="flex items-center ml-4 space-x-2">
                                         <!-- Update Quantity -->
                                         <div class="flex items-center border border-gray-300 rounded">
                                             <button onclick="updateQuantity({{ $item->id }}, -1)"
                                                     class="px-2 py-1 hover:bg-gray-100 transition ease-in-out duration-150 {{ $item->jumlah <= 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
                                                     {{ $item->jumlah <= 1 ? 'disabled' : '' }}
                                                     title="Kurangi jumlah">
-                                                <i class="fas fa-minus text-xs text-gray-600"></i>
+                                                <i class="text-xs text-gray-600 fas fa-minus"></i>
                                             </button>
                                             <span id="quantity-{{ $item->id }}" class="px-3 py-1 text-sm border-l border-r border-gray-300 bg-gray-50 font-medium min-w-[3rem] text-center">{{ $item->jumlah }}</span>
                                             <button onclick="updateQuantity({{ $item->id }}, 1)"
-                                                    class="px-2 py-1 hover:bg-gray-100 transition ease-in-out duration-150"
+                                                    class="px-2 py-1 transition duration-150 ease-in-out hover:bg-gray-100"
                                                     title="Tambah jumlah">
-                                                <i class="fas fa-plus text-xs text-gray-600"></i>
+                                                <i class="text-xs text-gray-600 fas fa-plus"></i>
                                             </button>
                                         </div>
 
                                         <!-- Edit Button -->
                                         <button onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->jumlah }}, '{{ addslashes($item->keterangan ?? '') }}', '{{ $item->barang->satuan }}')"
-                                                class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition ease-in-out duration-150 inline-flex items-center"
+                                                class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-700"
                                                 title="Edit usulan">
-                                            <i class="fas fa-edit mr-1"></i>
-                                            <span class="hidden sm:inline">Edit</span>
+                                            <i class="fas fa-edit"></i>
                                         </button>
 
                                         <!-- Remove Button -->
                                         <button onclick="removeItem({{ $item->id }})"
-                                                class="bg-red-500 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition ease-in-out duration-150 inline-flex items-center"
+                                                class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out bg-gray-400 rounded hover:bg-gray-500"
                                                 title="Hapus usulan">
-                                            <i class="fas fa-trash-alt mr-1"></i>
-                                            <span class="hidden sm:inline">Hapus</span>
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -145,31 +142,31 @@
                         </div>
 
                         <!-- Action Buttons -->
-                        <div class="flex justify-between items-center pt-6 mt-6 border-t border-gray-200">
+                        <div class="flex items-center justify-between pt-6 mt-6 border-t border-gray-200">
                             <button onclick="clearCart()"
-                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-150 inline-flex items-center"
+                                    class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out bg-red-500 rounded hover:bg-red-700"
                                     title="Hapus semua usulan">
-                                <i class="fas fa-trash-alt mr-2"></i>Kosongkan Usulan
+                                <i class="mr-2 fas fa-trash-alt"></i>Kosongkan Usulan
                             </button>
                             <button onclick="submitUsulan()"
-                                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-150 inline-flex items-center"
+                                    class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-blue-500 rounded-lg hover:bg-blue-600"
                                     title="Ajukan semua usulan">
-                                <i class="fas fa-paper-plane mr-2"></i>Ajukan Usulan
+                                <i class="mr-2 fas fa-paper-plane"></i>Ajukan Usulan
                             </button>
                         </div>
 
                     @else
                         <!-- Empty Cart -->
-                        <div class="text-center py-12">
+                        <div class="py-12 text-center">
                             <div class="mb-4">
-                                <i class="fas fa-shopping-cart text-6xl text-gray-400"></i>
+                                <i class="text-6xl text-gray-400 fas fa-shopping-cart"></i>
                             </div>
-                            <h2 class="text-xl font-semibold text-gray-600 mb-2 flex items-center justify-center">
-                                <i class="fas fa-info-circle mr-2 text-blue-500"></i>Belum Ada Usulan
+                            <h2 class="flex items-center justify-center mb-2 text-xl font-semibold text-gray-600">
+                                <i class="mr-2 text-blue-500 fas fa-info-circle"></i>Belum Ada Usulan
                             </h2>
-                            <p class="text-gray-500 mb-6">Anda belum menambahkan barang untuk diusulkan</p>
-                            <a href="{{ route('user.usulan.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-150 inline-flex items-center">
-                                <i class="fas fa-plus mr-2"></i>Buat Usulan
+                            <p class="mb-6 text-gray-500">Anda belum menambahkan barang untuk diusulkan</p>
+                            <a href="{{ route('user.usulan.index') }}" class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-700">
+                                <i class="mr-2 fas fa-plus"></i>Buat Usulan
                             </a>
                         </div>
                     @endif
@@ -180,38 +177,38 @@
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+<div id="editModal" class="fixed inset-0 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
+    <div class="relative p-5 mx-auto bg-white border rounded-md shadow-lg top-20 w-96">
         <div class="mt-3">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Usulan</h3>
+            <h3 class="mb-4 text-lg font-medium text-gray-900">Edit Usulan</h3>
             <form id="editForm">
                 @csrf
                 <input type="hidden" id="edit_id" name="id">
 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Barang:</label>
-                    <p class="text-sm text-gray-900 font-semibold" id="edit_nama_barang"></p>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang:</label>
+                    <p class="text-sm font-semibold text-gray-900" id="edit_nama_barang"></p>
                 </div>
 
                 <div class="mb-4">
-                    <label for="edit_jumlah" class="block text-sm font-medium text-gray-700 mb-2">Jumlah:</label>
+                    <label for="edit_jumlah" class="block mb-2 text-sm font-medium text-gray-700">Jumlah:</label>
                     <div class="flex items-center">
-                        <button type="button" onclick="editDecreaseQuantity()" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-l transition ease-in-out duration-150">-</button>
-                        <input type="number" id="edit_jumlah" name="jumlah" min="1" value="1" class="border-t border-b border-gray-300 text-center w-20 py-1 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150">
-                        <button type="button" onclick="editIncreaseQuantity()" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r transition ease-in-out duration-150">+</button>
+                        <button type="button" onclick="editDecreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-l hover:bg-gray-300">-</button>
+                        <input type="number" id="edit_jumlah" name="jumlah" min="1" value="1" class="w-20 py-1 text-center transition duration-150 ease-in-out border-t border-b border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="button" onclick="editIncreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-r hover:bg-gray-300">+</button>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label for="edit_keterangan" class="block text-sm font-medium text-gray-700 mb-2">Keterangan (opsional):</label>
-                    <textarea id="edit_keterangan" name="keterangan" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150" placeholder="Keterangan tambahan..."></textarea>
+                    <label for="edit_keterangan" class="block mb-2 text-sm font-medium text-gray-700">Keterangan (opsional):</label>
+                    <textarea id="edit_keterangan" name="keterangan" rows="3" class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Keterangan tambahan..."></textarea>
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition ease-in-out duration-150">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 text-base font-medium text-gray-700 transition duration-150 ease-in-out bg-gray-300 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Batal
                     </button>
-                    <button type="button" onclick="updateItem()" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ease-in-out duration-150">
+                    <button type="button" onclick="updateItem()" class="px-4 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         Simpan
                     </button>
                 </div>
@@ -336,32 +333,73 @@ function removeItem(id) {
 }
 
 function clearCart() {
-    if (!confirm('Apakah Anda yakin ingin mengosongkan semua usulan?')) {
-        return;
-    }
+    Swal.fire({
+        title: 'Kosongkan Usulan?',
+        text: 'Apakah Anda yakin ingin mengosongkan semua usulan ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Ya, Kosongkan!',
+        cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Show loading state
+            Swal.fire({
+                title: 'Mengosongkan Usulan...',
+                text: 'Mohon tunggu sebentar',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-    const formData = new FormData();
-    formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-    formData.append('_method', 'DELETE');
+            const formData = new FormData();
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+            formData.append('_method', 'DELETE');
 
-    fetch('/user/usulan/cart/clear', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+            fetch('/user/usulan/cart/clear', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonColor: '#16a34a',
+                        confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: data.message || 'Terjadi kesalahan saat mengosongkan usulan.',
+                        icon: 'error',
+                        confirmButtonColor: '#dc2626',
+                        confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan saat mengosongkan usulan.',
+                    icon: 'error',
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                });
+            });
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.reload();
-        } else {
-            showMessage(data.message || 'Terjadi kesalahan saat mengosongkan usulan.', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showMessage('Terjadi kesalahan saat mengosongkan usulan.', 'error');
     });
 }
 
@@ -389,9 +427,9 @@ function submitUsulan() {
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Ajukan!',
-        cancelButtonText: 'Batal',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: '<i class="mr-2 fas fa-check"></i>Ajukan!',
+        cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {

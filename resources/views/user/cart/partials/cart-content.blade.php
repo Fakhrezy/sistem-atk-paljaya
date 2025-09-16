@@ -57,13 +57,13 @@
                                             <p class="text-sm text-gray-600 mt-1 flex items-center">
                                                 @switch($item->barang->jenis)
                                                     @case('atk')
-                                                        <i class="fas fa-pen mr-1 text-blue-500"></i>Jenis: ATK
+                                                        <i class="fas fa-pen mr-1 text-gray-500"></i>Jenis: ATK
                                                         @break
                                                     @case('cetak')
-                                                        <i class="fas fa-print mr-1 text-green-500"></i>Jenis: Cetakan
+                                                        <i class="fas fa-print mr-1 text-gray-500"></i>Jenis: Cetakan
                                                         @break
                                                     @case('tinta')
-                                                        <i class="fas fa-tint mr-1 text-purple-500"></i>Jenis: Tinta
+                                                        <i class="fas fa-tint mr-1 text-gray-500"></i>Jenis: Tinta
                                                         @break
                                                     @default
                                                         <i class="fas fa-tag mr-1 text-gray-500"></i>Jenis: {{ ucfirst($item->barang->jenis) }}
@@ -74,7 +74,7 @@
                                             </p>
                                             @if($item->pengambil)
                                                 <p class="text-sm text-gray-600 mt-1 flex items-center">
-                                                    <i class="fas fa-user mr-1 text-green-500"></i>Pengambil: {{ $item->pengambil }}
+                                                    <i class="fas fa-user mr-1 text-gray-500"></i>Pengambil: {{ $item->pengambil }}
                                                 </p>
                                             @endif
                                             @if($item->keterangan)
@@ -91,7 +91,7 @@
                                                 <i class="fas fa-shopping-cart mr-2 text-blue-500"></i>{{ $item->quantity }} {{ $item->barang->satuan }}
                                             </span>
                                             <p class="text-sm text-gray-500 flex items-center justify-end">
-                                                <i class="fas fa-warehouse mr-1 text-green-500"></i>Stok tersedia: {{ $item->barang->stok }}
+                                                <i class="fas fa-warehouse mr-1 text-gray-500"></i>Stok tersedia: {{ $item->barang->stok }}
                                             </p>
                                         </div>
                                     </div>
@@ -117,18 +117,16 @@
 
                                     <!-- Edit Button -->
                                     <button onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->quantity }}, '{{ $item->bidang }}', '{{ addslashes($item->keterangan ?? '') }}', '{{ addslashes($item->pengambil ?? '') }}', {{ $item->barang->stok }}, '{{ $item->barang->satuan }}')"
-                                            class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition ease-in-out duration-150 inline-flex items-center"
+                                            class="w-8 h-8 bg-blue-500 hover:bg-blue-700 text-white rounded transition ease-in-out duration-150 inline-flex items-center justify-center"
                                             title="Edit item dalam keranjang">
-                                        <i class="fas fa-edit mr-1"></i>
-                                        <span class="hidden sm:inline">Edit</span>
+                                        <i class="fas fa-edit"></i>
                                     </button>
 
                                     <!-- Remove Button -->
                                     <button onclick="removeItem({{ $item->id }})"
-                                            class="bg-red-500 hover:bg-red-700 text-white px-3 py-2 rounded text-sm transition ease-in-out duration-150 inline-flex items-center"
+                                            class="w-8 h-8 bg-gray-400 hover:bg-gray-500 text-white rounded transition ease-in-out duration-150 inline-flex items-center justify-center"
                                             title="Hapus item dari keranjang">
-                                        <i class="fas fa-trash-alt mr-1"></i>
-                                        <span class="hidden sm:inline">Hapus</span>
+                                        <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </div>
                             </div>
@@ -143,7 +141,7 @@
                                 <span class="font-medium">{{ $items->sum('quantity') }} unit</span> dalam bidang {{ ucfirst($bidang) }}
                             </div>
                             <button onclick="submitPengambilanBidang('{{ $bidang }}')"
-                                    class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-150 inline-flex items-center"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-150 inline-flex items-center"
                                     title="Ajukan pengambilan untuk bidang {{ ucfirst($bidang) }}">
                                 <i class="fas fa-paper-plane mr-2"></i>Ajukan Pengambilan
                             </button>

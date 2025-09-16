@@ -9,18 +9,17 @@
 @section('content')
 <div class="h-full">
     <div class="max-w-full">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900">
                 <div class="mb-6">
-                    <div class="flex justify-between items-center">
+                    <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Keranjang Pengambilan</h2>
-                            <p class="mt-1 text-sm text-gray-600">Kelola barang ATK yang akan diambil</p>
                         </div>
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('user.pengambilan.index') }}"
-                               class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                 </svg>
                                 Kembali ke Katalog
@@ -30,13 +29,13 @@
                 </div>
 
                 @if(session('success'))
-                    <div class="mb-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded relative">
+                    <div class="relative p-4 mb-4 text-blue-700 bg-blue-100 border-l-4 border-blue-500 rounded">
                         <span class="block sm:inline">{{ session('success') }}</span>
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded relative">
+                    <div class="relative p-4 mb-4 text-red-700 bg-red-100 border-l-4 border-red-500 rounded">
                         <span class="block sm:inline">{{ session('error') }}</span>
                     </div>
                 @endif
@@ -51,33 +50,33 @@
 </div>
 
 <!-- Edit Item Modal -->
-<div id="editItemModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+<div id="editItemModal" class="fixed inset-0 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
+    <div class="relative p-5 mx-auto bg-white border rounded-md shadow-lg top-20 w-96">
         <div class="mt-3 text-center">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Item Keranjang</h3>
-            <div class="mt-2 px-7 py-3">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Edit Item Keranjang</h3>
+            <div class="py-3 mt-2 px-7">
                 <form id="editItemForm">
                     @csrf
                     <input type="hidden" id="edit_cart_id" name="cart_id">
 
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Barang:</label>
-                        <p class="text-sm text-gray-900 font-semibold" id="edit_barang_nama"></p>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang:</label>
+                        <p class="text-sm font-semibold text-gray-900" id="edit_barang_nama"></p>
                     </div>
 
                     <div class="mb-4">
-                        <label for="edit_quantity" class="block text-sm font-medium text-gray-700 mb-2">Jumlah:</label>
+                        <label for="edit_quantity" class="block mb-2 text-sm font-medium text-gray-700">Jumlah:</label>
                         <div class="flex items-center">
-                            <button type="button" onclick="editDecreaseQuantity()" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-l transition ease-in-out duration-150">-</button>
-                            <input type="number" id="edit_quantity" name="quantity" min="1" value="1" class="border-t border-b border-gray-300 text-center w-20 py-1 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150">
-                            <button type="button" onclick="editIncreaseQuantity()" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-r transition ease-in-out duration-150">+</button>
+                            <button type="button" onclick="editDecreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-l hover:bg-gray-300">-</button>
+                            <input type="number" id="edit_quantity" name="quantity" min="1" value="1" class="w-20 py-1 text-center transition duration-150 ease-in-out border-t border-b border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                            <button type="button" onclick="editIncreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-r hover:bg-gray-300">+</button>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Maksimal: <span id="edit_max_stock"></span> <span id="edit_satuan"></span></p>
+                        <p class="mt-1 text-xs text-gray-500">Maksimal: <span id="edit_max_stock"></span> <span id="edit_satuan"></span></p>
                     </div>
 
                     <div class="mb-4">
-                        <label for="edit_bidang" class="block text-sm font-medium text-gray-700 mb-2">Bidang:</label>
-                        <select id="edit_bidang" name="bidang" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150">
+                        <label for="edit_bidang" class="block mb-2 text-sm font-medium text-gray-700">Bidang:</label>
+                        <select id="edit_bidang" name="bidang" required class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Bidang</option>
                             <option value="umum">Umum</option>
                             <option value="perencanaan">Perencanaan</option>
@@ -88,21 +87,21 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="edit_pengambil" class="block text-sm font-medium text-gray-700 mb-2">Nama Pengambil:</label>
-                        <input type="text" id="edit_pengambil" name="pengambil" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150" placeholder="Masukkan nama pengambil...">
+                        <label for="edit_pengambil" class="block mb-2 text-sm font-medium text-gray-700">Nama Pengambil:</label>
+                        <input type="text" id="edit_pengambil" name="pengambil" required class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan nama pengambil...">
                     </div>
 
                     <div class="mb-4">
-                        <label for="edit_keterangan" class="block text-sm font-medium text-gray-700 mb-2">Keterangan (opsional):</label>
-                        <textarea id="edit_keterangan" name="keterangan" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition ease-in-out duration-150" placeholder="Keterangan tambahan..."></textarea>
+                        <label for="edit_keterangan" class="block mb-2 text-sm font-medium text-gray-700">Keterangan (opsional):</label>
+                        <textarea id="edit_keterangan" name="keterangan" rows="3" class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Keterangan tambahan..."></textarea>
                     </div>
                 </form>
             </div>
             <div class="items-center px-4 py-3">
-                <button id="updateItemBtn" onclick="updateCartItem()" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition ease-in-out duration-150">
+                <button id="updateItemBtn" onclick="updateCartItem()" class="w-full px-4 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-blue-500 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
                     Update Item
                 </button>
-                <button onclick="closeEditModal()" class="mt-3 px-4 py-2 bg-gray-300 text-black text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition ease-in-out duration-150">
+                <button onclick="closeEditModal()" class="w-full px-4 py-2 mt-3 text-base font-medium text-black transition duration-150 ease-in-out bg-gray-300 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
                     Batal
                 </button>
             </div>
@@ -129,7 +128,7 @@ function showMessage(message, type = 'info') {
     const messageDiv = document.createElement('div');
     messageDiv.className = `notification-message mb-4 ${alertClass} border-l-4 p-4 rounded relative`;
     messageDiv.innerHTML = `
-        <div class="flex justify-between items-center">
+        <div class="flex items-center justify-between">
             <span class="block sm:inline">${message}</span>
             <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-current hover:opacity-75">
                 <i class="fas fa-times"></i>
@@ -243,30 +242,69 @@ function removeItem(cartId) {
 
 // Clear cart
 function clearCart() {
-    if (!confirm('Apakah Anda yakin ingin mengosongkan keranjang?')) {
-        return;
-    }
+    Swal.fire({
+        title: 'Kosongkan Keranjang?',
+        text: 'Apakah Anda yakin ingin mengosongkan semua item di keranjang?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Ya, Kosongkan!',
+        cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Show loading state
+            Swal.fire({
+                title: 'Mengosongkan Keranjang...',
+                text: 'Mohon tunggu sebentar',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-    const formData = new FormData();
-    formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-    formData.append('_method', 'DELETE');
+            const formData = new FormData();
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+            formData.append('_method', 'DELETE');
 
-    fetch('{{ route("user.cart.clear") }}', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            loadCartContent();
-            showMessage(data.message, 'success');
-        } else {
-            alert(data.message || 'Terjadi kesalahan saat mengosongkan keranjang.');
+            fetch('{{ route("user.cart.clear") }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadCartContent();
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonColor: '#16a34a',
+                        confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: data.message || 'Terjadi kesalahan saat mengosongkan keranjang.',
+                        icon: 'error',
+                        confirmButtonColor: '#dc2626',
+                        confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan saat mengosongkan keranjang.',
+                    icon: 'error',
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                });
+            });
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengosongkan keranjang.');
     });
 }
 
@@ -355,10 +393,10 @@ function submitPengambilanBidang(bidang) {
         text: `Apakah Anda yakin ingin mengajukan pengambilan untuk semua item di bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}?`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#16a34a',
-        cancelButtonColor: '#dc2626',
-        confirmButtonText: '<i class="fas fa-check mr-2"></i>Ya, Ajukan!',
-        cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+        confirmButtonColor: '#3b82f6',
+        cancelButtonColor: '#9ca3af',
+        confirmButtonText: '<i class="mr-2 fas fa-check"></i>Ajukan!',
+        cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
@@ -398,7 +436,7 @@ function processCheckoutDirect(bidang) {
                 text: data.message,
                 icon: 'success',
                 confirmButtonColor: '#16a34a',
-                confirmButtonText: '<i class="fas fa-check mr-2"></i>OK'
+                confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
             }).then(() => {
                 loadCartContent(); // Refresh cart content
             });
@@ -408,7 +446,7 @@ function processCheckoutDirect(bidang) {
                 text: data.message || 'Terjadi kesalahan saat mengajukan pengambilan.',
                 icon: 'error',
                 confirmButtonColor: '#dc2626',
-                confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+                confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
             });
         }
     })
@@ -419,7 +457,7 @@ function processCheckoutDirect(bidang) {
             text: 'Terjadi kesalahan saat mengajukan pengambilan.',
             icon: 'error',
             confirmButtonColor: '#dc2626',
-            confirmButtonText: '<i class="fas fa-times mr-2"></i>OK'
+            confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
         });
     });
 }
