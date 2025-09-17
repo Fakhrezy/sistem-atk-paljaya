@@ -213,7 +213,7 @@ function updateQuantity(cartId, change) {
 
 // Remove item from cart
 function removeItem(cartId) {
-    if (!confirm('Apakah Anda yakin ingin menghapus item ini dari keranjang?')) {
+    if (!confirm('Yakin ingin menghapus item ini dari keranjang?')) {
         return;
     }
 
@@ -244,7 +244,7 @@ function removeItem(cartId) {
 function clearCart() {
     Swal.fire({
         title: 'Kosongkan Keranjang?',
-        text: 'Apakah Anda yakin ingin mengosongkan semua item di keranjang?',
+        text: 'Yakin ingin mengosongkan semua item di keranjang?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc2626',
@@ -390,7 +390,7 @@ function submitPengambilanBidang(bidang) {
     // Tampilkan SweetAlert konfirmasi
     Swal.fire({
         title: 'Konfirmasi Pengambilan',
-        text: `Apakah Anda yakin ingin mengajukan pengambilan untuk semua item di bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}?`,
+        text: `Yakin ingin mengajukan pengambilan untuk semua item di bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3b82f6',

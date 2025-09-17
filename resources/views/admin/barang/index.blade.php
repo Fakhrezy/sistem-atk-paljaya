@@ -15,7 +15,7 @@
 function deleteBarang(url) {
     Swal.fire({
         title: 'Hapus Barang?',
-        text: 'Apakah Anda yakin ingin menghapus barang ini?',
+        text: 'Yakin ingin menghapus barang ini?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#6B7280',

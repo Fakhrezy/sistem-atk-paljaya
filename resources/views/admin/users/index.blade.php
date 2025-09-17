@@ -15,7 +15,7 @@
 function deleteUser(url) {
     Swal.fire({
         title: 'Hapus User?',
-        text: 'Apakah Anda yakin ingin menghapus user ini?',
+        text: 'AYakin ingin menghapus user ini?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#6B7280',

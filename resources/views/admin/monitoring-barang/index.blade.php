@@ -397,7 +397,7 @@ function updateStatus(id, status) {
 function deleteMonitoring(id) {
     Swal.fire({
         title: 'Hapus Data Monitoring?',
-        text: 'Apakah Anda yakin ingin menghapus data monitoring ini? Data yang dihapus tidak dapat dikembalikan!',
+        text: 'Yakin ingin menghapus data monitoring ini?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc2626',

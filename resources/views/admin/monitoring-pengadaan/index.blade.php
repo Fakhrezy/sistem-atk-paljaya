@@ -175,8 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
     window.updateStatus = function(id, status) {
         const confirmTitle = status === 'terima' ? 'Terima Pengadaan?' : 'Batalkan Status?';
     const confirmText = status === 'terima' ?
-        'Apakah Anda yakin ingin menerima pengadaan ini? Stok barang akan bertambah sesuai jumlah pengadaan.' :
-        'Apakah Anda yakin ingin membatalkan status pengadaan ini? Stok barang akan dikurangi kembali.';
+        'Yakin ingin menerima pengadaan ini?' :
+        'Yakin ingin membatalkan status pengadaan ini?';
     const confirmButtonText = status === 'terima' ? '<i class="mr-2 fas fa-check"></i>Terima!' : '<i class="mr-2 fas fa-times"></i>Batalkan!';
     const confirmButtonColor = status === 'terima' ? '#16a34a' : '#f59e0b';
 

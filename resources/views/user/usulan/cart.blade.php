@@ -303,7 +303,7 @@ function updateItem() {
 }
 
 function removeItem(id) {
-    if (!confirm('Apakah Anda yakin ingin menghapus usulan ini?')) {
+    if (!confirm('Yakin ingin menghapus usulan ini?')) {
         return;
     }
 
@@ -335,7 +335,7 @@ function removeItem(id) {
 function clearCart() {
     Swal.fire({
         title: 'Kosongkan Usulan?',
-        text: 'Apakah Anda yakin ingin mengosongkan semua usulan ini?',
+        text: 'Yakin ingin mengosongkan semua usulan ini?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc2626',
@@ -423,7 +423,7 @@ function showMessage(message, type = 'info') {
 function submitUsulan() {
     Swal.fire({
         title: 'Ajukan Usulan',
-        text: 'Apakah Anda yakin ingin mengajukan semua usulan ini?',
+        text: 'Yakin ingin mengajukan semua usulan ini?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
