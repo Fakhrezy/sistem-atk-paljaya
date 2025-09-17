@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0" version="28.2.3" pages="2">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0" version="28.2.3" pages="3">
   <diagram name="fc-BTD" id="CKKrf23XRtR4sIhERC73">
     <mxGraphModel dx="713" dy="405" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -47,7 +47,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="mhmlcAYJWUHxj0jiPCu6" name="fc-MP">
-    <mxGraphModel dx="1034" dy="587" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1880" dy="1067" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -108,6 +108,50 @@
         </mxCell>
         <mxCell id="QAdFlfaC-wQvxZRa5yil-12" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Output :&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Statistik Penggunaan Harian/Bulanan/Tahunan/TW&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;align=left;" vertex="1" parent="1">
           <mxGeometry x="280" y="740" width="240" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="rgNDjQRQXwpFCaJVosgd" name="iden-BTD">
+    <mxGraphModel dx="1620" dy="2147" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="V0wnx0aj81doS9Qa0_a_-1" target="V0wnx0aj81doS9Qa0_a_-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="V0wnx0aj81doS9Qa0_a_-1" target="V0wnx0aj81doS9Qa0_a_-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="V0wnx0aj81doS9Qa0_a_-1" target="V0wnx0aj81doS9Qa0_a_-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="V0wnx0aj81doS9Qa0_a_-1" target="V0wnx0aj81doS9Qa0_a_-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-1" value="TAMU = ASET STRATEGIS&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Dimana tamu adalah elemen penting dalam menjaga hubungan baik, meningkatkan citra perusahaan, dan merencanakan kegiatan lebih efisien&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="200" width="430" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="V0wnx0aj81doS9Qa0_a_-2" target="V0wnx0aj81doS9Qa0_a_-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-2" value="Perumda PalJaya belum memiliki sistem buku tamu digital untuk mempermudah pencatatan kedatangan tamu, meningkatkan efisiensi, dan meminimalisir kesalahan dalam pencatatan." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="165" y="50" width="480" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-3" value="&lt;b&gt;Visibilitas Tamu Rendah&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;sulit melacak dan mengetahui jumlah atau informasi tamu yang datang pada waktu tertentu&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-102" y="460" width="230" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-4" value="&lt;div&gt;&lt;b&gt;Kesulitan Analisis&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;data yang tidak terorganisir&amp;nbsp; dengan baik menyulitkan untuk analisis lebih lanjut&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="168" y="460" width="230" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-5" value="&lt;div&gt;&lt;b&gt;Risiko Keamanan&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;berpotensi kehilangan data atau informasi terkait tamu yang tidak terproteksi&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="438" y="460" width="230" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-6" value="&lt;div&gt;&lt;b&gt;Rentan Kesalahan&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;pengisian manual dapat memakan waktu yang lama dan berisiko kesalahan pencatatan laporan&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="698" y="460" width="230" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="V0wnx0aj81doS9Qa0_a_-12" value="IDENTIFIKASI MASALAH&amp;nbsp;&lt;div&gt;SUB.BID RUMAH TANGGA&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="165" y="-30" width="440" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
