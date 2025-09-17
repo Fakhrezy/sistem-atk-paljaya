@@ -1,11 +1,26 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0" version="28.2.3">
-  <diagram name="Halaman-1" id="CKKrf23XRtR4sIhERC73">
+  <diagram name="fc-BTD" id="CKKrf23XRtR4sIhERC73">
     <mxGraphModel dx="1034" dy="587" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="wHczVmpkLcvk1zldVAY2-1" value="Mulai" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;" parent="1" vertex="1">
           <mxGeometry x="294" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="yvcsqLgFZWv69OoqPmIJ-2" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Input :&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Nama Lengkap&lt;/li&gt;&lt;li&gt;Klasifikasi (Pelanggan/Tamu)&lt;/li&gt;&lt;li&gt;Keterangan (Tujuan Kunjungan)&lt;/li&gt;&lt;li&gt;Waktu Kunjungan (timestamp)&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;align=left;size=30;" vertex="1" parent="1">
+          <mxGeometry x="234" y="220" width="240" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="yvcsqLgFZWv69OoqPmIJ-3" value="Database BTD" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="490" y="425" width="120" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="yvcsqLgFZWv69OoqPmIJ-6" value="Konfirmasi Data" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="yvcsqLgFZWv69OoqPmIJ-7" value="Simpan Data" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="294" y="460" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="yvcsqLgFZWv69OoqPmIJ-8" value="" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="380" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
