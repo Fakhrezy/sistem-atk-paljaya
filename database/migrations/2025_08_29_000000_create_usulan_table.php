@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('usulans', function (Blueprint $table) {
+        Schema::create('usulan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('id_barang');
-            $table->foreign('id_barang')->references('id_barang')->on('barang')->onDelete('cascade');
+            $table->string('barang_id');
+            $table->foreign('barang_id')->references('id_barang')->on('barang')->onDelete('cascade');
             $table->integer('jumlah');
-            $table->text('keterangan');
-            $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->text('keterangan')->nullable();
             $table->text('catatan_admin')->nullable();
+            $table->timestamp('processed_at')->nullable();
+            $table->foreignId('processed_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('usulans');
+        Schema::dropIfExists('usulan');
     }
 };

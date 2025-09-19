@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\KeranjangUsulan;
+use App\Models\KeranjangUsulan;
 
 use App\Models\Pengadaan;
 use App\Models\MonitoringBarang;
@@ -54,10 +54,13 @@ class PengadaanController extends Controller
             }
         }
 
+        
+
         // Kosongkan keranjang setelah usulan dibuat
         KeranjangUsulan::where('user_id', auth()->id())->delete();
 
         return redirect()->route('user.monitoring.index')
             ->with('success', 'Semua usulan pengadaan berhasil dikirim');
+
     }
 }

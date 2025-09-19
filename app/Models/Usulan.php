@@ -14,7 +14,14 @@ class Usulan extends Model
         'barang_id',
         'jumlah',
         'keterangan',
-        'status'
+        'status',
+        'catatan_admin',
+        'processed_at',
+        'processed_by'
+    ];
+
+    protected $casts = [
+        'processed_at' => 'datetime'
     ];
 
     public function user()
@@ -25,5 +32,10 @@ class Usulan extends Model
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'barang_id', 'id_barang');
+    }
+
+    public function processedBy()
+    {
+        return $this->belongsTo(User::class, 'processed_by');
     }
 }

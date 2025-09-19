@@ -147,6 +147,16 @@
                                                 <i class="fas fa-undo"></i>
                                             </button>
                                         @endif
+                                        <button onclick="editPengadaan({{ $pengadaan->id }})"
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
+                                                title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button onclick="deletePengadaan({{ $pengadaan->id }})"
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600"
+                                                title="Hapus">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -172,6 +182,220 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
+    window.deletePengadaan = function(id) {
+        Swal.fire({
+            title: 'Hapus Data Pengadaan?',
+            text: 'Anda yakin ingin menghapus data pengadaan ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Hapus!',
+            cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading state
+                Swal.fire({
+                    title: 'Menghapus...',
+                    text: 'Sedang menghapus data pengadaan',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Send delete request
+                fetch(`/admin/monitoring-pengadaan/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: data.message || 'Data pengadaan berhasil dihapus',
+                            icon: 'success',
+                            confirmButtonColor: '#16a34a',
+                            confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        throw new Error(data.message || 'Terjadi kesalahan saat menghapus data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: error.message,
+                        icon: 'error',
+                        confirmButtonColor: '#dc2626',
+                        confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                    });
+                });
+            }
+        });
+    };
+
+    window.editPengadaan = function(id) {
+        // Fetch current data
+        fetch(`/admin/monitoring-pengadaan/${id}/edit`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const pengadaan = data.data;
+
+                Swal.fire({
+                    title: 'Edit Data Pengadaan',
+                    html: `
+                        <div class="text-left">
+                            <div class="p-3 mb-4 rounded-md bg-gray-50">
+                                <h4 class="flex items-center mb-3 font-medium text-gray-800">
+                                    <i class="mr-2 text-blue-500 fas fa-info-circle"></i>
+                                    Informasi Pengadaan
+                                </h4>
+                                <div class="space-y-2 text-sm text-gray-600">
+                                    <p class="flex items-center">
+                                        <i class="w-4 mr-2 text-gray-500 fas fa-box"></i>
+                                        <strong>Nama Barang:</strong> <span class="ml-2">${pengadaan.barang.nama_barang}</span>
+                                    </p>
+                                    <p class="flex items-center">
+                                        <i class="w-4 mr-2 text-gray-500 fas fa-tags"></i>
+                                        <strong>Jenis:</strong> <span class="ml-2">${pengadaan.barang.jenis.toUpperCase()}</span>
+                                    </p>
+                                    <p class="flex items-center">
+                                        <i class="w-4 mr-2 text-gray-500 fas fa-calendar-alt"></i>
+                                        <strong>Tanggal:</strong> <span class="ml-2">${new Date(pengadaan.tanggal).toLocaleDateString('id-ID')}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="flex items-center block mb-2 text-sm font-medium text-gray-700">
+                                    <i class="mr-2 text-green-500 fas fa-plus-circle"></i>
+                                    Jumlah <span class="text-red-500">*</span>
+                                </label>
+                                <input type="number" id="edit_debit" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="${pengadaan.debit}" min="1" step="1" placeholder="Masukkan jumlah">
+                            </div>
+                            <div class="mb-4">
+                                <label class="flex items-center block mb-2 text-sm font-medium text-gray-700">
+                                    <i class="mr-2 text-blue-500 fas fa-sticky-note"></i>
+                                    Keterangan
+                                </label>
+                                <textarea id="edit_keterangan" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Masukkan keterangan (opsional)">${pengadaan.keterangan || ''}</textarea>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3b82f6',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: '<i class="mr-2 fas fa-save"></i>Simpan',
+                    cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
+                    width: '500px',
+                    preConfirm: () => {
+                        const debit = document.getElementById('edit_debit').value;
+                        const keterangan = document.getElementById('edit_keterangan').value;
+
+                        if (!debit || debit < 1) {
+                            Swal.showValidationMessage('Jumlah harus diisi dan minimal 1!');
+                            return false;
+                        }
+
+                        return {
+                            debit: parseInt(debit),
+                            keterangan: keterangan
+                        };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: 'Menyimpan...',
+                            text: 'Sedang menyimpan perubahan data',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Send update request
+                        fetch(`/admin/monitoring-pengadaan/${id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify(result.value)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: data.message || 'Data pengadaan berhasil diperbarui',
+                                    icon: 'success',
+                                    confirmButtonColor: '#16a34a',
+                                    confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal!',
+                                    text: data.message || 'Tidak dapat memperbarui data pengadaan',
+                                    icon: 'error',
+                                    confirmButtonColor: '#dc2626',
+                                    confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Terjadi kesalahan saat memperbarui data',
+                                icon: 'error',
+                                confirmButtonColor: '#dc2626',
+                                confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                            });
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: data.message || 'Tidak dapat mengambil data pengadaan',
+                    icon: 'error',
+                    confirmButtonColor: '#dc2626',
+                    confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'Terjadi kesalahan saat mengambil data',
+                icon: 'error',
+                confirmButtonColor: '#dc2626',
+                confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+            });
+        });
+    };
+
     window.updateStatus = function(id, status) {
         const confirmTitle = status === 'terima' ? 'Terima Pengadaan?' : 'Batalkan Status?';
     const confirmText = status === 'terima' ?

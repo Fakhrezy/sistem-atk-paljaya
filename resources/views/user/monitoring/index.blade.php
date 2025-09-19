@@ -23,34 +23,30 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @foreach($monitorings as $monitoring)
+                    @forelse($monitorings as $monitoring)
                     <tr>
                         <td class="px-4 py-3">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-3">{{ $monitoring->barang->nama_barang }}</td>
+                        <td class="px-4 py-3">{{ $monitoring->saldo ?? 0 }}</td>
                         <td class="px-4 py-3">
-                            @if($monitoring->barang)
-                                {{ $monitoring->barang->nama_barang }}
-                            @else
-                                <span class="text-red-500">Data barang tidak ditemukan</span>
-                            @endif
-                        </td>
-                        <td class="px-4 py-3">{{ $monitoring->stok }}</td>
-                        <td class="px-4 py-3">
-                            @if($monitoring->stok <= $monitoring->min_stok)
-                                <span class="font-semibold text-red-600">Stok Minimum</span>
-                            @else
-                                <span class="text-green-600">Stok Aman</span>
-                            @endif
+                            <span class="font-semibold text-{{ $monitoring->status == 'Disetujui' ? 'green' : 'red' }}-600">
+                                {{ $monitoring->status }}
+                            </span>
                         </td>
                         <td class="px-4 py-3">
-                            @if($monitoring->stok <= $monitoring->min_stok && $monitoring->barang)
-                            <a href="{{ route('user.pengadaan.create', $monitoring->id) }}"
+                            <a href="{{ route('user.monitoring.show', $monitoring->id) }}"
                                class="px-3 py-1 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
-                                Usulkan Pengadaan
+                                Detail
                             </a>
-                            @endif
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-4 py-3 text-center text-gray-500">
+                            Tidak ada data monitoring barang
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

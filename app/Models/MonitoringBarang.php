@@ -17,6 +17,7 @@ class MonitoringBarang extends Model
     }
 
     protected $fillable = [
+        'id_barang',
         'nama_barang',
         'jenis_barang',
         'nama_pengambil',

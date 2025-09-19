@@ -83,7 +83,42 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Monitoring Pengadaan Routes
     Route::controller(App\Http\Controllers\Admin\MonitoringPengadaanController::class)->group(function () {
         Route::get('/admin/monitoring-pengadaan', 'index')->name('admin.monitoring-pengadaan.index');
+        Route::get('/admin/monitoring-pengadaan/{id}/edit', 'edit')->name('admin.monitoring-pengadaan.edit');
+        Route::put('/admin/monitoring-pengadaan/{id}', 'update')->name('admin.monitoring-pengadaan.update');
         Route::post('/admin/monitoring-pengadaan/{id}/status', 'updateStatus')->name('admin.monitoring-pengadaan.update-status');
+        Route::delete('/admin/monitoring-pengadaan/{id}', 'destroy')->name('admin.monitoring-pengadaan.destroy');
+    });
+
+    // Admin Pengambilan Routes
+    Route::controller(App\Http\Controllers\Admin\PengambilanAdminController::class)->group(function () {
+        Route::get('/admin/pengambilan', 'index')->name('admin.pengambilan.index');
+        Route::post('/admin/pengambilan', 'store')->name('admin.pengambilan.store');
+        Route::get('/admin/pengambilan/stock/{barang}', 'getStock')->name('admin.pengambilan.stock');
+    });
+
+    // Admin Usulan Pengadaan Routes
+    Route::controller(App\Http\Controllers\Admin\UsulanPengadaanController::class)->group(function () {
+        Route::get('/admin/usulan', 'index')->name('admin.usulan.index');
+        Route::get('/admin/usulan/cart', 'cartIndex')->name('admin.usulan.cart.index');
+        Route::post('/admin/usulan/cart/add', 'addToCart')->name('admin.usulan.cart.add');
+        Route::patch('/admin/usulan/cart/{id}/update', 'updateCart')->name('admin.usulan.cart.update');
+        Route::delete('/admin/usulan/cart/{id}', 'removeFromCart')->name('admin.usulan.cart.remove');
+        Route::get('/admin/usulan/cart/count', 'cartCount')->name('admin.usulan.cart.count');
+        Route::post('/admin/usulan/cart/submit', 'submitCart')->name('admin.usulan.cart.submit');
+        Route::get('/admin/usulan/{id}', 'show')->name('admin.usulan.show');
+        Route::post('/admin/usulan/{id}/update-status', 'updateStatus')->name('admin.usulan.update-status');
+        Route::delete('/admin/usulan/{id}', 'destroy')->name('admin.usulan.destroy');
+    });
+
+    // Admin Cart Routes
+    Route::controller(App\Http\Controllers\Admin\CartController::class)->group(function () {
+        Route::get('/admin/cart', 'index')->name('admin.cart.index');
+        Route::post('/admin/cart/add', 'add')->name('admin.cart.add');
+        Route::post('/admin/cart/update/{cart}', 'update')->name('admin.cart.update');
+        Route::delete('/admin/cart/remove/{cart}', 'remove')->name('admin.cart.remove');
+        Route::delete('/admin/cart/clear', 'clear')->name('admin.cart.clear');
+        Route::get('/admin/cart/count', 'count')->name('admin.cart.count');
+        Route::post('/admin/cart/checkout', 'checkout')->name('admin.cart.checkout');
     });
 });
 

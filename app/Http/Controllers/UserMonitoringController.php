@@ -9,7 +9,9 @@ class UserMonitoringController extends Controller
 {
     public function index()
     {
-        $monitorings = MonitoringBarang::with('barang')->get();
+        $monitorings = MonitoringBarang::with(['barang' => function($query) {
+            $query->withoutTrashed(); // Jika menggunakan soft deletes
+        }])->whereHas('barang')->get();
         return view('user.monitoring.index', compact('monitorings'));
     }
 }

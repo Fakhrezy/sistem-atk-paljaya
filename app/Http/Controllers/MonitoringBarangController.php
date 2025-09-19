@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MonitoringBarang;
+use App\Models\Barang;
+use Illuminate\Support\Facades\DB;
 
 class MonitoringBarangController extends Controller
 {
@@ -53,18 +55,48 @@ class MonitoringBarangController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:diajukan,diterima'
+            'status' => 'required|in:diajukan,diproses,diterima,ditolak'
         ]);
 
-        $monitoringBarang = MonitoringBarang::findOrFail($id);
-        $monitoringBarang->update([
-            'status' => $request->status
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Status berhasil diperbarui!'
-        ]);
+            $monitoringBarang = MonitoringBarang::findOrFail($id);
+            $newStatus = $request->status;
+
+            // If status is being changed to 'diterima', reduce the stock
+            if ($newStatus === 'diterima') {
+                $barang = Barang::findOrFail($monitoringBarang->id_barang);
+
+                // Recheck stock availability
+                if ($barang->stok < $monitoringBarang->kredit) {
+                    throw new \Exception("Stok {$barang->nama_barang} tidak mencukupi. Stok tersedia: {$barang->stok}");
+                }
+
+                // Update the stock
+                $barang->decrement('stok', $monitoringBarang->kredit);
+
+                // Update saldo_akhir in monitoring record
+                $monitoringBarang->saldo_akhir = $barang->stok;
+            }
+
+            // Update the status
+            $monitoringBarang->status = $newStatus;
+            $monitoringBarang->save();
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Status berhasil diperbarui!'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui status: ' . $e->getMessage()
+            ], 400);
+        }
     }
 
     /**

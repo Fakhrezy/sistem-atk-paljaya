@@ -89,4 +89,104 @@ class MonitoringPengadaanController extends Controller
             ], 500);
         }
     }
+
+    public function edit($id)
+    {
+        try {
+            $pengadaan = MonitoringPengadaan::with('barang')->findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => $pengadaan
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'debit' => 'required|integer|min:1',
+            'keterangan' => 'nullable|string'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $pengadaan = MonitoringPengadaan::with('barang')->findOrFail($id);
+            $oldDebit = $pengadaan->debit;
+            $newDebit = $request->debit;
+            $diffDebit = $newDebit - $oldDebit;
+
+            // Jika status sudah 'terima', perlu update stok barang
+            if ($pengadaan->status === 'terima') {
+                $barang = $pengadaan->barang;
+
+                // Jika pengurangan debit, pastikan stok mencukupi
+                if ($diffDebit < 0 && $barang->stok < abs($diffDebit)) {
+                    throw new \Exception('Stok tidak mencukupi untuk pengurangan jumlah pengadaan.');
+                }
+
+                // Update stok barang
+                $barang->stok += $diffDebit;
+                $barang->save();
+            }
+
+            // Update data pengadaan
+            $pengadaan->debit = $newDebit;
+            $pengadaan->keterangan = $request->keterangan;
+            $pengadaan->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data pengadaan berhasil diperbarui'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $pengadaan = MonitoringPengadaan::with('barang')->findOrFail($id);
+
+            // Jika status terima, kembalikan stok
+            if ($pengadaan->status === 'terima') {
+                $barang = $pengadaan->barang;
+                $barang->stok -= $pengadaan->debit;
+                $barang->save();
+            }
+
+            // Hapus data pengadaan
+            $pengadaan->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data pengadaan berhasil dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

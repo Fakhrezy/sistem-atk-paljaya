@@ -27,7 +27,7 @@
     <div class="min-h-screen bg-gray-100">
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div class="flex-shrink-0 w-64 overflow-y-auto bg-gray-800 shadow-lg">
+            <div class="flex-shrink-0 w-64 overflow-y-auto bg-gray-800 shadow-lg" style="z-index: 50;">
                 <div class="flex flex-col h-full">
                     <!-- Logo -->
                     <div class="flex items-center justify-center h-16 px-4 bg-gray-900">
@@ -62,6 +62,24 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                 </svg>
                                 Kelola Users
+                            </a>
+
+                            <!-- Pengambilan Barang Link -->
+                            <a href="{{ route('admin.pengambilan.index') }}"
+                               class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.pengambilan*') ? 'bg-gray-700' : '' }}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                </svg>
+                                Pengambilan Barang
+                            </a>
+
+                            <!-- Usulan Pengadaan Link -->
+                            <a href="{{ route('admin.usulan.index') }}"
+                               class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.usulan*') ? 'bg-gray-700' : '' }}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Usulan Pengadaan
                             </a>
 
                             <!-- Monitoring Pengambilan Link -->
@@ -104,7 +122,7 @@
             <!-- Main Content -->
             <div class="flex flex-col flex-1 overflow-hidden">
                 <!-- Top Navigation -->
-                <div class="bg-blue-500 shadow">
+                <div class="bg-blue-500 shadow" style="z-index: 45;">
                     <div class="px-6 py-4">
                         <h2 class="text-2xl font-bold leading-tight text-white">
                             @yield('header', 'Dashboard')

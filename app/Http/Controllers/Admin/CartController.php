@@ -1,86 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
-use App\Models\Barang;
 use App\Models\Pengambilan;
-use App\Models\Monitoring;
+use App\Models\Barang;
 use App\Models\MonitoringBarang;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
-    public function __construct()
+    public function index(Request $request)
     {
-        $this->middleware(['auth', 'role:user']);
-    }
+        $cartByBidang = Cart::with(['barang'])
+            ->where('user_id', auth()->id())
+            ->get()
+            ->groupBy('bidang');
 
-    /**
-     * Display cart items
-     */
-    public function index()
-    {
-        try {
-            $cartItems = Cart::with('barang')
-                ->where('user_id', auth()->id())
-                ->orderBy('bidang')
-                ->orderBy('created_at')
-                ->get();
-
-            // Group cart items by bidang
-            $cartByBidang = $cartItems->groupBy('bidang');
-
-            // Debug info
-            if (config('app.debug')) {
-                Log::info('Cart index accessed', [
-                    'user_id' => auth()->id(),
-                    'cart_count' => $cartItems->count(),
-                    'bidang_count' => $cartByBidang->count(),
-                    'is_ajax' => request()->ajax()
-                ]);
-            }
-
-            // If AJAX request, return partial view
-            if (request()->ajax()) {
-                return view('user.cart.partials.cart-content', compact('cartByBidang'));
-            }
-
-            return view('user.cart.index', compact('cartByBidang'));
-
-        } catch (\Exception $e) {
-            Log::error('Cart index error: ' . $e->getMessage(), [
-                'user_id' => auth()->id(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            if (request()->ajax()) {
-                return response()->json([
-                    'error' => 'Gagal memuat keranjang: ' . $e->getMessage()
-                ], 500);
-            }
-
-            $cartByBidang = collect();
-            return view('user.cart.index', compact('cartByBidang'));
+        if ($request->ajax()) {
+            return view('admin.cart.partials.cart-content', compact('cartByBidang'))->render();
         }
+
+        return view('admin.cart.index', compact('cartByBidang'));
     }
 
-    /**
-     * Add item to cart
-     */
     public function add(Request $request)
     {
         try {
-            // Debug info
-            if (config('app.debug')) {
-                Log::info('Cart add request from user: ' . auth()->id(), [
-                    'request_data' => $request->all(),
-                    'user' => auth()->user()->only(['id', 'name', 'role'])
-                ]);
-            }
-
             $request->validate([
                 'id_barang' => 'required|exists:barang,id_barang',
                 'quantity' => 'required|integer|min:1',
@@ -168,12 +116,6 @@ class CartController extends Controller
                 'errors' => $e->errors()
             ], 422);
         } catch (\Exception $e) {
-            Log::error('Cart add error: ' . $e->getMessage(), [
-                'user_id' => auth()->id(),
-                'request_data' => $request->all(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
@@ -181,9 +123,6 @@ class CartController extends Controller
         }
     }
 
-    /**
-     * Update cart item
-     */
     public function update(Request $request, Cart $cart)
     {
         // Check if cart belongs to authenticated user
@@ -218,9 +157,6 @@ class CartController extends Controller
         ]);
     }
 
-    /**
-     * Remove item from cart
-     */
     public function remove(Cart $cart)
     {
         // Check if cart belongs to authenticated user
@@ -239,9 +175,6 @@ class CartController extends Controller
         ]);
     }
 
-    /**
-     * Clear all cart items
-     */
     public function clear()
     {
         Cart::where('user_id', auth()->id())->delete();
@@ -252,19 +185,6 @@ class CartController extends Controller
         ]);
     }
 
-    /**
-     * Get cart count
-     */
-    public function count()
-    {
-        $count = Cart::where('user_id', auth()->id())->sum('quantity');
-
-        return response()->json(['count' => $count]);
-    }
-
-    /**
-     * Checkout cart items
-     */
     public function checkout(Request $request)
     {
         $request->validate([
@@ -316,7 +236,7 @@ class CartController extends Controller
                 $kredit = $cartItem->quantity;
                 $saldo_akhir = $saldo; // Tidak mengurangi stok dulu karena masih diajukan
 
-                // Create monitoring_barang record using create method instead of raw SQL
+                // Create monitoring_barang record
                 MonitoringBarang::create([
                     'id_barang' => $barang->id_barang,
                     'nama_barang' => $barang->nama_barang,
@@ -354,5 +274,14 @@ class CartController extends Controller
                 'message' => 'Checkout gagal: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function count()
+    {
+        $count = Cart::where('user_id', auth()->id())->sum('quantity');
+
+        return response()->json([
+            'count' => $count
+        ]);
     }
 }
