@@ -66,7 +66,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="mhmlcAYJWUHxj0jiPCu6" name="fc-MP">
-    <mxGraphModel dx="1216" dy="691" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="766" dy="435" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -85,7 +85,7 @@
         <mxCell id="QAdFlfaC-wQvxZRa5yil-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="HLG9YtRJ6DaxEjXbOdr5-3" target="QAdFlfaC-wQvxZRa5yil-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="HLG9YtRJ6DaxEjXbOdr5-3" value="tiket antrian" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="HLG9YtRJ6DaxEjXbOdr5-3" value="mendapat tiket antrian peminjaman" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="340" y="280" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="eJBJzkufxHcqo_FAlyu_-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="HLG9YtRJ6DaxEjXbOdr5-4" target="QAdFlfaC-wQvxZRa5yil-12" edge="1">
@@ -97,7 +97,7 @@
         <mxCell id="QAdFlfaC-wQvxZRa5yil-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="QAdFlfaC-wQvxZRa5yil-1" target="HLG9YtRJ6DaxEjXbOdr5-4" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="QAdFlfaC-wQvxZRa5yil-7" value="Ya" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="QAdFlfaC-wQvxZRa5yil-6" vertex="1" connectable="0">
+        <mxCell id="QAdFlfaC-wQvxZRa5yil-7" value="YA" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="QAdFlfaC-wQvxZRa5yil-6" vertex="1" connectable="0">
           <mxGeometry x="0.0267" y="-2" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -105,9 +105,9 @@
         <mxCell id="QAdFlfaC-wQvxZRa5yil-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="QAdFlfaC-wQvxZRa5yil-1" target="QAdFlfaC-wQvxZRa5yil-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="QAdFlfaC-wQvxZRa5yil-9" value="Tidak" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="QAdFlfaC-wQvxZRa5yil-8" vertex="1" connectable="0">
+        <mxCell id="QAdFlfaC-wQvxZRa5yil-9" value="TIDAK" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="QAdFlfaC-wQvxZRa5yil-8" vertex="1" connectable="0">
           <mxGeometry x="-0.1906" y="-5" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="1" y="-5" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="QAdFlfaC-wQvxZRa5yil-1" value="Available?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
