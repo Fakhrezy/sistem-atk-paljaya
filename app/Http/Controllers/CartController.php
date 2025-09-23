@@ -15,7 +15,7 @@ class CartController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'role:user']);
+        $this->middleware(['auth', 'role:user,admin']);
     }
 
     /**
@@ -49,7 +49,6 @@ class CartController extends Controller
             }
 
             return view('user.cart.index', compact('cartByBidang'));
-
         } catch (\Exception $e) {
             Log::error('Cart index error: ' . $e->getMessage(), [
                 'user_id' => auth()->id(),
@@ -158,9 +157,8 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => $message
+                'message' => 'Barang berhasil ditambahkan ke keranjang'
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -288,7 +286,7 @@ class CartController extends Controller
         }
 
         // Validasi bahwa semua cart item memiliki nama pengambil
-        $itemsWithoutPengambil = $cartItems->filter(function($item) {
+        $itemsWithoutPengambil = $cartItems->filter(function ($item) {
             return empty($item->pengambil);
         });
 
@@ -345,7 +343,6 @@ class CartController extends Controller
                 'success' => true,
                 'message' => "Pengambilan ATK {$messageDetail} berhasil diajukan dan sedang menunggu persetujuan!"
             ]);
-
         } catch (\Exception $e) {
             DB::rollback();
 

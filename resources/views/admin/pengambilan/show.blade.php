@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+<!-- Dihapus -->
 @section('title', 'Detail Pengambilan')
 
 @section('header')

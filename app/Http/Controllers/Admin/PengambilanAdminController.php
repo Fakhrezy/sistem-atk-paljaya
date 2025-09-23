@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Pengambilan;
 use App\Models\Barang;
 use App\Models\Cart;
-use App\Models\MonitoringBarang;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PengambilanAdminController extends Controller
@@ -18,6 +15,9 @@ class PengambilanAdminController extends Controller
         $this->middleware(['auth', 'role:admin']);
     }
 
+    /**
+     * Display a listing of available items for admin to add to cart
+     */
     public function index(Request $request)
     {
         $query = Barang::query();
@@ -26,9 +26,9 @@ class PengambilanAdminController extends Controller
         // Filter berdasarkan pencarian
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_barang', 'like', "%{$search}%")
-                  ->orWhere('jenis', 'like', "%{$search}%");
+                    ->orWhere('jenis', 'like', "%{$search}%");
             });
         }
 
@@ -36,6 +36,9 @@ class PengambilanAdminController extends Controller
         if ($request->filled('jenis')) {
             $query->where('jenis', $request->input('jenis'));
         }
+
+        // Filter hanya barang yang stoknya > 0
+        $query->where('stok', '>', 0);
 
         // Order by nama barang
         $query->orderBy('nama_barang', 'asc');
@@ -54,63 +57,12 @@ class PengambilanAdminController extends Controller
         }
 
         // Get distinct jenis for filter dropdown
-        $jenisBarang = Barang::distinct()
+        $jenisBarang = Barang::where('stok', '>', 0)
+            ->distinct()
             ->pluck('jenis')
             ->sort();
 
         return view('admin.pengambilan.index', compact('barang', 'jenisBarang'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'id_barang' => 'required|exists:barang,id_barang',
-            'quantity' => 'required|integer|min:1',
-            'nama_pengambil' => 'required|string|max:255',
-            'bidang' => 'required|string',
-        ]);
-
-        DB::beginTransaction();
-        try {
-            $barang = Barang::findOrFail($request->id_barang);
-
-            // Check stock availability
-            if ($barang->stok < $request->quantity) {
-                throw new \Exception("Stok {$barang->nama_barang} tidak mencukupi. Stok tersedia: {$barang->stok}");
-            }
-
-            // Simpan saldo awal (stok sekarang) untuk monitoring
-            $saldo = $barang->stok;
-            $kredit = $request->quantity;
-            $saldo_akhir = $saldo; // Tidak mengurangi stok dulu karena masih diajukan
-
-            // Create monitoring_barang record
-            MonitoringBarang::create([
-                'id_barang' => $barang->id_barang,
-                'nama_barang' => $barang->nama_barang,
-                'jenis_barang' => $barang->jenis,
-                'nama_pengambil' => $request->nama_pengambil,
-                'bidang' => $request->bidang,
-                'tanggal_ambil' => now()->toDateString(),
-                'saldo' => $saldo,
-                'saldo_akhir' => $saldo_akhir,
-                'kredit' => $kredit,
-                'status' => 'diajukan'
-            ]);
-
-            DB::commit();
-            return response()->json([
-                'success' => true,
-                'message' => 'Pengambilan barang berhasil diajukan dan menunggu persetujuan!'
-            ]);
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json([
-                'success' => false,
-                'message' => 'Pengambilan gagal: ' . $e->getMessage()
-            ], 400);
-        }
     }
 
     /**

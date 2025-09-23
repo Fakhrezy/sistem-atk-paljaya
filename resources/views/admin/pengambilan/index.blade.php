@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+<!-- Dihapus -->
 @section('title', 'Pengambilan Barang')
 
 @section('header')
