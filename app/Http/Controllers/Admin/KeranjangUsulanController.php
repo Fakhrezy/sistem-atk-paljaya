@@ -23,7 +23,7 @@ class KeranjangUsulanController extends Controller
             ->where('user_id', auth()->id())
             ->get();
 
-        return view('admin.usulan.cart', compact('items'));
+        return view('user.usulan.cart', compact('items'));
     }
 
     /**
@@ -69,7 +69,6 @@ class KeranjangUsulanController extends Controller
                 'success' => true,
                 'message' => 'Barang berhasil ditambahkan ke keranjang usulan'
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation error:', ['errors' => $e->errors()]);
             return response()->json([
@@ -221,13 +220,11 @@ class KeranjangUsulanController extends Controller
                     'success' => true,
                     'message' => 'Usulan pengadaan berhasil diajukan'
                 ]);
-
             } catch (\Exception $e) {
                 // Rollback transaction on error
                 DB::rollback();
                 throw $e;
             }
-
         } catch (\Exception $e) {
             Log::error('Error submitting usulan:', [
                 'message' => $e->getMessage(),

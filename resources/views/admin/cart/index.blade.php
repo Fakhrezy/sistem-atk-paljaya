@@ -1,15 +1,15 @@
 @extends('layouts.admin')
 
-@section('title', 'Keranjang Usulan Pengadaan')
+@section('title', 'Keranjang Barang')
 
 @section('header')
-    SISTEM MONITORING BARANG HABIS PAKAI
+    Keranjang Barang
 @endsection
 
 @section('content')
-<div class="h-full" style="z-index: 30;">
+<div class="h-full">
     <div class="max-w-full">
-        <div class="relative overflow-hidden bg-white shadow-sm sm:rounded-lg">
+        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900">
                 <div class="mb-6">
                     <div class="flex items-center justify-between">
@@ -19,7 +19,9 @@
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('admin.pengambilan.index') }}"
                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                                <i class="mr-2 fas fa-arrow-left"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                </svg>
                                 Kembali ke Katalog
                             </a>
                         </div>
@@ -48,10 +50,10 @@
 </div>
 
 <!-- Edit Item Modal -->
-<div id="editItemModal" class="fixed inset-0 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50" style="z-index: 40;">
+<div id="editItemModal" class="fixed inset-0 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
     <div class="relative p-5 mx-auto bg-white border rounded-md shadow-lg top-20 w-96">
-                            <div class="mt-3 text-center">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Edit Pengambilan Item</h3>
+        <div class="mt-3 text-center">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Edit Item Keranjang</h3>
             <div class="py-3 mt-2 px-7">
                 <form id="editItemForm">
                     @csrf
@@ -63,23 +65,13 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="edit_quantity" class="block mb-2 text-sm font-medium text-gray-700">
-                            <i class="mr-1 fas fa-calculator"></i>
-                            Jumlah yang akan diambil:
-                        </label>
+                        <label for="edit_quantity" class="block mb-2 text-sm font-medium text-gray-700">Jumlah:</label>
                         <div class="flex items-center">
-                            <button type="button" onclick="editDecreaseQuantity()" class="flex items-center justify-center w-10 h-10 text-gray-700 bg-gray-200 rounded-l hover:bg-gray-300">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <input type="number" id="edit_quantity" name="quantity" min="1" value="1" class="w-20 h-10 text-lg font-medium text-center border-y border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                            <button type="button" onclick="editIncreaseQuantity()" class="flex items-center justify-center w-10 h-10 text-gray-700 bg-gray-200 rounded-r hover:bg-gray-300">
-                                <i class="fas fa-plus"></i>
-                            </button>
+                            <button type="button" onclick="editDecreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-l hover:bg-gray-300">-</button>
+                            <input type="number" id="edit_quantity" name="quantity" min="1" value="1" class="w-20 py-1 text-center transition duration-150 ease-in-out border-t border-b border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                            <button type="button" onclick="editIncreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-r hover:bg-gray-300">+</button>
                         </div>
-                        <p class="mt-2 text-sm text-gray-500">
-                            <i class="mr-1 fas fa-info-circle"></i>
-                            Satuan: <span id="edit_satuan" class="font-medium"></span>
-                        </p>
+                        <p class="mt-1 text-xs text-gray-500">Maksimal: <span id="edit_max_stock"></span> <span id="edit_satuan"></span></p>
                     </div>
 
                     <div class="mb-4">
@@ -257,7 +249,7 @@ function clearCart() {
         showCancelButton: true,
         confirmButtonColor: '#dc2626',
         cancelButtonColor: '#6b7280',
-        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Kosongkan!',
+        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Ya, Kosongkan!',
         cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
         reverseButtons: true
     }).then((result) => {
@@ -394,7 +386,7 @@ function updateCartItem() {
 }
 
 // Submit pengambilan untuk bidang tertentu
-function submitUsulanBidang(bidang) {
+function submitPengambilanBidang(bidang) {
     // Tampilkan SweetAlert konfirmasi
     Swal.fire({
         title: 'Konfirmasi Pengambilan',
@@ -446,7 +438,7 @@ function processCheckoutDirect(bidang) {
                 confirmButtonColor: '#16a34a',
                 confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
             }).then(() => {
-                loadCartContent();
+                loadCartContent(); // Refresh cart content
             });
         } else {
             Swal.fire({

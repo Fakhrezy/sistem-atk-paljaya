@@ -172,9 +172,11 @@ class CartController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
 
+            // Kirim pesan error detail ke frontend agar SweetAlert bisa menampilkan
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ], 500);
         }
     }

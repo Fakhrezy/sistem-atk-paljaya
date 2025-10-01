@@ -40,7 +40,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::controller(\App\Http\Controllers\AdminController::class)->group(function () {
         Route::get('/admin/dashboard', 'dashboard')->name('admin.dashboard');
     });
-
+    // Route :-> manajemen barang
     Route::controller(\App\Http\Controllers\BarangController::class)->group(function () {
         Route::get('/admin/barang', 'index')->name('admin.barang');
         Route::get('/admin/barang/print', 'print')->name('admin.barang.print');
@@ -51,8 +51,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/admin/barang/{barang}', 'update')->name('admin.barang.update');
         Route::delete('/admin/barang/{barang}', 'destroy')->name('admin.barang.destroy');
     });
-
-    // Route :-> user management
+    // Route :-> manajemen user
     Route::controller(App\Http\Controllers\AdminUserController::class)->group(function () {
         Route::get('/admin/users', 'index')->name('admin.users');
         Route::get('/admin/users/create', 'create')->name('admin.users.create');
@@ -61,13 +60,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/admin/users/{user}', 'update')->name('admin.users.update');
         Route::delete('/admin/users/{user}', 'destroy')->name('admin.users.destroy');
     });
-
-    // Pengambilan Barang Routes
-    Route::controller(App\Http\Controllers\Admin\PengambilanController::class)->group(function () {
-        Route::get('/admin/pengambilan', 'index')->name('admin.pengambilan.index');
-        Route::get('/admin/pengambilan/stock/{barang}', 'getStock')->name('admin.pengambilan.stock');
-    });
-
     // Route :-> monitoring pengambilan
     Route::controller(App\Http\Controllers\MonitoringController::class)->group(function () {
         Route::get('/admin/monitoring', 'index')->name('admin.monitoring');
@@ -78,22 +70,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/admin/monitoring/{monitoring}', 'update')->name('admin.monitoring.update');
         Route::delete('/admin/monitoring/{monitoring}', 'destroy')->name('admin.monitoring.destroy');
     });
+
+    // Route :-> monitoring-barang (?)
     Route::controller(App\Http\Controllers\MonitoringBarangController::class)->group(function () {
         Route::get('/admin/monitoring-barang', 'index')->name('admin.monitoring-barang.index');
         Route::get('/admin/monitoring-barang/{id}/edit', 'edit')->name('admin.monitoring-barang.edit');
         Route::put('/admin/monitoring-barang/{id}', 'update')->name('admin.monitoring-barang.update');
         Route::post('/admin/monitoring-barang/{id}/update-status', 'updateStatus')->name('admin.monitoring-barang.update-status');
         Route::delete('/admin/monitoring-barang/{id}', 'destroy')->name('admin.monitoring-barang.destroy');
-    });
-    // Cart Routes
-    Route::controller(CartController::class)->group(function () {
-        Route::get('/admin/cart', 'index')->name('admin.cart.index');
-        Route::post('/admin/cart/add', 'add')->name('admin.cart.add');
-        Route::post('/admin/cart/update/{cart}', 'update')->name('admin.cart.update');
-        Route::delete('/admin/cart/remove/{cart}', 'remove')->name('admin.cart.remove');
-        Route::delete('/admin/cart/clear', 'clear')->name('admin.cart.clear');
-        Route::get('/admin/cart/count', 'count')->name('admin.cart.count');
-        Route::post('/admin/cart/checkout', 'checkout')->name('admin.cart.checkout');
     });
 
     // Route :-> monitoring pengadaan
@@ -104,14 +88,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/admin/monitoring-pengadaan/{id}/status', 'updateStatus')->name('admin.monitoring-pengadaan.update-status');
         Route::delete('/admin/monitoring-pengadaan/{id}', 'destroy')->name('admin.monitoring-pengadaan.destroy');
     });
-
-    // Usulan Pengadaan Admin Routes
-    Route::controller(App\Http\Controllers\Admin\UsulanPengadaanController::class)->group(function () {
+    // Route :-> pengambilan barang
+    Route::controller(App\Http\Controllers\Admin\PengambilanController::class)->group(function () {
+        Route::get('/admin/pengambilan', 'index')->name('admin.pengambilan.index');
+        Route::get('/admin/pengambilan/stock/{barang}', 'getStock')->name('admin.pengambilan.stock');
+    });
+    // Route :-> usulan pengadaan
+    Route::controller(App\Http\Controllers\Admin\UsulanController::class)->group(function () {
         Route::get('/admin/usulan', 'index')->name('admin.usulan.index');
         Route::post('/admin/usulan', 'store')->name('admin.usulan.store');
     });
-
-    // Usulan Cart Admin Routes
+    // Route :-> keranjang usulan
     Route::controller(App\Http\Controllers\Admin\KeranjangUsulanController::class)->group(function () {
         Route::get('/admin/usulan/cart', 'index')->name('admin.usulan.cart.index');
         Route::post('/admin/usulan/cart/add', 'add')->name('admin.usulan.cart.add');
@@ -121,6 +108,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/usulan/cart/count', 'count')->name('admin.usulan.cart.count');
         Route::post('/admin/usulan/cart/submit', 'submit')->name('admin.usulan.cart.submit');
     });
+    // Route :-> keranjang pengambilan
+    Route::controller(CartController::class)->group(function () {
+        Route::get('/admin/cart', 'index')->name('admin.cart.index');
+        Route::post('/admin/cart/add', 'add')->name('admin.cart.add');
+        Route::post('/admin/cart/update/{cart}', 'update')->name('admin.cart.update');
+        Route::delete('/admin/cart/remove/{cart}', 'remove')->name('admin.cart.remove');
+        Route::delete('/admin/cart/clear', 'clear')->name('admin.cart.clear');
+        Route::get('/admin/cart/count', 'count')->name('admin.cart.count');
+        Route::post('/admin/cart/checkout', 'checkout')->name('admin.cart.checkout');
+    });
 });
 
 
@@ -129,20 +126,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 
-    // Route untuk monitoring barang user
+    // Route :-> monitoring pengambilan
     Route::get('/user/monitoring', [UserMonitoringController::class, 'index'])
         ->name('user.monitoring.index');
-    // Pengambilan Barang Routes (User)
+    // Route :-> pengambilan barang
     Route::controller(UserPengambilanController::class)->group(function () {
         Route::get('/user/pengambilan', 'index')->name('user.pengambilan.index');
         Route::get('/user/pengambilan/stock/{barang}', 'getStock')->name('user.pengambilan.stock');
     });
-    // Usulan Routes
+    // Route :-> usulan pengadaan
     Route::controller(App\Http\Controllers\User\UsulanController::class)->group(function () {
         Route::get('/user/usulan', 'index')->name('user.usulan.index');
         Route::post('/user/usulan', 'store')->name('user.usulan.store');
     });
-    // Usulan Cart Routes
+    // Route :-> keranjang usulan
     Route::controller(App\Http\Controllers\User\KeranjangUsulanController::class)->group(function () {
         Route::get('/user/usulan/cart', 'index')->name('user.usulan.cart.index');
         Route::post('/user/usulan/cart/add', 'add')->name('user.usulan.cart.add');
@@ -152,7 +149,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::get('/user/usulan/cart/count', 'count')->name('user.usulan.cart.count');
         Route::post('/user/usulan/cart/submit', 'submit')->name('user.usulan.cart.submit');
     });
-    // Cart Routes
+    // Route :-> keranjang pengambilan
     Route::controller(CartController::class)->group(function () {
         Route::get('/user/cart', 'index')->name('user.cart.index');
         Route::post('/user/cart/add', 'add')->name('user.cart.add');
@@ -162,55 +159,6 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::get('/user/cart/count', 'count')->name('user.cart.count');
         Route::post('/user/cart/checkout', 'checkout')->name('user.cart.checkout');
     });
-
-
-    if (app()->environment('local')) {
-        Route::prefix('test')->name('test.')->middleware(['auth', 'role:admin'])->group(function () {
-            Route::get('/cart', function () {
-                $user = auth()->user();
-                $barang = \App\Models\Barang::first();
-
-                if (!$user) {
-                    return response()->json(['error' => 'Not authenticated'], 401);
-                }
-
-                $cartItems = \App\Models\Cart::with('barang')->where('user_id', $user->id)->get();
-                return response()->json([
-                    'user_id' => $user->id,
-                    'cart_count' => $cartItems->count(),
-                    'cart_items' => $cartItems->map(fn($item) => [
-                        'id' => $item->id,
-                        'barang_nama' => $item->barang?->nama_barang,
-                        'quantity' => $item->quantity
-                    ])
-                ]);
-            })->name('cart.view');
-
-            Route::post('/cart/add', function (Request $request) {
-                try {
-                    $barang = \App\Models\Barang::first();
-                    if (!$barang) {
-                        return response()->json(['error' => 'No barang found'], 404);
-                    }
-
-                    $cart = \App\Models\Cart::create([
-                        'user_id' => auth()->id(),
-                        'id_barang' => $barang->id_barang,
-                        'quantity' => 1,
-                        'bidang' => 'test',
-                        'keterangan' => 'Test item'
-                    ]);
-
-                    return response()->json([
-                        'success' => true,
-                        'cart_id' => $cart->id
-                    ]);
-                } catch (\Exception $e) {
-                    return response()->json(['error' => $e->getMessage()], 500);
-                }
-            })->name('cart.add');
-        });
-    }
 });
 
 
