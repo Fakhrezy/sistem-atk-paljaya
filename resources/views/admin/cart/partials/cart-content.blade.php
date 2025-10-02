@@ -155,7 +155,7 @@
         <div class="flex items-center justify-center pt-6 border-t border-gray-200">
             <button onclick="clearCart()" class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out bg-red-500 rounded hover:bg-red-700"
                     title="Hapus semua item dari keranjang">
-                <i class="mr-2 fas fa-trash-alt"></i>Kosongkan Semua Keranjang
+                <i class="mr-2 fas fa-trash-alt"></i>Kosongkan Keranjang
             </button>
         </div>
 

@@ -14,6 +14,19 @@ use Carbon\Carbon;
 
 class KeranjangUsulanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'role:user,admin']);
+    }
+
+    /**
+     * Get view prefix based on current route
+     */
+    private function getViewPrefix()
+    {
+        return request()->is('admin/*') ? 'admin' : 'user';
+    }
+
     /**
      * Display cart contents
      */
@@ -23,7 +36,10 @@ class KeranjangUsulanController extends Controller
             ->where('user_id', auth()->id())
             ->get();
 
-        return view('user.usulan.cart', compact('items'));
+        // Determine view prefix based on route
+        $viewPrefix = $this->getViewPrefix();
+
+        return view("{$viewPrefix}.usulan.cart", compact('items'));
     }
 
     /**
@@ -69,7 +85,6 @@ class KeranjangUsulanController extends Controller
                 'success' => true,
                 'message' => 'Barang berhasil ditambahkan ke keranjang usulan'
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             Log::error('Validation error:', ['errors' => $e->errors()]);
             return response()->json([
@@ -205,6 +220,7 @@ class KeranjangUsulanController extends Controller
                         'user_id' => Auth::id(),
                         'barang_id' => $item->barang->id_barang,
                         'debit' => $item->jumlah,
+                        'saldo_akhir' => $item->barang->stok, // Set saldo_akhir sesuai stok saat ini
                         'keterangan' => $item->keterangan,
                         'status' => 'proses',
                         'tanggal' => Carbon::now(),
@@ -221,13 +237,11 @@ class KeranjangUsulanController extends Controller
                     'success' => true,
                     'message' => 'Usulan pengadaan berhasil diajukan'
                 ]);
-
             } catch (\Exception $e) {
                 // Rollback transaction on error
                 DB::rollback();
                 throw $e;
             }
-
         } catch (\Exception $e) {
             Log::error('Error submitting usulan:', [
                 'message' => $e->getMessage(),

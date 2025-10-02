@@ -17,6 +17,12 @@ class DashboardController extends Controller
             'tinta' => Barang::where('jenis', 'tinta')->count(),
         ];
 
-        return view('admin.dashboard', compact('stats'));
+        // Data untuk chart barang dengan stok paling sedikit (10 barang teratas)
+        $lowStockItems = Barang::select('nama_barang', 'stok', 'jenis')
+            ->orderBy('stok', 'asc')
+            ->limit(10)
+            ->get();
+
+        return view('admin.dashboard', compact('stats', 'lowStockItems'));
     }
 }

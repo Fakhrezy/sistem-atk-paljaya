@@ -38,13 +38,16 @@ class MonitoringBarangController extends Controller
 
         // Search by nama_barang or nama_pengambil
         if ($request->search) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('nama_barang', 'like', '%' . $request->search . '%')
-                  ->orWhere('nama_pengambil', 'like', '%' . $request->search . '%');
+                    ->orWhere('nama_pengambil', 'like', '%' . $request->search . '%');
             });
         }
 
         $monitoringBarang = $query->orderBy('created_at', 'desc')->paginate(15);
+
+        // Sync saldo dengan stok barang terkini untuk status 'diajukan'
+        $this->syncSaldoWithCurrentStock();
 
         return view('admin.monitoring-barang.index', compact('monitoringBarang'));
     }
@@ -62,21 +65,31 @@ class MonitoringBarangController extends Controller
             DB::beginTransaction();
 
             $monitoringBarang = MonitoringBarang::findOrFail($id);
+            $currentStatus = $monitoringBarang->status;
             $newStatus = $request->status;
 
-            // If status is being changed to 'diterima', reduce the stock
-            if ($newStatus === 'diterima') {
-                $barang = Barang::findOrFail($monitoringBarang->id_barang);
+            $barang = Barang::findOrFail($monitoringBarang->id_barang);
 
+            // If status is being changed to 'diterima', reduce the stock
+            if ($newStatus === 'diterima' && $currentStatus !== 'diterima') {
                 // Recheck stock availability
                 if ($barang->stok < $monitoringBarang->kredit) {
                     throw new \Exception("Stok {$barang->nama_barang} tidak mencukupi. Stok tersedia: {$barang->stok}");
                 }
 
-                // Update the stock
+                // Update the stock (reduce)
                 $barang->decrement('stok', $monitoringBarang->kredit);
 
                 // Update saldo_akhir in monitoring record
+                $monitoringBarang->saldo_akhir = $barang->stok;
+            }
+
+            // If status is being changed from 'diterima' to 'diajukan', restore the stock
+            if ($currentStatus === 'diterima' && $newStatus === 'diajukan') {
+                // Return the stock (add back)
+                $barang->increment('stok', $monitoringBarang->kredit);
+
+                // Update saldo_akhir in monitoring record to reflect new stock
                 $monitoringBarang->saldo_akhir = $barang->stok;
             }
 
@@ -85,11 +98,19 @@ class MonitoringBarangController extends Controller
             $monitoringBarang->save();
 
             DB::commit();
+
+            // Generate appropriate success message based on status change
+            $message = 'Status berhasil diperbarui!';
+            if ($currentStatus === 'diterima' && $newStatus === 'diajukan') {
+                $message = 'Status dikembalikan ke diajukan dan stok berhasil dipulihkan!';
+            } elseif ($newStatus === 'diterima' && $currentStatus !== 'diterima') {
+                $message = 'Status diterima dan stok berhasil dikurangi!';
+            }
+
             return response()->json([
                 'success' => true,
-                'message' => 'Status berhasil diperbarui!'
+                'message' => $message
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -167,5 +188,21 @@ class MonitoringBarangController extends Controller
                 'message' => 'Gagal menghapus data monitoring: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Sync saldo in monitoring barang with current stock from barang table
+     */
+    private function syncSaldoWithCurrentStock()
+    {
+        // Update saldo untuk semua monitoring barang dengan status 'diajukan'
+        // berdasarkan stok terkini dari tabel barang
+        DB::statement("
+            UPDATE monitoring_barang mb
+            INNER JOIN barang b ON mb.id_barang = b.id_barang
+            SET mb.saldo = b.stok,
+                mb.saldo_akhir = b.stok - mb.kredit
+            WHERE mb.status = 'diajukan'
+        ");
     }
 }

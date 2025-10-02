@@ -8,347 +8,369 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
 @section('content')
 <div class="h-full">
-	<div class="max-w-full">
-		<div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-			<div class="w-full p-6 text-gray-900">
-				<div class="mb-6">
-					<div class="flex items-center justify-between">
-						<div>
-							<h2 class="text-2xl font-semibold text-gray-800">Daftar Barang Tersedia</h2>
-							<p class="mt-1 text-sm text-gray-600">Pilih barang untuk melakukan pengambilan</p>
-						</div>
-						<!-- Cart Link -->
-						<div class="flex items-center space-x-4">
-							<a href="{{ route('admin.cart.index') }}"
-								class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
-								<i class="fas fa-shopping-cart mr-2"></i>
-								Keranjang
-								<span id="cart-count"
-									class="ml-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">0</span>
-							</a>
-						</div>
-					</div>
-				</div>
+    <div class="max-w-full">
+        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+            <div class="w-full p-6 text-gray-900">
+                <div class="mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-800">Daftar Barang Tersedia</h2>
+                            <p class="mt-1 text-sm text-gray-600">Pilih barang untuk melakukan pengambilan</p>
+                        </div>
+                        <!-- Cart Link -->
+                        <div class="flex items-center space-x-4">
+                            <a href="{{ route('admin.cart.index') }}"
+                                class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
+                                <i class="fas fa-shopping-cart mr-2"></i>
+                                Keranjang
+                                <span id="cart-count"
+                                    class="ml-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-				@if (session('success'))
-				<div class="relative mb-4 rounded border-l-4 border-blue-500 bg-blue-100 p-4 text-blue-700">
-					<span class="block sm:inline">{{ session('success') }}</span>
-				</div>
-				@endif
+                @if (session('success'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+				            Swal.fire({
+				                icon: 'success',
+				                title: 'Berhasil!',
+				                text: '{{ session('success') }}',
+				                showConfirmButton: false,
+				                timer: 2000,
+				                timerProgressBar: true,
+				                toast: true,
+				                position: 'top-end'
+				            });
+				        });
+                </script>
+                @endif
 
-				@if (session('error'))
-				<div class="relative mb-4 rounded border-l-4 border-red-500 bg-red-100 p-4 text-red-700">
-					<span class="block sm:inline">{{ session('error') }}</span>
-				</div>
-				@endif
+                @if (session('error'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+				            Swal.fire({
+				                icon: 'error',
+				                title: 'Error!',
+				                text: '{{ session('error') }}',
+				                confirmButtonColor: '#d33'
+				            });
+				        });
+                </script>
+                @endif
 
-				<!-- Search and Filter -->
-				<div class="mb-6">
-					<form action="{{ route('admin.pengambilan.index') }}" method="GET"
-						class="flex flex-col gap-4 sm:flex-row">
-						<input type="hidden" name="per_page" value="{{ request('per_page', 12) }}">
+                <!-- Search and Filter -->
+                <div class="mb-6">
+                    <form action="{{ route('admin.pengambilan.index') }}" method="GET"
+                        class="flex flex-col gap-4 sm:flex-row">
+                        <input type="hidden" name="per_page" value="{{ request('per_page', 12) }}">
 
-						<!-- Search Input -->
-						<div class="flex-1">
-							<input type="text" name="search" value="{{ request('search') }}"
-								placeholder="Cari nama barang atau jenis..."
-								class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-						</div>
+                        <!-- Search Input -->
+                        <div class="flex-1">
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                placeholder="Cari nama barang atau jenis..."
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
 
-						<!-- Jenis Filter -->
-						<div class="w-full sm:w-48">
-							<select name="jenis"
-								class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-								<option value="">Semua Jenis</option>
-								@foreach ($jenisBarang as $jenis)
-								<option value="{{ $jenis }}" {{ request('jenis')==$jenis ? 'selected' : '' }}>
-									{{ ucfirst($jenis) }}
-								</option>
-								@endforeach
-							</select>
-						</div>
+                        <!-- Jenis Filter -->
+                        <div class="w-full sm:w-48">
+                            <select name="jenis"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Semua Jenis</option>
+                                @foreach ($jenisBarang as $jenis)
+                                <option value="{{ $jenis }}" {{ request('jenis')==$jenis ? 'selected' : '' }}>
+                                    {{ ucfirst($jenis) }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-						<!-- Search Button -->
-						<button type="submit"
-							class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-							<i class="fas fa-search mr-2"></i>
-							Cari
-						</button>
+                        <!-- Search Button -->
+                        <button type="submit"
+                            class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <i class="fas fa-search mr-2"></i>
+                            Cari
+                        </button>
 
-						@if (request('search') || request('jenis'))
-						<a href="{{ route('admin.pengambilan.index', ['per_page' => request('per_page', 12)]) }}"
-							class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-							Reset
-						</a>
-						@endif
-					</form>
-				</div>
+                        @if (request('search') || request('jenis'))
+                        <a href="{{ route('admin.pengambilan.index', ['per_page' => request('per_page', 12)]) }}"
+                            class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Reset
+                        </a>
+                        @endif
+                    </form>
+                </div>
 
-				<!-- Items Grid -->
-				@if ($barang->count() > 0)
-				<div class="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-					@foreach ($barang as $item)
-					<div
-						class="rounded-lg border border-gray-200 bg-white shadow-md transition-shadow duration-200 hover:shadow-lg">
-						<!-- Item Image -->
-						<div class="aspect-w-1 aspect-h-1 h-48 w-full overflow-hidden rounded-t-lg bg-gray-200">
-							@if ($item->foto)
-							<div class="flex h-full items-center justify-center p-4">
-								<img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama_barang }}"
-									style="width: 140px; height: 140px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
-							</div>
-							@else
-							<div class="flex h-full items-center justify-center bg-gray-100">
-								<span
-									class="inline-flex items-center rounded-full bg-gray-200 px-3 py-2 text-sm font-medium text-gray-600">
-									<i class="fas fa-image mr-2 text-gray-400"></i>
-									No Image
-								</span>
-							</div>
-							@endif
-						</div>
+                <!-- Items Grid -->
+                @if ($barang->count() > 0)
+                <div class="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    @foreach ($barang as $item)
+                    <div
+                        class="rounded-lg border border-gray-200 bg-white shadow-md transition-shadow duration-200 hover:shadow-lg">
+                        <!-- Item Image -->
+                        <div class="aspect-w-1 aspect-h-1 h-48 w-full overflow-hidden rounded-t-lg bg-gray-200">
+                            @if ($item->foto)
+                            <div class="flex h-full items-center justify-center p-4">
+                                <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama_barang }}"
+                                    style="width: 140px; height: 140px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
+                            </div>
+                            @else
+                            <div class="flex h-full items-center justify-center bg-gray-100">
+                                <span
+                                    class="inline-flex items-center rounded-full bg-gray-200 px-3 py-2 text-sm font-medium text-gray-600">
+                                    <i class="fas fa-image mr-2 text-gray-400"></i>
+                                    No Image
+                                </span>
+                            </div>
+                            @endif
+                        </div>
 
-						<!-- Item Info -->
-						<div class="p-4">
-							<h3 class="mb-2 line-clamp-2 text-lg font-semibold text-gray-900">
-								{{ $item->nama_barang }}</h3>
+                        <!-- Item Info -->
+                        <div class="p-4">
+                            <h3 class="mb-2 line-clamp-2 text-lg font-semibold text-gray-900">
+                                {{ $item->nama_barang }}</h3>
 
-							<div class="mb-4 space-y-2">
-								<div class="flex items-center justify-between">
-									<span class="text-sm text-gray-600">Jenis:</span>
-									<span class="text-sm font-medium text-gray-900">{{ ucfirst($item->jenis) }}</span>
-								</div>
+                            <div class="mb-4 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Jenis:</span>
+                                    <span class="text-sm font-medium text-gray-900">{{ ucfirst($item->jenis) }}</span>
+                                </div>
 
-								<div class="flex items-center justify-between">
-									<span class="text-sm text-gray-600">Satuan:</span>
-									<span class="text-sm font-medium text-gray-900">{{ $item->satuan }}</span>
-								</div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Satuan:</span>
+                                    <span class="text-sm font-medium text-gray-900">{{ $item->satuan }}</span>
+                                </div>
 
-								<div class="flex items-center justify-between">
-									<span class="text-sm text-gray-600">Stok Tersedia:</span>
-									<span id="stock-{{ $item->id_barang }}" class="@if ($item->available_stock > 10) text-green-600
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600">Stok Tersedia:</span>
+                                    <span id="stock-{{ $item->id_barang }}" class="@if ($item->available_stock > 10) text-green-600
                                 @elseif($item->available_stock > 5) text-yellow-600
                                 @else text-red-600 @endif text-sm font-bold">
-										{{ $item->available_stock }}
-									</span>
-								</div>
-							</div>
+                                        {{ $item->available_stock }}
+                                    </span>
+                                </div>
+                            </div>
 
-							<!-- Action Button -->
-							@if ($item->available_stock > 0)
-							<button id="add-btn-{{ $item->id_barang }}" data-barang-id="{{ $item->id_barang }}"
-								data-barang-nama="{{ addslashes($item->nama_barang) }}"
-								data-satuan="{{ $item->satuan }}" data-current-stock="{{ $item->available_stock }}"
-								onclick="handleAddToCart(this)"
-								class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
-								<i class="fas fa-cart-plus mr-2"></i>
-								Ambil Barang
-							</button>
-							@else
-							<button id="add-btn-{{ $item->id_barang }}" data-barang-id="{{ $item->id_barang }}"
-								data-current-stock="0" disabled
-								class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-semibold tracking-widest text-white">
-								Barang Belum Tersedia
-							</button>
-							@endif
-						</div>
-					</div>
-					@endforeach
-				</div>
+                            <!-- Action Button -->
+                            @if ($item->available_stock > 0)
+                            <button id="add-btn-{{ $item->id_barang }}" data-barang-id="{{ $item->id_barang }}"
+                                data-barang-nama="{{ addslashes($item->nama_barang) }}"
+                                data-satuan="{{ $item->satuan }}" data-current-stock="{{ $item->available_stock }}"
+                                onclick="handleAddToCart(this)"
+                                class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
+                                <i class="fas fa-cart-plus mr-2"></i>
+                                Ambil Barang
+                            </button>
+                            @else
+                            <button id="add-btn-{{ $item->id_barang }}" data-barang-id="{{ $item->id_barang }}"
+                                data-current-stock="0" disabled
+                                class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-md border border-transparent bg-gray-400 px-4 py-2 text-sm font-semibold tracking-widest text-white">
+                                Barang Belum Tersedia
+                            </button>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
 
-				<!-- Pagination -->
-				<div class="mt-6">
-					<div class="mb-4 flex items-center space-x-2">
-						<span class="text-sm text-gray-700">Tampilkan</span>
-						<select name="per_page"
-							onchange="window.location.href = '{{ route('admin.pengambilan.index') }}?per_page=' + this.value + '&search={{ request('search') }}&jenis={{ request('jenis') }}'"
-							class="rounded-md border-gray-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
-							@foreach ([12, 24, 36, 48] as $perPage)
-							<option value="{{ $perPage }}" {{ request('per_page', 12)==$perPage ? 'selected' : '' }}>
-								{{ $perPage }}
-							</option>
-							@endforeach
-						</select>
-						<span class="text-sm text-gray-700">item per halaman</span>
-					</div>
-					<div>
-						{{ $barang->appends(['per_page' => request('per_page'), 'search' => request('search'), 'jenis'
-						=> request('jenis')])->links() }}
-					</div>
-				</div>
-				@else
-				<div class="py-12 text-center">
-					<i class="fas fa-box-open mb-4 text-6xl text-gray-400"></i>
-					<h3 class="mt-4 text-lg font-medium text-gray-900">Tidak ada barang tersedia</h3>
-					<p class="mt-2 text-gray-500">
-						@if (request('search') || request('jenis'))
-						Tidak ditemukan barang yang sesuai dengan pencarian Anda.
-						@else
-						Saat ini tidak ada barang yang tersedia untuk diambil.
-						@endif
-					</p>
-					@if (request('search') || request('jenis'))
-					<div class="mt-4">
-						<a href="{{ route('admin.pengambilan.index') }}"
-							class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-							Lihat Semua Barang
-						</a>
-					</div>
-					@endif
-				</div>
-				@endif
-			</div>
-		</div>
-	</div>
+                <!-- Pagination -->
+                <div class="mt-6">
+                    <div class="mb-4 flex items-center space-x-2">
+                        <span class="text-sm text-gray-700">Tampilkan</span>
+                        <select name="per_page"
+                            onchange="window.location.href = '{{ route('admin.pengambilan.index') }}?per_page=' + this.value + '&search={{ request('search') }}&jenis={{ request('jenis') }}'"
+                            class="rounded-md border-gray-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            @foreach ([12, 24, 36, 48] as $perPage)
+                            <option value="{{ $perPage }}" {{ request('per_page', 12)==$perPage ? 'selected' : '' }}>
+                                {{ $perPage }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <span class="text-sm text-gray-700">item per halaman</span>
+                    </div>
+                    <div>
+                        {{ $barang->appends(['per_page' => request('per_page'), 'search' => request('search'), 'jenis'
+                        => request('jenis')])->links() }}
+                    </div>
+                </div>
+                @else
+                <div class="py-12 text-center">
+                    <i class="fas fa-box-open mb-4 text-6xl text-gray-400"></i>
+                    <h3 class="mt-4 text-lg font-medium text-gray-900">Tidak ada barang tersedia</h3>
+                    <p class="mt-2 text-gray-500">
+                        @if (request('search') || request('jenis'))
+                        Tidak ditemukan barang yang sesuai dengan pencarian Anda.
+                        @else
+                        Saat ini tidak ada barang yang tersedia untuk diambil.
+                        @endif
+                    </p>
+                    @if (request('search') || request('jenis'))
+                    <div class="mt-4">
+                        <a href="{{ route('admin.pengambilan.index') }}"
+                            class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Lihat Semua Barang
+                        </a>
+                    </div>
+                    @endif
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Add to Cart Modal -->
-<div id="addToCartModal"
-	class="fixed inset-0 z-50 hidden h-full w-full items-center justify-center overflow-y-auto bg-black bg-opacity-50 p-4">
-	<div class="relative mx-auto my-8 w-full max-w-lg overflow-hidden rounded-lg bg-white shadow-xl">
-		<!-- Modal Header -->
-		<div class="border-b border-gray-200 bg-blue-600 px-6 py-4">
-			<div class="flex items-center justify-between">
-				<h3 class="text-lg font-semibold text-white">
-					<i class="fas fa-cart-plus mr-2"></i>
-					Tambah ke Keranjang
-				</h3>
-				<button onclick="closeModal()" class="text-blue-100 hover:text-white">
-					<i class="fas fa-times text-lg"></i>
-				</button>
-			</div>
-		</div>
+<div id="addToCartModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
+    <div class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg relative">
+        <!-- Modal Header -->
+        <div class="bg-gray-600 px-6 py-4 rounded-t-lg">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white">
+                    Tambah Pengambilan
+                </h3>
+                <button onclick="closeModal()" class="text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
 
-		<!-- Modal Body -->
-		<div class="p-6">
-			<form id="addToCartForm">
-				@csrf
-				<input type="hidden" id="id_barang" name="id_barang">
+        <!-- Modal Body -->
+        <div class="p-6">
+            <form id="addToCartForm">
+                @csrf
+                <input type="hidden" id="id_barang" name="id_barang">
 
-				<!-- Nama Barang -->
-				<div class="mb-5">
-					<label class="mb-3 block text-sm font-medium text-gray-700">
-						<i class="fas fa-box mr-1"></i>
-						Nama Barang
-					</label>
-					<div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
-						<p id="barang_nama" class="mb-2 text-base font-medium text-gray-900">Loading...</p>
-						<p class="text-sm text-gray-500">
-							Stok tersedia: <span id="max_stock" class="font-semibold">0</span> <span
-								id="satuan">pcs</span>
-						</p>
-					</div>
-				</div>
+                <!-- Nama Barang Section -->
+                <div class="mb-4">
+                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-box text-gray-500 mr-2"></i>
+                        Nama Barang
+                    </label>
+                    <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                        <p id="barang_nama" class="font-medium text-gray-900">Loading...</p>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Stok tersedia: <span id="max_stock" class="font-semibold">0</span> <span
+                                id="satuan">pcs</span>
+                        </p>
+                    </div>
+                </div>
 
-				<!-- Quantity -->
-				<div class="mb-5">
-					<label class="mb-3 block text-sm font-medium text-gray-700">
-						<i class="fas fa-calculator mr-1"></i>
-						Jumlah yang Diambil
-					</label>
-					<div class="flex items-center justify-center space-x-4">
-						<button type="button" onclick="decreaseQuantity()"
-							class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300">
-							<i class="fas fa-minus"></i>
-						</button>
-						<input type="number" id="quantity" name="quantity" min="1" value="1"
-							class="h-10 w-20 rounded-lg border-2 border-gray-300 text-center text-lg font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
-						<button type="button" onclick="increaseQuantity()"
-							class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300">
-							<i class="fas fa-plus"></i>
-						</button>
-					</div>
-				</div>
+                <!-- Quantity Section -->
+                <div class="mb-4">
+                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-calculator text-gray-500 mr-2"></i>
+                        Jumlah
+                    </label>
+                    <div class="flex items-center justify-center space-x-3">
+                        <button type="button" onclick="decreaseQuantity()"
+                            class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
+                            <i class="fas fa-minus text-gray-500"></i>
+                        </button>
+                        <input type="number" id="quantity" name="quantity" min="1" value="1"
+                            class="w-16 h-8 border border-gray-300 rounded-md text-center focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
+                        <button type="button" onclick="increaseQuantity()"
+                            class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
+                            <i class="fas fa-plus text-gray-500"></i>
+                        </button>
+                    </div>
+                </div>
 
-				<!-- Pengambil -->
-				<div class="mb-5">
-					<label for="pengambil" class="mb-3 block text-sm font-medium text-gray-700">
-						<i class="fas fa-user mr-1"></i>
-						Nama Pengambil <span class="text-red-500">*</span>
-					</label>
-					<input type="text" id="pengambil" name="pengambil" required
-						class="h-12 w-full rounded-lg border-2 border-gray-300 px-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-						placeholder="Masukkan nama pengambil barang">
-				</div>
+                <!-- Bidang Section -->
+                <div class="mb-4">
+                    <label for="bidang" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-building text-gray-500 mr-2"></i>
+                        Bidang <span class="text-red-500">*</span>
+                    </label>
+                    <select id="bidang" name="bidang" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
+                        <option value="">Pilih Bidang</option>
+                        <option value="umum">Umum</option>
+                        <option value="perencanaan">Perencanaan</option>
+                        <option value="keuangan">Keuangan</option>
+                        <option value="operasional">Operasional</option>
+                        <option value="lainnya">Lainnya</option>
+                    </select>
+                </div>
 
-				<!-- Bidang -->
-				<div class="mb-5">
-					<label for="bidang" class="mb-3 block text-sm font-medium text-gray-700">
-						<i class="fas fa-building mr-1"></i>
-						Bidang <span class="text-red-500">*</span>
-					</label>
-					<select id="bidang" name="bidang" required
-						class="h-12 w-full rounded-lg border-2 border-gray-300 px-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
-						<option value="">-- Pilih Bidang --</option>
-						<option value="umum">Umum</option>
-						<option value="perencanaan">Perencanaan</option>
-						<option value="keuangan">Keuangan</option>
-						<option value="operasional">Operasional</option>
-						<option value="lainnya">Lainnya</option>
-					</select>
-				</div>
+                <!-- Nama Pengambil Section -->
+                <div class="mb-4">
+                    <label for="pengambil" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user text-gray-500 mr-2"></i>
+                        Nama Pengambil <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="pengambil" name="pengambil" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
+                        placeholder="Masukkan nama pengambil...">
+                </div>
 
-				<!-- Keterangan -->
-				<div class="mb-5">
-					<label for="keterangan" class="mb-3 block text-sm font-medium text-gray-700">
-						<i class="fas fa-sticky-note mr-1"></i>
-						Keterangan
-					</label>
-					<textarea id="keterangan" name="keterangan" rows="3"
-						class="w-full resize-none rounded-lg border-2 border-gray-300 px-3 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-						placeholder="Tambahkan keterangan jika diperlukan (opsional)"></textarea>
-				</div>
-			</form>
-		</div>
+                <!-- Keterangan Section -->
+                <div class="mb-4">
+                    <label for="keterangan" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-sticky-note text-gray-500 mr-2"></i>
+                        Keterangan <span class="text-gray-400 text-xs">(opsional)</span>
+                    </label>
+                    <textarea id="keterangan" name="keterangan" rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 resize-none"
+                        placeholder="Keterangan tambahan..."></textarea>
+                </div>
+            </form>
+        </div>
 
-		<!-- Modal Footer -->
-		<div class="flex justify-end space-x-3 border-t border-gray-200 bg-gray-50 px-6 py-4">
-			<button onclick="closeModal()"
-				class="rounded-lg border-2 border-gray-300 bg-white px-6 py-3 text-base font-medium text-gray-700 hover:bg-gray-50">
-				<i class="fas fa-times mr-2"></i>
-				Batal
-			</button>
-			<button id="addToCartBtn" onclick="addToCart()"
-				class="rounded-lg border-2 border-blue-600 bg-blue-600 px-6 py-3 text-base font-medium text-white hover:bg-blue-700">
-				<i class="fas fa-cart-plus mr-2"></i>
-				Tambah ke Keranjang
-			</button>
-		</div>
-	</div>
+        <!-- Modal Footer -->
+        <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex space-x-3">
+            <button onclick="closeModal()" class="flex-1 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md">
+                Batal
+            </button>
+            <button id="addToCartBtn" onclick="addToCart()"
+                class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                Tambah ke Keranjang
+            </button>
+        </div>
+    </div>
 </div>
 
 <style>
-	.line-clamp-2 {
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 
-	/* Modal styles */
-	#addToCartModal.show {
-		display: flex !important;
-	}
+    /* Modal styles */
+    #addToCartModal.show {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
 
-	#addToCartModal {
-		display: none;
-	}
+    #addToCartModal {
+        display: none;
+    }
 
-	/* Custom input number controls */
-	input[type="number"]::-webkit-outer-spin-button,
-	input[type="number"]::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
+    #addToCartModal>div {
+        margin: auto;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
 
-	input[type="number"] {
-		-moz-appearance: textfield;
-	}
+    /* Custom input number controls */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
 </style>
 </style>
 
 <script>
-	// Load cart count when page loads
+    // Load cart count when page loads
 								document.addEventListener('DOMContentLoaded', function() {
 												updateCartCount();
 
@@ -404,7 +426,12 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
 												// Check if stock is 0
 												if (stok <= 0) {
-																alert('Barang belum tersedia. Stok saat ini: 0');
+																Swal.fire({
+																				icon: 'warning',
+																				title: 'Stok Tidak Tersedia',
+																				text: 'Barang belum tersedia. Stok saat ini: 0',
+																				confirmButtonColor: '#f59e0b'
+																});
 																return;
 												}
 
@@ -438,7 +465,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 								function increaseQuantity() {
 												const quantityInput = document.getElementById('quantity');
 												const maxStock = parseInt(document.getElementById('max_stock').textContent);
-												const currentValue = parseInt(quantityInput.value);
+												const currentValue = parseInt(quantityInput.value) || 0;
 												if (currentValue < maxStock) {
 																quantityInput.value = currentValue + 1;
 												}
@@ -446,7 +473,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
 								function decreaseQuantity() {
 												const quantityInput = document.getElementById('quantity');
-												const currentValue = parseInt(quantityInput.value);
+												const currentValue = parseInt(quantityInput.value) || 0;
 												if (currentValue > 1) {
 																quantityInput.value = currentValue - 1;
 												}
@@ -463,69 +490,34 @@ SISTEM MONITORING BARANG HABIS PAKAI
 												const csrfToken = document.querySelector('meta[name="csrf-token"]');
 												if (!csrfToken) {
 																console.error('CSRF token not found');
-																alert('Error: CSRF token not found. Please refresh the page.');
+																Swal.fire({
+																				icon: 'error',
+																				title: 'Error!',
+																				text: 'CSRF token not found. Please refresh the page.',
+																				confirmButtonColor: '#d33'
+																});
 																return;
 												}
 
 												// Validate bidang
 												if (!formData.get('bidang')) {
-																// Show error state on select
-																const bidangSelect = document.getElementById('bidang');
-																bidangSelect.classList.add('border-red-500');
-																bidangSelect.focus();
-
-																// Create error message
-																let errorMsg = document.getElementById('bidang-error');
-																if (!errorMsg) {
-																				errorMsg = document.createElement('p');
-																				errorMsg.id = 'bidang-error';
-																				errorMsg.className = 'text-red-500 text-sm mt-1 font-medium';
-																				errorMsg.textContent = 'Bidang harus dipilih';
-																				bidangSelect.parentNode.appendChild(errorMsg);
-																}
-
-																// Remove error after user selects
-																bidangSelect.addEventListener('change', function() {
-																				if (this.value) {
-																								this.classList.remove('border-red-500');
-																								const errorMsg = document.getElementById('bidang-error');
-																								if (errorMsg) {
-																												errorMsg.remove();
-																								}
-																				}
+																Swal.fire({
+																				icon: 'warning',
+																				title: 'Perhatian!',
+																				text: 'Silakan pilih bidang terlebih dahulu.',
+																				confirmButtonColor: '#f59e0b'
 																});
-
 																return;
 												}
 
 												// Validate pengambil
-												if (!formData.get('pengambil')) {
-																// Show error state on input
-																const pengambilInput = document.getElementById('pengambil');
-																pengambilInput.classList.add('border-red-500');
-																pengambilInput.focus();
-
-																// Create error message
-																let errorMsg = document.getElementById('pengambil-error');
-																if (!errorMsg) {
-																				errorMsg = document.createElement('p');
-																				errorMsg.id = 'pengambil-error';
-																				errorMsg.className = 'text-red-500 text-sm mt-1 font-medium';
-																				errorMsg.textContent = 'Nama pengambil harus diisi';
-																				pengambilInput.parentNode.appendChild(errorMsg);
-																}
-
-																// Remove error after user types
-																pengambilInput.addEventListener('input', function() {
-																				if (this.value.trim()) {
-																								this.classList.remove('border-red-500');
-																								const errorMsg = document.getElementById('pengambil-error');
-																								if (errorMsg) {
-																												errorMsg.remove();
-																								}
-																				}
+												if (!formData.get('pengambil') || formData.get('pengambil').trim() === '') {
+																Swal.fire({
+																				icon: 'warning',
+																				title: 'Perhatian!',
+																				text: 'Nama pengambil harus diisi.',
+																				confirmButtonColor: '#f59e0b'
 																});
-
 																return;
 												}
 
@@ -540,27 +532,33 @@ SISTEM MONITORING BARANG HABIS PAKAI
 												});
 
 												addBtn.disabled = true;
-												addBtn.innerHTML = `
-        <i class="mr-2 fas fa-spinner fa-spin"></i>
-        Menambahkan...
-    `;
+												addBtn.textContent = 'Menambahkan...';
 
 												fetch('{{ route('admin.cart.add') }}', {
 																				method: 'POST',
 																				body: formData,
 																				headers: {
-																								'X-CSRF-TOKEN': csrfToken.getAttribute('content')
+																								'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
+																								'X-Requested-With': 'XMLHttpRequest',
+																								'Accept': 'application/json'
 																				}
 																})
-																.then(response => {
+																.then(async response => {
 																				console.log('Response status:', response.status);
 																				console.log('Response headers:', response.headers);
 
+																				const responseText = await response.text();
+																				console.log('Response text:', responseText);
+
 																				if (!response.ok) {
-																								throw new Error(`HTTP error! status: ${response.status}`);
+																								throw new Error(`HTTP error! status: ${response.status}, response: ${responseText.substring(0, 200)}...`);
 																				}
 
-																				return response.json();
+																				try {
+																								return JSON.parse(responseText);
+																				} catch (e) {
+																								throw new Error(`Invalid JSON response: ${responseText.substring(0, 200)}...`);
+																				}
 																})
 																.then(data => {
 																				console.log('Response data:', data);
@@ -573,22 +571,36 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																								const quantity = parseInt(formData.get('quantity'));
 																								updateStockDisplay(barangId, quantity);
 
-																								// Show success message
-																								showMessage(data.message, 'success');
+																								// Show SweetAlert success message
+																								Swal.fire({
+																												icon: 'success',
+																												title: 'Berhasil!',
+																												text: data.message,
+																												showConfirmButton: false,
+																												timer: 2000,
+																												timerProgressBar: true
+																								});
 																				} else {
-																								alert(data.message || 'Terjadi kesalahan saat menambahkan ke keranjang.');
+																								Swal.fire({
+																												icon: 'error',
+																												title: 'Gagal!',
+																												text: data.message || 'Terjadi kesalahan saat menambahkan ke keranjang.',
+																												confirmButtonColor: '#d33'
+																								});
 																				}
 																})
 																.catch(error => {
 																				console.error('Error details:', error);
-																				alert('Terjadi kesalahan saat menambahkan ke keranjang: ' + error.message);
+																				Swal.fire({
+																								icon: 'error',
+																								title: 'Terjadi Kesalahan!',
+																								text: 'Terjadi kesalahan saat menambahkan ke keranjang: ' + error.message,
+																								confirmButtonColor: '#d33'
+																				});
 																})
 																.finally(() => {
 																				addBtn.disabled = false;
-																				addBtn.innerHTML = `
-            <i class="mr-2 fas fa-cart-plus"></i>
-            Tambah ke Keranjang
-        `;
+																				addBtn.textContent = 'Tambah ke Keranjang';
 																});
 								}
 

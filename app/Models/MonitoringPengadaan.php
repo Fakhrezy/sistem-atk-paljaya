@@ -15,6 +15,7 @@ class MonitoringPengadaan extends Model
         'user_id',
         'barang_id',
         'debit',
+        'saldo_akhir',
         'keterangan',
         'status',
         'tanggal'

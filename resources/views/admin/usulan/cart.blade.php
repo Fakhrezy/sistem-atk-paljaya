@@ -3,7 +3,7 @@
 @section('title', 'Keranjang Usulan')
 
 @section('header')
-Keranjang Usulan
+SISTEM MONITORING BARANG HABIS PAKAI
 @endsection
 
 @push('scripts')
@@ -18,7 +18,7 @@ Keranjang Usulan
                 <div class="mb-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h2 class="text-2xl font-semibold text-gray-800">Keranjang Usulan Pengadaan</h2>
+                            <h2 class="text-2xl font-semibold text-gray-800">Keranjang Pengadaan</h2>
                         </div>
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('admin.usulan.index') }}"
@@ -35,15 +35,33 @@ Keranjang Usulan
                 </div>
 
                 @if (session('success'))
-                <div class="relative mb-4 rounded border-l-4 border-blue-500 bg-blue-100 p-4 text-blue-700">
-                    <span class="block sm:inline">{{ session('success') }}</span>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+				            Swal.fire({
+				                icon: 'success',
+				                title: 'Berhasil!',
+				                text: '{{ session('success') }}',
+				                showConfirmButton: false,
+				                timer: 2000,
+				                timerProgressBar: true,
+				                toast: true,
+				                position: 'top-end'
+				            });
+				        });
+                </script>
                 @endif
 
                 @if (session('error'))
-                <div class="relative mb-4 rounded border-l-4 border-red-500 bg-red-100 p-4 text-red-700">
-                    <span class="block sm:inline">{{ session('error') }}</span>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+				            Swal.fire({
+				                icon: 'error',
+				                title: 'Error!',
+				                text: '{{ session('error') }}',
+				                confirmButtonColor: '#d33'
+				            });
+				        });
+                </script>
                 @endif
 
                 <div id="cart-container">
@@ -159,12 +177,12 @@ Keranjang Usulan
                         <button onclick="clearCart()"
                             class="inline-flex items-center rounded bg-red-500 px-4 py-2 font-bold text-white transition duration-150 ease-in-out hover:bg-red-700"
                             title="Hapus semua usulan">
-                            <i class="fas fa-trash-alt mr-2"></i>Kosongkan Usulan
+                            <i class="fas fa-trash-alt mr-2"></i>Kosongkan Keranjang
                         </button>
                         <button onclick="submitUsulan()"
                             class="inline-flex items-center rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white transition duration-150 ease-in-out hover:bg-blue-600"
                             title="Ajukan semua usulan">
-                            <i class="fas fa-paper-plane mr-2"></i>Ajukan Usulan
+                            <i class="fas fa-paper-plane mr-2"></i>Tambah Pengadaan
                         </button>
                     </div>
                     @else
@@ -190,50 +208,82 @@ Keranjang Usulan
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="fixed inset-0 hidden h-full w-full overflow-y-auto bg-gray-600 bg-opacity-50">
-    <div class="relative top-20 mx-auto w-96 rounded-md border bg-white p-5 shadow-lg">
-        <div class="mt-3">
-            <h3 class="mb-4 text-lg font-medium text-gray-900">Edit Usulan</h3>
-            <form id="editForm">
-                @csrf
-                <input type="hidden" id="edit_id" name="id">
-
-                <div class="mb-4">
-                    <label class="mb-2 block text-sm font-medium text-gray-700">Nama Barang:</label>
-                    <p class="text-sm font-semibold text-gray-900" id="edit_nama_barang"></p>
+<div id="editModal" class="fixed inset-0 hidden z-50 overflow-y-auto bg-black bg-opacity-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="relative w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg">
+            <!-- Modal Header -->
+            <div class="bg-gray-600 px-6 py-4 rounded-t-lg">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-white">
+                        Edit Usulan
+                    </h3>
+                    <button onclick="closeEditModal()" class="text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
+            </div>
 
-                <div class="mb-4">
-                    <label for="edit_jumlah" class="mb-2 block text-sm font-medium text-gray-700">Jumlah:</label>
-                    <div class="flex items-center">
-                        <button type="button" onclick="editDecreaseQuantity()"
-                            class="rounded-l bg-gray-200 px-3 py-1 transition duration-150 ease-in-out hover:bg-gray-300">-</button>
-                        <input type="number" id="edit_jumlah" name="jumlah" min="1" value="1"
-                            class="w-20 border-b border-t border-gray-300 py-1 text-center transition duration-150 ease-in-out focus:border-blue-500 focus:ring-blue-500">
-                        <button type="button" onclick="editIncreaseQuantity()"
-                            class="rounded-r bg-gray-200 px-3 py-1 transition duration-150 ease-in-out hover:bg-gray-300">+</button>
+            <!-- Modal Body -->
+            <div class="p-6">
+                <form id="editForm">
+                    @csrf
+                    <input type="hidden" id="edit_id" name="id">
+
+                    <!-- Nama Barang Section -->
+                    <div class="mb-4">
+                        <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-box text-gray-500 mr-2"></i>
+                            Nama Barang
+                        </label>
+                        <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                            <p class="font-medium text-gray-900" id="edit_nama_barang"></p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="mb-4">
-                    <label for="edit_keterangan" class="mb-2 block text-sm font-medium text-gray-700">Keterangan
-                        (opsional):</label>
-                    <textarea id="edit_keterangan" name="keterangan" rows="3"
-                        class="w-full rounded-md border border-gray-300 px-3 py-2 transition duration-150 ease-in-out focus:border-blue-500 focus:ring-blue-500"
-                        placeholder="Keterangan tambahan..."></textarea>
-                </div>
+                    <!-- Quantity Section -->
+                    <div class="mb-4">
+                        <label for="edit_jumlah" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-calculator text-gray-500 mr-2"></i>
+                            Jumlah
+                        </label>
+                        <div class="flex items-center justify-center space-x-3">
+                            <button type="button" onclick="editDecreaseQuantity()"
+                                class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
+                                <i class="fas fa-minus text-gray-500"></i>
+                            </button>
+                            <input type="number" id="edit_jumlah" name="jumlah" min="1" value="1"
+                                class="w-16 h-8 border border-gray-300 rounded-md text-center focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
+                            <button type="button" onclick="editIncreaseQuantity()"
+                                class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
+                                <i class="fas fa-plus text-gray-500"></i>
+                            </button>
+                        </div>
+                    </div>
 
-                <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="closeEditModal()"
-                        class="rounded-md bg-gray-300 px-4 py-2 text-base font-medium text-gray-700 transition duration-150 ease-in-out hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        Batal
-                    </button>
-                    <button type="button" onclick="updateItem()"
-                        class="rounded-md bg-blue-500 px-4 py-2 text-base font-medium text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Simpan
-                    </button>
-                </div>
-            </form>
+                    <!-- Keterangan Section -->
+                    <div class="mb-4">
+                        <label for="edit_keterangan" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-sticky-note text-gray-500 mr-2"></i>
+                            Keterangan <span class="text-gray-400 text-xs">(opsional)</span>
+                        </label>
+                        <textarea id="edit_keterangan" name="keterangan" rows="3"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 resize-none"
+                            placeholder="Keterangan tambahan..."></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex space-x-3">
+                <button type="button" onclick="closeEditModal()"
+                    class="flex-1 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md">
+                    Batal
+                </button>
+                <button type="button" onclick="updateItem()"
+                    class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                    Simpan
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -286,7 +336,7 @@ Keranjang Usulan
 
 								function editDecreaseQuantity() {
 												const input = document.getElementById('edit_jumlah');
-												const currentValue = parseInt(input.value);
+												const currentValue = parseInt(input.value) || 0;
 												if (currentValue > 1) {
 																input.value = currentValue - 1;
 												}
@@ -294,11 +344,23 @@ Keranjang Usulan
 
 								function editIncreaseQuantity() {
 												const input = document.getElementById('edit_jumlah');
-												input.value = parseInt(input.value) + 1;
+												const currentValue = parseInt(input.value) || 0;
+												input.value = currentValue + 1;
 								}
 
 								function updateItem() {
 												const id = document.getElementById('edit_id').value;
+												const jumlah = parseInt(document.getElementById('edit_jumlah').value);
+
+												if (jumlah < 1) {
+																Swal.fire({
+																				icon: 'warning',
+																				title: 'Perhatian!',
+																				text: 'Jumlah harus lebih dari 0.'
+																});
+																return;
+												}
+
 												const formData = new FormData(document.getElementById('editForm'));
 
 												fetch(`/admin/usulan/cart/update/${id}`, {
@@ -312,56 +374,110 @@ Keranjang Usulan
 																.then(data => {
 																				if (data.success) {
 																								closeEditModal();
-																								window.location.reload();
+																								Swal.fire({
+																												icon: 'success',
+																												title: 'Berhasil!',
+																												text: data.message,
+																												timer: 2000,
+																												showConfirmButton: false
+																								}).then(() => {
+																												window.location.reload();
+																								});
 																				} else {
-																								showMessage(data.message || 'Terjadi kesalahan saat mengupdate usulan.', 'error');
+																								Swal.fire({
+																												icon: 'error',
+																												title: 'Gagal!',
+																												text: data.message || 'Terjadi kesalahan saat mengupdate usulan.'
+																								});
 																				}
 																})
 																.catch(error => {
 																				console.error('Error:', error);
-																				showMessage('Terjadi kesalahan saat mengupdate usulan.', 'error');
+																				Swal.fire({
+																								icon: 'error',
+																								title: 'Error!',
+																								text: 'Terjadi kesalahan saat mengupdate usulan.'
+																				});
 																});
 								}
 
 								function removeItem(id) {
-												if (!confirm('Yakin ingin menghapus usulan ini?')) {
-																return;
-												}
+												Swal.fire({
+																title: 'Hapus Pengadaan?',
+																text: 'Yakin ingin menghapus pengadaan ini?',
+																icon: 'warning',
+																showCancelButton: true,
+																confirmButtonColor: '#6b7280',
+																cancelButtonColor: '#3085d6',
+																confirmButtonText: '<i class="fas fa-trash"></i> Hapus!',
+																cancelButtonText: '<i class="fas fa-times"></i> Batal'
+												}).then((result) => {
+																if (result.isConfirmed) {
+																				Swal.fire({
+																								title: 'Menghapus...',
+																								text: 'Mohon tunggu sebentar.',
+																								icon: 'info',
+																								allowOutsideClick: false,
+																								showConfirmButton: false,
+																								didOpen: () => {
+																												Swal.showLoading();
+																								}
+																				});
 
-												const formData = new FormData();
-												formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-												formData.append('_method', 'DELETE');
+																				const formData = new FormData();
+																				formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+																				formData.append('_method', 'DELETE');
 
-												fetch(`/admin/usulan/cart/remove/${id}`, {
-																				method: 'POST',
-																				body: formData,
-																				headers: {
-																								'X-Requested-With': 'XMLHttpRequest'
-																				}
-																})
-																.then(response => response.json())
-																.then(data => {
-																				if (data.success) {
-																								window.location.reload();
-																				} else {
-																								showMessage(data.message || 'Terjadi kesalahan saat menghapus usulan.', 'error');
-																				}
-																})
-																.catch(error => {
-																				console.error('Error:', error);
-																				showMessage('Terjadi kesalahan saat menghapus usulan.', 'error');
-																});
+																				fetch(`/admin/usulan/cart/remove/${id}`, {
+																								method: 'POST',
+																								body: formData,
+																								headers: {
+																												'X-Requested-With': 'XMLHttpRequest'
+																								}
+																				})
+																				.then(response => response.json())
+																				.then(data => {
+																								if (data.success) {
+																												Swal.fire({
+																																icon: 'success',
+																																title: 'Berhasil!',
+																																text: 'Usulan berhasil dihapus.',
+																																showConfirmButton: false,
+																																timer: 1500
+																												}).then(() => {
+																																window.location.reload();
+																												});
+																								} else {
+																												Swal.fire({
+																																icon: 'error',
+																																title: 'Gagal!',
+																																text: data.message || 'Terjadi kesalahan saat menghapus usulan.',
+																																confirmButtonColor: '#d33'
+																												});
+																								}
+																				})
+																				.catch(error => {
+																								console.error('Error:', error);
+																								Swal.fire({
+																												icon: 'error',
+																												title: 'Error!',
+																												text: 'Terjadi kesalahan saat menghapus usulan.',
+																												confirmButtonColor: '#d33'
+																								});
+																				});
+																}
+												});
 								}
 
 								function clearCart() {
 												Swal.fire({
-																title: 'Kosongkan Usulan?',
-																text: 'Yakin ingin mengosongkan semua usulan ini?',
+																title: 'Kosongkan Keranjang?',
+																text: 'Yakin ingin mengosongkan semua keranjang ini?',
 																icon: 'warning',
 																showCancelButton: true,
 																confirmButtonColor: '#dc2626',
 																cancelButtonColor: '#6b7280',
-																confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Ya, Kosongkan!',
+																confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Kosongkan!',
 																cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
 																reverseButtons: true
 												}).then((result) => {
@@ -495,7 +611,7 @@ Keranjang Usulan
 																																				timer: 2000,
 																																				showConfirmButton: false
 																																}).then(() => {
-																																				window.location.href = '/user/usulan';
+																																				window.location.href = '/admin/usulan';
 																																});
 																												} else {
 																																const errorMessage = typeof data.message === 'string' ? data.message :

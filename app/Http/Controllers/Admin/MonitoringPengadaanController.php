@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MonitoringPengadaan;
+use App\Models\MonitoringBarang;
 use App\Models\Barang;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MonitoringPengadaanController extends Controller
 {
@@ -37,13 +39,16 @@ class MonitoringPengadaanController extends Controller
 
         $pengadaans = $query->get();
 
+        // Sync saldo_akhir dengan stok barang terkini
+        $this->syncSaldoAkhirWithCurrentStock();
+
         return view('admin.monitoring-pengadaan.index', compact('pengadaans'));
     }
 
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:proses,terima'
+            'status' => 'required|in:proses,selesai'
         ]);
 
         try {
@@ -55,19 +60,33 @@ class MonitoringPengadaanController extends Controller
             $jumlahPengadaan = $pengadaan->debit;
 
             // Update barang stock based on status change
-            if ($oldStatus === 'proses' && $newStatus === 'terima') {
-                // When accepting pengadaan, increase stock
+            if ($oldStatus === 'proses' && $newStatus === 'selesai') {
+                // When completing pengadaan, increase stock
                 $pengadaan->barang->stok += $jumlahPengadaan;
                 $pengadaan->barang->save();
-                $message = 'Pengadaan berhasil diterima dan stok barang telah ditambahkan';
-            } elseif ($oldStatus === 'terima' && $newStatus === 'proses') {
-                // When cancelling acceptance, decrease stock
+
+                // Update saldo_akhir di monitoring pengadaan
+                $pengadaan->saldo_akhir = $pengadaan->barang->stok;
+
+                // Update saldo di tabel monitoring barang yang belum diterima
+                $this->updateMonitoringBarangSaldo($pengadaan->barang->id_barang, $pengadaan->barang->stok);
+
+                $message = 'Pengadaan berhasil diselesaikan, stok barang telah ditambahkan, dan saldo monitoring diperbarui';
+            } elseif ($oldStatus === 'selesai' && $newStatus === 'proses') {
+                // When reverting completion, decrease stock
                 if ($pengadaan->barang->stok < $jumlahPengadaan) {
                     throw new \Exception('Stok tidak mencukupi untuk pembatalan. Pastikan stok barang cukup.');
                 }
                 $pengadaan->barang->stok -= $jumlahPengadaan;
                 $pengadaan->barang->save();
-                $message = 'Status pengadaan dibatalkan dan stok barang telah dikurangi';
+
+                // Reset saldo_akhir karena kembali ke proses
+                $pengadaan->saldo_akhir = $pengadaan->barang->stok;
+
+                // Update saldo di tabel monitoring barang yang belum diterima
+                $this->updateMonitoringBarangSaldo($pengadaan->barang->id_barang, $pengadaan->barang->stok);
+
+                $message = 'Status pengadaan dikembalikan ke proses, stok barang telah dikurangi, dan saldo monitoring diperbarui';
             }
 
             // Update pengadaan status
@@ -80,7 +99,6 @@ class MonitoringPengadaanController extends Controller
                 'success' => true,
                 'message' => $message
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -122,8 +140,8 @@ class MonitoringPengadaanController extends Controller
             $newDebit = $request->debit;
             $diffDebit = $newDebit - $oldDebit;
 
-            // Jika status sudah 'terima', perlu update stok barang
-            if ($pengadaan->status === 'terima') {
+            // Jika status sudah 'selesai', perlu update stok barang
+            if ($pengadaan->status === 'selesai') {
                 $barang = $pengadaan->barang;
 
                 // Jika pengurangan debit, pastikan stok mencukupi
@@ -147,7 +165,6 @@ class MonitoringPengadaanController extends Controller
                 'success' => true,
                 'message' => 'Data pengadaan berhasil diperbarui'
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -164,8 +181,8 @@ class MonitoringPengadaanController extends Controller
 
             $pengadaan = MonitoringPengadaan::with('barang')->findOrFail($id);
 
-            // Jika status terima, kembalikan stok
-            if ($pengadaan->status === 'terima') {
+            // Jika status selesai, kembalikan stok
+            if ($pengadaan->status === 'selesai') {
                 $barang = $pengadaan->barang;
                 $barang->stok -= $pengadaan->debit;
                 $barang->save();
@@ -180,7 +197,6 @@ class MonitoringPengadaanController extends Controller
                 'success' => true,
                 'message' => 'Data pengadaan berhasil dihapus'
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -188,5 +204,36 @@ class MonitoringPengadaanController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Helper method to update saldo in monitoring barang table when stock changes
+     */
+    private function updateMonitoringBarangSaldo($idBarang, $newStok)
+    {
+        // Update saldo untuk monitoring barang dengan status 'diajukan' (belum diterima)
+        // Karena ketika status 'diterima', saldo_akhir sudah dihitung berdasarkan pengambilan
+        MonitoringBarang::where('id_barang', $idBarang)
+            ->where('status', 'diajukan')
+            ->update([
+                'saldo' => $newStok,
+                'saldo_akhir' => DB::raw('saldo - kredit')
+            ]);
+
+        // Log untuk debugging (optional)
+        Log::info("Updated monitoring barang saldo for barang ID: {$idBarang}, new stock: {$newStok}");
+    }
+
+    /**
+     * Sync saldo_akhir in monitoring pengadaan with current stock from barang table
+     */
+    private function syncSaldoAkhirWithCurrentStock()
+    {
+        // Update saldo_akhir untuk semua monitoring pengadaan berdasarkan stok terkini dari tabel barang
+        DB::statement("
+            UPDATE monitoring_pengadaan mp
+            INNER JOIN barang b ON mp.barang_id = b.id_barang
+            SET mp.saldo_akhir = b.stok
+        ");
     }
 }

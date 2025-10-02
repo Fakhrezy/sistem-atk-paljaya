@@ -19,6 +19,14 @@ class CartController extends Controller
     }
 
     /**
+     * Get view prefix based on current route
+     */
+    private function getViewPrefix()
+    {
+        return request()->is('admin/*') ? 'admin' : 'user';
+    }
+
+    /**
      * Display cart items
      */
     public function index()
@@ -33,10 +41,15 @@ class CartController extends Controller
             // Group cart items by bidang
             $cartByBidang = $cartItems->groupBy('bidang');
 
+            // Determine view prefix based on route
+            $viewPrefix = $this->getViewPrefix();
+
             // Debug info
             if (config('app.debug')) {
                 Log::info('Cart index accessed', [
                     'user_id' => auth()->id(),
+                    'user_role' => auth()->user()->role,
+                    'view_prefix' => $viewPrefix,
                     'cart_count' => $cartItems->count(),
                     'bidang_count' => $cartByBidang->count(),
                     'is_ajax' => request()->ajax()
@@ -45,10 +58,10 @@ class CartController extends Controller
 
             // If AJAX request, return partial view
             if (request()->ajax()) {
-                return view('user.cart.partials.cart-content', compact('cartByBidang'));
+                return view("{$viewPrefix}.cart.partials.cart-content", compact('cartByBidang'));
             }
 
-            return view('user.cart.index', compact('cartByBidang'));
+            return view("{$viewPrefix}.cart.index", compact('cartByBidang'));
         } catch (\Exception $e) {
             Log::error('Cart index error: ' . $e->getMessage(), [
                 'user_id' => auth()->id(),
@@ -61,8 +74,10 @@ class CartController extends Controller
                 ], 500);
             }
 
+            // Determine view prefix for error case
+            $viewPrefix = $this->getViewPrefix();
             $cartByBidang = collect();
-            return view('user.cart.index', compact('cartByBidang'));
+            return view("{$viewPrefix}.cart.index", compact('cartByBidang'));
         }
     }
 
@@ -72,12 +87,22 @@ class CartController extends Controller
     public function add(Request $request)
     {
         try {
-            // Debug info
-            if (config('app.debug')) {
-                Log::info('Cart add request from user: ' . auth()->id(), [
-                    'request_data' => $request->all(),
-                    'user' => auth()->user()->only(['id', 'name', 'role'])
-                ]);
+            // Enhanced debug info
+            Log::info('Cart add request received', [
+                'user_id' => auth()->id(),
+                'user_role' => auth()->user()?->role,
+                'request_url' => $request->fullUrl(),
+                'request_method' => $request->method(),
+                'request_data' => $request->all(),
+                'headers' => $request->headers->all()
+            ]);
+
+            // Check authentication first
+            if (!auth()->check()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
             }
 
             $request->validate([
@@ -160,23 +185,34 @@ class CartController extends Controller
                 'message' => 'Barang berhasil ditambahkan ke keranjang'
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::warning('Cart add validation error', [
+                'user_id' => auth()->id(),
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Data tidak valid',
+                'message' => 'Data tidak valid: ' . implode(', ', collect($e->errors())->flatten()->toArray()),
                 'errors' => $e->errors()
             ], 422);
         } catch (\Exception $e) {
             Log::error('Cart add error: ' . $e->getMessage(), [
                 'user_id' => auth()->id(),
                 'request_data' => $request->all(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
 
-            // Kirim pesan error detail ke frontend agar SweetAlert bisa menampilkan
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'message' => 'Terjadi kesalahan internal: ' . $e->getMessage(),
+                'debug' => config('app.debug') ? [
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString()
+                ] : null
             ], 500);
         }
     }

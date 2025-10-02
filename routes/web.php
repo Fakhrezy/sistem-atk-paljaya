@@ -88,6 +88,31 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/admin/monitoring-pengadaan/{id}/status', 'updateStatus')->name('admin.monitoring-pengadaan.update-status');
         Route::delete('/admin/monitoring-pengadaan/{id}', 'destroy')->name('admin.monitoring-pengadaan.destroy');
     });
+
+    // Route :-> API notifikasi
+    Route::get('/admin/notifications/count', function () {
+        try {
+            $notifications = [
+                'monitoring_pengambilan' => \App\Models\MonitoringBarang::where('status', 'diajukan')->count(),
+                'monitoring_pengadaan' => \App\Models\MonitoringPengadaan::where('status', 'proses')->count(),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'notifications' => $notifications
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching notifications',
+                'notifications' => [
+                    'monitoring_pengambilan' => 0,
+                    'monitoring_pengadaan' => 0,
+                ]
+            ]);
+        }
+    })->name('admin.notifications.count');
+
     // Route :-> pengambilan barang
     Route::controller(App\Http\Controllers\Admin\PengambilanController::class)->group(function () {
         Route::get('/admin/pengambilan', 'index')->name('admin.pengambilan.index');
@@ -98,8 +123,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/usulan', 'index')->name('admin.usulan.index');
         Route::post('/admin/usulan', 'store')->name('admin.usulan.store');
     });
-    // Route :-> keranjang usulan
-    Route::controller(App\Http\Controllers\Admin\KeranjangUsulanController::class)->group(function () {
+    // Route :-> keranjang usulan (using User controller with middleware)
+    Route::controller(App\Http\Controllers\User\KeranjangUsulanController::class)->group(function () {
         Route::get('/admin/usulan/cart', 'index')->name('admin.usulan.cart.index');
         Route::post('/admin/usulan/cart/add', 'add')->name('admin.usulan.cart.add');
         Route::post('/admin/usulan/cart/update/{cart}', 'update')->name('admin.usulan.cart.update');

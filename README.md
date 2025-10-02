@@ -1,9 +1,9 @@
 ## Admin
 
-- **Email:** `admin@example.com`
+- **Email:** `admin@paljaya.com`
 - **Password:** `password`
 
 ## User
 
-- **Email:** `user@example.com`
+- **Email:** `user@paljaya.com`
 - **Password:** `password`

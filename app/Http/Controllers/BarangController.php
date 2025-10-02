@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\MonitoringBarang;
+use App\Models\MonitoringPengadaan;
 use App\Exports\BarangExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class BarangController extends Controller
 {
@@ -17,9 +20,9 @@ class BarangController extends Controller
         // Filter berdasarkan pencarian
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_barang', 'like', "%{$search}%")
-                  ->orWhere('id_barang', 'like', "%{$search}%");
+                    ->orWhere('id_barang', 'like', "%{$search}%");
             });
         }
 
@@ -78,11 +81,13 @@ class BarangController extends Controller
     public function update(Request $request, $id)
     {
         $barang = Barang::findOrFail($id);
+        $oldStok = $barang->stok; // Simpan stok lama
 
         $request->validate([
             'nama_barang' => 'required',
             'satuan' => 'required',
             'harga_barang' => 'required|numeric',
+            'stok' => 'required|numeric|min:0',
             'jenis' => 'required|in:atk,cetak,tinta',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
@@ -100,9 +105,22 @@ class BarangController extends Controller
             $data['foto'] = $path;
         }
 
-        $barang->update($data);
+        DB::beginTransaction();
+        try {
+            $barang->update($data);
 
-        return redirect()->route('admin.barang')->with('success', 'Barang berhasil diupdate');
+            // Jika stok berubah, update saldo di monitoring barang dan pengadaan
+            if ($oldStok != $request->stok) {
+                $this->updateMonitoringBarangSaldo($barang->id_barang, $request->stok);
+                $this->updateMonitoringPengadaanSaldo($barang->id_barang, $request->stok);
+            }
+
+            DB::commit();
+            return redirect()->route('admin.barang')->with('success', 'Barang berhasil diupdate dan saldo monitoring telah diperbarui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.barang')->with('error', 'Gagal mengupdate barang: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id)
@@ -126,9 +144,9 @@ class BarangController extends Controller
         // Filter berdasarkan pencarian
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_barang', 'like', "%{$search}%")
-                  ->orWhere('id_barang', 'like', "%{$search}%");
+                    ->orWhere('id_barang', 'like', "%{$search}%");
             });
         }
 
@@ -157,5 +175,31 @@ class BarangController extends Controller
         $export->export($filename);
 
         return response()->download($filename)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Helper method to update saldo in monitoring barang table when stock changes
+     */
+    private function updateMonitoringBarangSaldo($idBarang, $newStok)
+    {
+        // Update saldo untuk monitoring barang dengan status 'diajukan' (belum diterima)
+        MonitoringBarang::where('id_barang', $idBarang)
+            ->where('status', 'diajukan')
+            ->update([
+                'saldo' => $newStok,
+                'saldo_akhir' => DB::raw('saldo - kredit')
+            ]);
+    }
+
+    /**
+     * Helper method to update saldo_akhir in monitoring pengadaan table when stock changes
+     */
+    private function updateMonitoringPengadaanSaldo($idBarang, $newStok)
+    {
+        // Update saldo_akhir untuk semua monitoring pengadaan
+        MonitoringPengadaan::where('barang_id', $idBarang)
+            ->update([
+                'saldo_akhir' => $newStok
+            ]);
     }
 }

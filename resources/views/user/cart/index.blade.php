@@ -99,7 +99,7 @@
             </div>
             <div class="items-center px-4 py-3">
                 <button id="updateItemBtn" onclick="updateCartItem()" class="w-full px-4 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-blue-500 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                    Update Item
+                    Update
                 </button>
                 <button onclick="closeEditModal()" class="w-full px-4 py-2 mt-3 text-base font-medium text-black transition duration-150 ease-in-out bg-gray-300 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
                     Batal

@@ -3,7 +3,7 @@
 @section('title', 'Monitoring Pengambilan')
 
 @section('header')
-    SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 @endsection
 
 @section('content')
@@ -22,70 +22,105 @@
 
                 <!-- Filters -->
                 <div class="p-4 mb-6 rounded-lg bg-gray-50">
-                    <form method="GET" action="{{ route('admin.monitoring-barang.index') }}" class="flex flex-wrap items-end gap-4">
+                    <form method="GET" action="{{ route('admin.monitoring-barang.index') }}"
+                        class="flex flex-wrap items-end gap-4">
                         <div class="flex-1 min-w-64">
                             <label for="search" class="block text-sm font-medium text-gray-700">Pencarian</label>
                             <input type="text" id="search" name="search" value="{{ request('search') }}"
-                                   class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                   placeholder="Cari nama barang atau pengambil...">
+                                class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                placeholder="Cari nama barang atau pengambil...">
                         </div>
 
                         <div class="min-w-48">
                             <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                            <select id="status" name="status" class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <select id="status" name="status"
+                                class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Semua Status</option>
-                                <option value="diajukan" {{ request('status') == 'diajukan' ? 'selected' : '' }}>Diajukan</option>
-                                <option value="diterima" {{ request('status') == 'diterima' ? 'selected' : '' }}>Diterima</option>
+                                <option value="diajukan" {{ request('status')=='diajukan' ? 'selected' : '' }}>Diajukan
+                                </option>
+                                <option value="diterima" {{ request('status')=='diterima' ? 'selected' : '' }}>Diterima
+                                </option>
                             </select>
                         </div>
 
                         <div class="min-w-48">
                             <label for="bidang" class="block text-sm font-medium text-gray-700">Bidang</label>
-                            <select id="bidang" name="bidang" class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <select id="bidang" name="bidang"
+                                class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Semua Bidang</option>
-                                <option value="umum" {{ request('bidang') == 'umum' ? 'selected' : '' }}>Umum</option>
-                                <option value="perencanaan" {{ request('bidang') == 'perencanaan' ? 'selected' : '' }}>Perencanaan</option>
-                                <option value="keuangan" {{ request('bidang') == 'keuangan' ? 'selected' : '' }}>Keuangan</option>
-                                <option value="operasional" {{ request('bidang') == 'operasional' ? 'selected' : '' }}>Operasional</option>
-                                <option value="lainnya" {{ request('bidang') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                                <option value="umum" {{ request('bidang')=='umum' ? 'selected' : '' }}>Umum</option>
+                                <option value="perencanaan" {{ request('bidang')=='perencanaan' ? 'selected' : '' }}>
+                                    Perencanaan</option>
+                                <option value="keuangan" {{ request('bidang')=='keuangan' ? 'selected' : '' }}>Keuangan
+                                </option>
+                                <option value="operasional" {{ request('bidang')=='operasional' ? 'selected' : '' }}>
+                                    Operasional</option>
+                                <option value="lainnya" {{ request('bidang')=='lainnya' ? 'selected' : '' }}>Lainnya
+                                </option>
                             </select>
                         </div>
 
                         <div class="min-w-48">
-                            <label for="jenis_barang" class="block text-sm font-medium text-gray-700">Jenis Barang</label>
-                            <select id="jenis_barang" name="jenis_barang" class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <label for="jenis_barang" class="block text-sm font-medium text-gray-700">Jenis
+                                Barang</label>
+                            <select id="jenis_barang" name="jenis_barang"
+                                class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Semua Jenis</option>
-                                <option value="atk" {{ request('jenis_barang') == 'atk' ? 'selected' : '' }}>ATK</option>
-                                <option value="cetak" {{ request('jenis_barang') == 'cetak' ? 'selected' : '' }}>Cetakan</option>
-                                <option value="tinta" {{ request('jenis_barang') == 'tinta' ? 'selected' : '' }}>Tinta</option>
+                                <option value="atk" {{ request('jenis_barang')=='atk' ? 'selected' : '' }}>ATK</option>
+                                <option value="cetak" {{ request('jenis_barang')=='cetak' ? 'selected' : '' }}>Cetakan
+                                </option>
+                                <option value="tinta" {{ request('jenis_barang')=='tinta' ? 'selected' : '' }}>Tinta
+                                </option>
                             </select>
                         </div>
 
                         <div class="flex items-end space-x-2">
-                            <button type="submit" class="inline-flex items-center px-4 text-gray-700 bg-white border border-gray-300 rounded-md h-9 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            <button type="submit"
+                                class="inline-flex items-center px-4 text-gray-700 bg-white border border-gray-300 rounded-md h-9 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
                             </button>
                             @if(request('search') || request('bidang') || request('jenis_barang') || request('status'))
-                                <a href="{{ route('admin.monitoring-barang.index') }}" class="inline-flex items-center px-4 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-md h-9 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    Reset
-                                </a>
+                            <a href="{{ route('admin.monitoring-barang.index') }}"
+                                class="inline-flex items-center px-4 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-md h-9 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Reset
+                            </a>
                             @endif
                         </div>
                     </form>
                 </div>
 
                 @if(session('success'))
-                    <div class="relative p-4 mb-4 text-green-700 bg-green-100 border-l-4 border-green-500 rounded">
-                        <span class="block sm:inline">{{ session('success') }}</span>
-                    </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: '{{ session('success') }}',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true,
+                                toast: true,
+                                position: 'top-end'
+                            });
+                        });
+                </script>
                 @endif
 
                 @if(session('error'))
-                    <div class="relative p-4 mb-4 text-red-700 bg-red-100 border-l-4 border-red-500 rounded">
-                        <span class="block sm:inline">{{ session('error') }}</span>
-                    </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: '{{ session('error') }}',
+                                confirmButtonColor: '#d33'
+                            });
+                        });
+                </script>
                 @endif
 
                 <!-- Data Table -->
@@ -96,70 +131,79 @@
                             @forelse ($monitoringBarang as $index => $item)
                             <div class="p-4 border rounded-lg bg-gray-50">
                                 <div class="flex items-start justify-between mb-2">
-                                    <h3 class="text-sm font-medium text-gray-900" title="{{ $item->nama_barang }}">{{ Str::limit($item->nama_barang, 30) }}</h3>
+                                    <h3 class="text-sm font-medium text-gray-900" title="{{ $item->nama_barang }}">{{
+                                        Str::limit($item->nama_barang, 30) }}</h3>
                                     @if($item->jenis_barang)
-                                        @switch($item->jenis_barang)
-                                            @case('atk')
-                                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
-                                                    ATK
-                                                </span>
-                                                @break
-                                            @case('cetak')
-                                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
-                                                    Cetakan
-                                                </span>
-                                                @break
-                                            @case('tinta')
-                                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded">
-                                                    Tinta
-                                                </span>
-                                                @break
-                                        @endswitch
+                                    @switch($item->jenis_barang)
+                                    @case('atk')
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
+                                        ATK
+                                    </span>
+                                    @break
+                                    @case('cetak')
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
+                                        Cetakan
+                                    </span>
+                                    @break
+                                    @case('tinta')
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded">
+                                        Tinta
+                                    </span>
+                                    @break
+                                    @endswitch
                                     @endif
                                 </div>
                                 <div class="grid grid-cols-2 gap-2 mb-3 text-xs text-gray-600">
                                     <div><span class="font-medium">Pengambil:</span> {{ $item->nama_pengambil }}</div>
                                     <div><span class="font-medium">Bidang:</span> {{ ucfirst($item->bidang) }}</div>
-                                    <div><span class="font-medium">Tanggal:</span> {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}</div>
-                                    <div><span class="font-medium">Kredit:</span> <span class="font-medium text-red-600">{{ number_format($item->kredit, 0, ',', '.') }}</span></div>
+                                    <div><span class="font-medium">Tanggal:</span> {{
+                                        \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}</div>
+                                    <div><span class="font-medium">Kredit:</span> <span
+                                            class="font-medium text-red-600">{{ number_format($item->kredit, 0, ',',
+                                            '.') }}</span></div>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     @if($item->status == 'diajukan')
-                                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded">
-                                            Diajukan
-                                        </span>
-                                        <div class="flex gap-2">
-                                            <button onclick="updateStatus({{ $item->id }}, 'diterima')"
-                                                    class="px-3 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700">
-                                                <i class="mr-1 fas fa-check"></i>Terima
-                                            </button>
-                                            <button onclick="editMonitoring({{ $item->id }})"
-                                                    class="px-3 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700">
-                                                <i class="mr-1 fas fa-edit"></i>Edit
-                                            </button>
-                                            <button onclick="deleteMonitoring({{ $item->id }})"
-                                                    class="px-3 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600">
-                                                <i class="mr-1 fas fa-trash"></i>Hapus
-                                            </button>
-                                        </div>
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded">
+                                        Diajukan
+                                    </span>
+                                    <div class="flex gap-2">
+                                        <button onclick="updateStatus({{ $item->id }}, 'diterima')"
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700">
+                                            <i class="mr-1 fas fa-check"></i>Terima
+                                        </button>
+                                        <button onclick="editMonitoring({{ $item->id }})"
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700">
+                                            <i class="mr-1 fas fa-edit"></i>Edit
+                                        </button>
+                                        <button onclick="deleteMonitoring({{ $item->id }})"
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600">
+                                            <i class="mr-1 fas fa-trash"></i>Hapus
+                                        </button>
+                                    </div>
                                     @else
-                                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
-                                            Diterima
-                                        </span>
-                                        <div class="flex gap-2">
-                                            <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
-                                                    class="px-3 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700">
-                                                <i class="mr-1 fas fa-undo"></i>Batalkan
-                                            </button>
-                                            <button onclick="editMonitoring({{ $item->id }})"
-                                                    class="px-3 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700">
-                                                <i class="mr-1 fas fa-edit"></i>Edit
-                                            </button>
-                                            <button onclick="deleteMonitoring({{ $item->id }})"
-                                                    class="px-3 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700">
-                                                <i class="mr-1 fas fa-trash"></i>Hapus
-                                            </button>
-                                        </div>
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
+                                        Diterima
+                                    </span>
+                                    <div class="flex gap-2">
+                                        <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700">
+                                            <i class="mr-1 fas fa-undo"></i>Batalkan
+                                        </button>
+                                        <button disabled
+                                            class="px-3 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed">
+                                            <i class="mr-1 fas fa-edit"></i>Edit
+                                        </button>
+                                        <button onclick="deleteMonitoring({{ $item->id }})"
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700">
+                                            <i class="mr-1 fas fa-trash"></i>Hapus
+                                        </button>
+                                    </div>
                                     @endif
                                 </div>
                             </div>
@@ -178,138 +222,179 @@
                         <table class="w-full table-fixed">
                             <thead>
                                 <tr class="bg-gray-50">
-                                    <th class="w-12 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">No</th>
-                                    <th class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-28">Tanggal</th>
-                                    <th class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-36">Nama Barang</th>
-                                    <th class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Jenis</th>
-                                    <th class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Pengambil</th>
-                                    <th class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Bidang</th>
-                                    <th class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Saldo</th>
-                                    <th class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Kredit</th>
-                                    <th class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Saldo Akhir</th>
-                                    <th class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Status</th>
-                                    <th class="w-24 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">Aksi</th>
+                                    <th
+                                        class="w-12 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        No</th>
+                                    <th
+                                        class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-28">
+                                        Tanggal</th>
+                                    <th
+                                        class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-36">
+                                        Nama Barang</th>
+                                    <th
+                                        class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Jenis</th>
+                                    <th
+                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Pengambil</th>
+                                    <th
+                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Bidang</th>
+                                    <th
+                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Saldo</th>
+                                    <th
+                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Kredit</th>
+                                    <th
+                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Saldo Akhir</th>
+                                    <th
+                                        class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Status</th>
+                                    <th
+                                        class="w-24 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Aksi</th>
                                 </tr>
                             </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($monitoringBarang as $index => $item)
-                            <tr class="transition-colors duration-200 hover:bg-gray-50">
-                                <td class="px-3 py-3 text-sm text-gray-900 border">
-                                    {{ $monitoringBarang->firstItem() + $index }}
-                                </td>
-                                <td class="px-3 py-3 text-sm text-gray-900 border">
-                                    {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}
-                                </td>
-                                <td class="px-3 py-3 text-sm font-medium text-gray-900 truncate border" title="{{ $item->nama_barang }}">
-                                    {{ $item->nama_barang }}
-                                </td>
-                                <td class="px-3 py-3 text-sm text-gray-900 border">
-                                    @if($item->jenis_barang)
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse ($monitoringBarang as $index => $item)
+                                <tr class="transition-colors duration-200 hover:bg-gray-50">
+                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                        {{ $monitoringBarang->firstItem() + $index }}
+                                    </td>
+                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                        {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}
+                                    </td>
+                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 truncate border"
+                                        title="{{ $item->nama_barang }}">
+                                        {{ $item->nama_barang }}
+                                    </td>
+                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                        @if($item->jenis_barang)
                                         @switch($item->jenis_barang)
-                                            @case('atk')
-                                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
-                                                    ATK
-                                                </span>
-                                                @break
-                                            @case('cetak')
-                                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
-                                                    Cetakan
-                                                </span>
-                                                @break
-                                            @case('tinta')
-                                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded">
-                                                    Tinta
-                                                </span>
-                                                @break
-                                            @default
-                                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded">
-                                                    {{ ucfirst($item->jenis_barang) }}
-                                                </span>
+                                        @case('atk')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
+                                            ATK
+                                        </span>
+                                        @break
+                                        @case('cetak')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
+                                            Cetakan
+                                        </span>
+                                        @break
+                                        @case('tinta')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded">
+                                            Tinta
+                                        </span>
+                                        @break
+                                        @default
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded">
+                                            {{ ucfirst($item->jenis_barang) }}
+                                        </span>
                                         @endswitch
-                                    @else
-                                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 rounded">
+                                        @else
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 rounded">
                                             Tidak diketahui
                                         </span>
-                                    @endif
-                                </td>
-                                <td class="px-3 py-3 text-sm text-gray-900 truncate border" title="{{ $item->nama_pengambil }}">
-                                    <i class="mr-1 text-xs text-blue-500 fas fa-user"></i>
-                                    {{ $item->nama_pengambil }}
-                                </td>
-                                <td class="px-3 py-3 text-sm text-gray-900 border">
-                                    <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
-                                        {{ ucfirst($item->bidang) }}
-                                    </span>
-                                </td>
-                                <td class="px-3 py-3 text-sm text-right text-gray-900 border">
-                                    {{ number_format($item->saldo, 0, ',', '.') }}
-                                </td>
-                                <td class="px-3 py-3 text-sm font-medium text-right text-red-600 border">
-                                    {{ number_format($item->kredit, 0, ',', '.') }}
-                                </td>
-                                <td class="px-3 py-3 text-sm font-medium text-right text-gray-900 border">
-                                    {{ number_format($item->saldo_akhir, 0, ',', '.') }}
-                                </td>
-                                <td class="px-3 py-3 text-sm border">
-                                    @if($item->status == 'diajukan')
-                                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded">
+                                        @endif
+                                    </td>
+                                    <td class="px-3 py-3 text-sm text-gray-900 truncate border"
+                                        title="{{ $item->nama_pengambil }}">
+                                        <i class="mr-1 text-xs text-blue-500 fas fa-user"></i>
+                                        {{ $item->nama_pengambil }}
+                                    </td>
+                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
+                                            {{ ucfirst($item->bidang) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-3 py-3 text-sm text-right text-gray-900 border">
+                                        {{ number_format($item->saldo, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-3 py-3 text-sm font-medium text-right text-red-600 border">
+                                        {{ number_format($item->kredit, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-3 py-3 text-sm font-medium text-right text-gray-900 border">
+                                        {{ number_format($item->saldo_akhir, 0, ',', '.') }}
+                                    </td>
+                                    <td class="px-3 py-3 text-sm border">
+                                        @if($item->status == 'diajukan')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded">
                                             Diajukan
                                         </span>
-                                    @else
-                                        <span class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
+                                        @else
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
                                             Diterima
                                         </span>
-                                    @endif
-                                </td>
-                                <td class="px-3 py-3 text-sm border">
-                                    <div class="flex gap-1">
-                                        @if($item->status == 'diajukan')
+                                        @endif
+                                    </td>
+                                    <td class="px-3 py-3 text-sm border">
+                                        <div class="flex gap-1">
+                                            @if($item->status == 'diajukan')
                                             <button onclick="updateStatus({{ $item->id }}, 'diterima')"
-                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
-                                                    title="Terima">
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
+                                                title="Terima">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                        @else
+                                            @else
                                             <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
-                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
-                                                    title="Batalkan">
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
+                                                title="Batalkan">
                                                 <i class="fas fa-undo"></i>
                                             </button>
-                                        @endif
-                                        <button onclick="editMonitoring({{ $item->id }})"
+                                            @endif
+                                            @if($item->status == 'diajukan')
+                                            <button onclick="editMonitoring({{ $item->id }})"
                                                 class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
                                                 title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button onclick="deleteMonitoring({{ $item->id }})"
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            @else
+                                            <button disabled
+                                                class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
+                                                title="Tidak dapat mengedit data yang sudah diterima">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            @endif
+                                            <button onclick="deleteMonitoring({{ $item->id }})"
                                                 class="px-2 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600"
                                                 title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="11" class="px-3 py-8 text-center text-gray-500 border">
-                                    <div class="flex flex-col items-center">
-                                        <i class="mb-2 text-3xl text-gray-400 fas fa-clipboard-list"></i>
-                                        <p class="text-base font-medium">Belum ada data monitoring barang</p>
-                                        <p class="text-sm">Data akan muncul setelah ada pengambilan barang yang diajukan</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="11" class="px-3 py-8 text-center text-gray-500 border">
+                                        <div class="flex flex-col items-center">
+                                            <i class="mb-2 text-3xl text-gray-400 fas fa-clipboard-list"></i>
+                                            <p class="text-base font-medium">Belum ada data monitoring barang</p>
+                                            <p class="text-sm">Data akan muncul setelah ada pengambilan barang yang
+                                                diajukan</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
                         </table>
                     </div>
                 </div>
 
                 <!-- Pagination -->
                 @if($monitoringBarang->hasPages())
-                    <div class="mt-6">
-                        {{ $monitoringBarang->appends(request()->query())->links() }}
-                    </div>
+                <div class="mt-6">
+                    {{ $monitoringBarang->appends(request()->query())->links() }}
+                </div>
                 @endif
             </div>
         </div>
@@ -317,12 +402,12 @@
 </div>
 
 <script>
-// Update status function
+    // Update status function
 function updateStatus(id, status) {
     const actionText = status === 'diterima' ? 'menerima' : 'membatalkan penerimaan';
     const confirmTitle = status === 'diterima' ? 'Terima Pengambilan?' : 'Batalkan Penerimaan?';
     const confirmText = `Apakah Anda yakin ingin ${actionText} pengambilan barang ini?`;
-    const confirmButtonText = status === 'diterima' ? '<i class="mr-2 fas fa-check"></i>Terima!' : '<i class="mr-2 fas fa-times"></i>Batalkan!';
+    const confirmButtonText = status === 'diterima' ? '<i class="mr-2 fas fa-check"></i>Terima!' : '<i class="mr-2 fas fa-check"></i>Ya, Batalkan!';
     const confirmButtonColor = status === 'diterima' ? '#16a34a' : '#f59e0b';
 
     Swal.fire({
@@ -331,9 +416,9 @@ function updateStatus(id, status) {
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: confirmButtonColor,
-        cancelButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
         confirmButtonText: confirmButtonText,
-        cancelButtonText: '<i class="mr-2 fas fa-ban"></i>Batal',
+        cancelButtonText: '<i class="mr-2 fas fa-times"></i>Tidak',
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
@@ -364,8 +449,9 @@ function updateStatus(id, status) {
                         title: 'Berhasil!',
                         text: data.message || 'Status berhasil diperbarui',
                         icon: 'success',
-                        confirmButtonColor: '#16a34a',
-                        confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
                     }).then(() => {
                         location.reload();
                     });
@@ -433,8 +519,9 @@ function deleteMonitoring(id) {
                         title: 'Berhasil!',
                         text: data.message || 'Data monitoring berhasil dihapus',
                         icon: 'success',
-                        confirmButtonColor: '#16a34a',
-                        confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true
                     }).then(() => {
                         location.reload();
                     });
@@ -478,7 +565,7 @@ function editMonitoring(id) {
             const monitoring = data.data;
 
             Swal.fire({
-                title: 'Edit Kredit - Data Monitoring',
+                title: 'Edit Data Pengambilan',
                 html: `
                     <div class="text-left">
                         <div class="p-3 mb-4 rounded-md bg-gray-50">
@@ -581,8 +668,9 @@ function editMonitoring(id) {
                                 title: 'Berhasil!',
                                 text: data.message || 'Kredit berhasil diperbarui',
                                 icon: 'success',
-                                confirmButtonColor: '#16a34a',
-                                confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
                             }).then(() => {
                                 location.reload();
                             });

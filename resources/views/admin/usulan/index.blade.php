@@ -19,7 +19,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                         </div>
                         <!-- Cart Link -->
                         <div class="flex items-center space-x-4">
-                            <a href="{{ route('user.usulan.cart.index') }}"
+                            <a href="{{ route('admin.usulan.cart.index') }}"
                                 class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
                                 <i class="fas fa-shopping-cart mr-2"></i>
                                 Keranjang
@@ -31,20 +31,35 @@ SISTEM MONITORING BARANG HABIS PAKAI
                 </div>
 
                 @if (session('success'))
-                <div class="relative mb-4 rounded border-l-4 border-blue-500 bg-blue-100 p-4 text-blue-700">
-                    <span class="block sm:inline">{{ session('success') }}</span>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: '{{ session('success') }}',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        });
+                </script>
                 @endif
 
                 @if (session('error'))
-                <div class="relative mb-4 rounded border-l-4 border-red-500 bg-red-100 p-4 text-red-700">
-                    <span class="block sm:inline">{{ session('error') }}</span>
-                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: '{{ session('error') }}',
+                                confirmButtonColor: '#d33'
+                            });
+                        });
+                </script>
                 @endif
 
                 <!-- Search and Filter -->
                 <div class="mb-6">
-                    <form action="{{ route('user.usulan.index') }}" method="GET"
+                    <form action="{{ route('admin.usulan.index') }}" method="GET"
                         class="flex flex-col gap-4 sm:flex-row">
                         <input type="hidden" name="per_page" value="{{ request('per_page', 12) }}">
 
@@ -76,7 +91,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                         </button>
 
                         @if (request('search') || request('jenis'))
-                        <a href="{{ route('user.usulan.index', ['per_page' => request('per_page', 12)]) }}"
+                        <a href="{{ route('admin.usulan.index', ['per_page' => request('per_page', 12)]) }}"
                             class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             Reset
                         </a>
@@ -138,8 +153,8 @@ SISTEM MONITORING BARANG HABIS PAKAI
                             <button
                                 onclick="showUsulanModal('{{ $item->id_barang }}', '{{ addslashes($item->nama_barang) }}', '{{ $item->satuan }}')"
                                 class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
-                                <i class="fas fa-paper-plane mr-2"></i>
-                                Ajukan Usulan
+                                <i class="mr-2 fas fa-cart-plus"></i>
+                                Tambah Barang
                             </button>
                         </div>
                     </div>
@@ -151,7 +166,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                     <div class="mb-4 flex items-center space-x-2">
                         <span class="text-sm text-gray-700">Tampilkan</span>
                         <select name="per_page"
-                            onchange="window.location.href = '{{ route('user.usulan.index') }}?per_page=' + this.value + '&search={{ request('search') }}&jenis={{ request('jenis') }}'"
+                            onchange="window.location.href = '{{ route('admin.usulan.index') }}?per_page=' + this.value + '&search={{ request('search') }}&jenis={{ request('jenis') }}'"
                             class="rounded-md border-gray-300 text-sm shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             @foreach ([12, 24, 36, 48] as $perPage)
                             <option value="{{ $perPage }}" {{ request('per_page', 12)==$perPage ? 'selected' : '' }}>
@@ -179,7 +194,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                     </p>
                     @if (request('search') || request('jenis'))
                     <div class="mt-4">
-                        <a href="{{ route('user.usulan.index') }}"
+                        <a href="{{ route('admin.usulan.index') }}"
                             class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                             Lihat Semua Barang
                         </a>
@@ -193,18 +208,16 @@ SISTEM MONITORING BARANG HABIS PAKAI
 </div>
 
 <!-- Usulan Modal -->
-<div id="usulanModal"
-    class="fixed inset-0 z-50 hidden h-full w-full items-center justify-center overflow-y-auto bg-black bg-opacity-50 p-4">
-    <div class="relative mx-auto my-8 w-full max-w-lg overflow-hidden rounded-lg bg-white shadow-xl">
+<div id="usulanModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
+    <div class="relative w-full max-w-lg mx-auto bg-white rounded-lg shadow-xl">
         <!-- Modal Header -->
-        <div class="border-b border-gray-200 bg-blue-600 px-6 py-4">
+        <div class="bg-gray-600 px-6 py-4 rounded-t-lg">
             <div class="flex items-center justify-between">
                 <h3 class="text-lg font-semibold text-white">
-                    <i class="fas fa-paper-plane mr-2"></i>
-                    Form Usulan Pengadaan
+                    Tambah Pengadaan
                 </h3>
-                <button onclick="closeModal()" class="text-blue-100 hover:text-white">
-                    <i class="fas fa-times text-lg"></i>
+                <button onclick="closeModal()" class="text-white">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
@@ -216,63 +229,60 @@ SISTEM MONITORING BARANG HABIS PAKAI
                 <input type="hidden" id="id_barang" name="barang_id">
 
                 <!-- Nama Barang -->
-                <div class="mb-5">
-                    <label class="mb-3 block text-sm font-medium text-gray-700">
-                        <i class="fas fa-box mr-1"></i>
+                <div class="mb-4">
+                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-box text-gray-500 mr-2"></i>
                         Nama Barang
                     </label>
-                    <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                        <p id="barang_nama" class="mb-2 text-base font-medium text-gray-900">Loading...</p>
-                        <p class="text-sm text-gray-500">
+                    <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                        <p id="barang_nama" class="font-medium text-gray-900">Loading...</p>
+                        <p class="text-sm text-gray-500 mt-1">
                             Satuan: <span id="satuan">pcs</span>
                         </p>
                     </div>
                 </div>
 
                 <!-- Quantity -->
-                <div class="mb-5">
-                    <label class="mb-3 block text-sm font-medium text-gray-700">
-                        <i class="fas fa-calculator mr-1"></i>
+                <div class="mb-4">
+                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-calculator text-gray-500 mr-2"></i>
                         Jumlah yang Diusulkan <span class="text-red-500">*</span>
                     </label>
-                    <div class="flex items-center justify-center space-x-4">
+                    <div class="flex items-center justify-center space-x-3">
                         <button type="button" onclick="decreaseQuantity()"
-                            class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300">
-                            <i class="fas fa-minus"></i>
+                            class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
+                            <i class="fas fa-minus text-gray-500"></i>
                         </button>
                         <input type="number" id="jumlah" name="jumlah" min="1" value="1"
-                            class="h-10 w-20 rounded-lg border-2 border-gray-300 text-center text-lg font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
+                            class="w-16 h-8 border border-gray-300 rounded-md text-center focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
                         <button type="button" onclick="increaseQuantity()"
-                            class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300">
-                            <i class="fas fa-plus"></i>
+                            class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
+                            <i class="fas fa-plus text-gray-500"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Keterangan -->
-                <div class="mb-5">
-                    <label for="keterangan" class="mb-3 block text-sm font-medium text-gray-700">
-                        <i class="fas fa-sticky-note mr-1"></i>
-                        Keterangan Usulan <span class="text-gray-500">(opsional)</span>
+                <div class="mb-4">
+                    <label for="keterangan" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-sticky-note text-gray-500 mr-2"></i>
+                        Keterangan <span class="text-gray-400 text-xs">(opsional)</span>
                     </label>
                     <textarea id="keterangan" name="keterangan" rows="3"
-                        class="w-full resize-none rounded-lg border-2 border-gray-300 px-3 py-3 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-                        placeholder="Tambahkan keterangan jika diperlukan..."></textarea>
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 resize-none"
+                        placeholder="Keterangan tambahan..."></textarea>
                 </div>
             </form>
         </div>
 
         <!-- Modal Footer -->
-        <div class="flex justify-end space-x-3 border-t border-gray-200 bg-gray-50 px-6 py-4">
-            <button onclick="closeModal()"
-                class="rounded-lg border-2 border-gray-300 bg-white px-6 py-3 text-base font-medium text-gray-700 hover:bg-gray-50">
-                <i class="fas fa-times mr-2"></i>
+        <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex space-x-3">
+            <button onclick="closeModal()" class="flex-1 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md">
                 Batal
             </button>
             <button id="submitUsulanBtn" onclick="submitUsulan()"
-                class="rounded-lg border-2 border-blue-600 bg-blue-600 px-6 py-3 text-base font-medium text-white hover:bg-blue-700">
-                <i class="fas fa-paper-plane mr-2"></i>
-                Ajukan Usulan
+                class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                Tambah ke Keranjang
             </button>
         </div>
     </div>
@@ -289,10 +299,19 @@ SISTEM MONITORING BARANG HABIS PAKAI
     /* Modal styles */
     #usulanModal.show {
         display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
     }
 
     #usulanModal {
         display: none;
+    }
+
+    #usulanModal>div {
+        margin: auto;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
     }
 
     /* Custom input number controls */
@@ -309,42 +328,32 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
 <script>
     function showUsulanModal(barangId, namaBarang, satuan) {
-												document.getElementById('id_barang').value = barangId;
-												document.getElementById('barang_nama').textContent = namaBarang;
-												document.getElementById('satuan').textContent = satuan;
-												document.getElementById('jumlah').value = 1;
-												document.getElementById('keterangan').value = '';
+        document.getElementById('id_barang').value = barangId;
+        document.getElementById('barang_nama').textContent = namaBarang;
+        document.getElementById('satuan').textContent = satuan;
 
-												const modal = document.getElementById('usulanModal');
-												modal.classList.remove('hidden');
-												document.body.style.overflow = 'hidden'; // Prevent background scroll
-												setTimeout(() => {
-																modal.classList.add('show');
-												}, 10);
-								}
+        const modal = document.getElementById('usulanModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('show');
+    }    function closeModal() {
+        const modal = document.getElementById('usulanModal');
+        modal.classList.remove('show');
+        modal.classList.add('hidden');
+    }
 
-								function closeModal() {
-												const modal = document.getElementById('usulanModal');
-												modal.classList.remove('show');
-												document.body.style.overflow = 'auto'; // Restore background scroll
-												setTimeout(() => {
-																modal.classList.add('hidden');
-												}, 300);
-								}
+    function increaseQuantity() {
+        const quantityInput = document.getElementById('jumlah');
+        const currentValue = parseInt(quantityInput.value);
+        quantityInput.value = currentValue + 1;
+    }
 
-								function increaseQuantity() {
-												const quantityInput = document.getElementById('jumlah');
-												const currentValue = parseInt(quantityInput.value);
-												quantityInput.value = currentValue + 1;
-								}
-
-								function decreaseQuantity() {
-												const quantityInput = document.getElementById('jumlah');
-												const currentValue = parseInt(quantityInput.value);
-												if (currentValue > 1) {
-																quantityInput.value = currentValue - 1;
-												}
-								}
+    function decreaseQuantity() {
+        const quantityInput = document.getElementById('jumlah');
+        const currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+        }
+    }
 
 								function submitUsulan() {
 												const form = document.getElementById('usulanForm');
@@ -357,13 +366,17 @@ SISTEM MONITORING BARANG HABIS PAKAI
 												// Log form data
 												console.log('Form data:', Object.fromEntries(formData));
 
-												submitBtn.disabled = true;
-												submitBtn.innerHTML = `
-        <i class="mr-2 fas fa-spinner fa-spin"></i>
-        Memproses...
-    `;
+        const jumlah = document.getElementById('jumlah').value;
 
-												fetch('{{ route('user.usulan.cart.add') }}', {
+        if (!jumlah || jumlah < 1) {
+            Swal.fire('Error!', 'Jumlah harus diisi minimal 1', 'error');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Memproses...';
+
+												fetch('{{ route('admin.usulan.cart.add') }}', {
 																				method: 'POST',
 																				body: formData,
 																				headers: {
@@ -382,42 +395,27 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																				return response.json();
 																})
 																.then(data => {
-																				if (data.success) {
-																								closeModal();
-
-																								// Show success message
-																								const successDiv = document.createElement('div');
-																								successDiv.className =
-																												'mb-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded relative';
-																								successDiv.innerHTML = `<span class="block sm:inline">${data.message}</span>`;
-
-																								const contentDiv = document.querySelector('.p-6.text-gray-900');
-																								if (contentDiv) {
-																												contentDiv.insertBefore(successDiv, contentDiv.firstChild);
-
-																												// Remove success message after 3 seconds
-																												setTimeout(() => {
-																																successDiv.remove();
-																												}, 3000);
-																								}
-
-																								// Reset form
-																								form.reset();
-																				} else {
-																								throw new Error(data.message || 'Terjadi kesalahan saat mengajukan usulan');
-																				}
+                if (data.success) {
+                    closeModal();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    form.reset();
+                } else {
+                    Swal.fire('Error!', data.message || 'Terjadi kesalahan saat mengajukan usulan', 'error');
+                }
 																})
-																.catch(error => {
-																				console.error('Error:', error);
-																				alert(error.message);
-																})
-																.finally(() => {
-																				submitBtn.disabled = false;
-																				submitBtn.innerHTML = `
-            <i class="mr-2 fas fa-paper-plane"></i>
-            Ajukan Usulan
-        `;
-																});
+                .catch(error => {
+                    Swal.fire('Error!', error.message, 'error');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Tambah ke Keranjang';
+                });
 								}
 
 								// Close modal when clicking outside
@@ -428,7 +426,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
 								// Update cart count
 								function updateCartCount() {
-												fetch('{{ route('user.usulan.cart.count') }}')
+												fetch('{{ route('admin.usulan.cart.count') }}')
 																.then(response => {
 																				if (!response.ok) {
 																								throw new Error(`HTTP error! status: ${response.status}`);
