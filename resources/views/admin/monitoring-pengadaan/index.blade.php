@@ -127,35 +127,20 @@ SISTEM MONITORING BARANG HABIS PAKAI
                                 <td class="px-3 py-3 text-sm text-gray-900 border">
                                     @switch($pengadaan->barang->jenis)
                                     @case('atk')
-                                    <span
-                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
-                                        ATK
-                                    </span>
+                                    ATK
                                     @break
                                     @case('cetak')
-                                    <span
-                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
-                                        Cetakan
-                                    </span>
+                                    Cetakan
                                     @break
                                     @case('tinta')
-                                    <span
-                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded">
-                                        Tinta
-                                    </span>
+                                    Tinta
                                     @break
                                     @default
-                                    <span
-                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded">
-                                        {{ ucfirst($pengadaan->barang->jenis) }}
-                                    </span>
+                                    {{ ucfirst($pengadaan->barang->jenis) }}
                                     @endswitch
                                 </td>
                                 <td class="px-3 py-3 text-sm text-gray-900 border">
-                                    <span
-                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded">
-                                        {{ $pengadaan->barang->satuan }}
-                                    </span>
+                                    {{ $pengadaan->barang->satuan }}
                                 </td>
                                 <td class="px-3 py-3 text-sm text-right text-gray-900 border">
                                     {{ $pengadaan->debit }}

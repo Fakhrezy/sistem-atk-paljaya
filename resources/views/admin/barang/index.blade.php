@@ -190,7 +190,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     class="w-32 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">
                                     Foto</th>
                                 <th scope="col"
-                                    class="w-20 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">
+                                    class="w-28 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">
                                     Aksi</th>
                             </tr>
                         </thead>
@@ -250,6 +250,11 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             title="Edit Barang">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        <a href="{{ route('admin.monitoring-barang.index', ['search' => $item->nama_barang]) }}"
+                                            class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
+                                            title="Monitor Barang">
+                                            <i class="fas fa-table"></i>
+                                        </a>
                                         <button onclick="deleteBarang('{{ route('admin.barang.destroy', $item) }}')"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600"
                                             title="Hapus Barang">
@@ -260,7 +265,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-8 text-center">
+                                <td colspan="8" class="px-6 py-8 text-center">
                                     <div class="flex flex-col items-center justify-center">
                                         <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">

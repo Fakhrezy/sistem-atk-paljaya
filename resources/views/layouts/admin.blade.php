@@ -148,7 +148,7 @@
                                         @if(isset($notifications['monitoring_pengambilan']) &&
                                         $notifications['monitoring_pengambilan'] > 0)
                                         <span
-                                            class="notification-badge inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg"
+                                            class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg notification-badge"
                                             title="{{ $notifications['monitoring_pengambilan'] }} pengambilan menunggu persetujuan">
                                             {{ $notifications['monitoring_pengambilan'] }}
                                         </span>
@@ -170,11 +170,22 @@
                                         @if(isset($notifications['monitoring_pengadaan']) &&
                                         $notifications['monitoring_pengadaan'] > 0)
                                         <span
-                                            class="notification-badge inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg"
+                                            class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg notification-badge"
                                             title="{{ $notifications['monitoring_pengadaan'] }} pengadaan menunggu persetujuan">
                                             {{ $notifications['monitoring_pengadaan'] }}
                                         </span>
                                         @endif
+                                    </a>
+
+                                    <!-- Detail Monitoring Barang -->
+                                    <a href="{{ route('admin.detail-monitoring-barang.index') }}"
+                                        class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.detail-monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
+                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                            </path>
+                                        </svg>
+                                        Detail Monitoring Barang
                                     </a>
                                 </div>
                             </div>

@@ -165,6 +165,17 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             class="font-medium text-red-600">{{ number_format($item->kredit, 0, ',',
                                             '.') }}</span></div>
                                 </div>
+                                @if($item->keterangan)
+                                <div class="mb-3 text-xs text-gray-600">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="mt-1 text-blue-500 fas fa-sticky-note"></i>
+                                        <div>
+                                            <span class="font-medium">Keterangan:</span>
+                                            <p class="mt-1 text-gray-700">{{ $item->keterangan }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                                 <div class="flex items-center justify-between">
                                     @if($item->status == 'diajukan')
                                     <span
@@ -229,7 +240,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-28">
                                         Tanggal</th>
                                     <th
-                                        class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-36">
+                                        class="w-48 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Nama Barang</th>
                                     <th
                                         class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
@@ -253,6 +264,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Status</th>
                                     <th
+                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        Keterangan</th>
+                                    <th
                                         class="w-24 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Aksi</th>
                                 </tr>
@@ -266,54 +280,33 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 truncate border"
-                                        title="{{ $item->nama_barang }}">
+                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 break-words border">
                                         {{ $item->nama_barang }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         @if($item->jenis_barang)
                                         @switch($item->jenis_barang)
                                         @case('atk')
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
-                                            ATK
-                                        </span>
+                                        ATK
                                         @break
                                         @case('cetak')
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
-                                            Cetakan
-                                        </span>
+                                        Cetakan
                                         @break
                                         @case('tinta')
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-purple-800 bg-purple-100 rounded">
-                                            Tinta
-                                        </span>
+                                        Tinta
                                         @break
                                         @default
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded">
-                                            {{ ucfirst($item->jenis_barang) }}
-                                        </span>
+                                        {{ ucfirst($item->jenis_barang) }}
                                         @endswitch
                                         @else
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-500 bg-gray-100 rounded">
-                                            Tidak diketahui
-                                        </span>
+                                        Tidak diketahui
                                         @endif
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-900 truncate border"
-                                        title="{{ $item->nama_pengambil }}">
-                                        <i class="mr-1 text-xs text-blue-500 fas fa-user"></i>
+                                    <td class="px-3 py-3 text-sm text-gray-900 break-words border">
                                         {{ $item->nama_pengambil }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
-                                        <span
-                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
-                                            {{ ucfirst($item->bidang) }}
-                                        </span>
+                                        {{ ucfirst($item->bidang) }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-right text-gray-900 border">
                                         {{ number_format($item->saldo, 0, ',', '.') }}
@@ -335,6 +328,18 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
                                             Diterima
                                         </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                        @if($item->keterangan)
+                                        <div class="flex items-start space-x-2">
+                                            <i class="mt-1 text-xs text-blue-500 fas fa-sticky-note"></i>
+                                            <span class="text-sm" title="{{ $item->keterangan }}">
+                                                {{ Str::limit($item->keterangan, 50) }}
+                                            </span>
+                                        </div>
+                                        @else
+                                        <span class="text-xs italic text-gray-400">-</span>
                                         @endif
                                     </td>
                                     <td class="px-3 py-3 text-sm border">
@@ -375,7 +380,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="11" class="px-3 py-8 text-center text-gray-500 border">
+                                    <td colspan="12" class="px-3 py-8 text-center text-gray-500 border">
                                         <div class="flex flex-col items-center">
                                             <i class="mb-2 text-3xl text-gray-400 fas fa-clipboard-list"></i>
                                             <p class="text-base font-medium">Belum ada data monitoring barang</p>

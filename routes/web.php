@@ -25,7 +25,7 @@ Route::get('/', function () {
 
 // Dashboard route
 Route::get('/dashboard', function () {
-    if (auth()->check()) {
+    if (auth()->check() && auth()->user()) {
         if (auth()->user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         } else {
@@ -87,6 +87,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::put('/admin/monitoring-pengadaan/{id}', 'update')->name('admin.monitoring-pengadaan.update');
         Route::post('/admin/monitoring-pengadaan/{id}/status', 'updateStatus')->name('admin.monitoring-pengadaan.update-status');
         Route::delete('/admin/monitoring-pengadaan/{id}', 'destroy')->name('admin.monitoring-pengadaan.destroy');
+    });
+
+    // Route :-> detail monitoring barang (gabungan)
+    Route::controller(App\Http\Controllers\Admin\DetailMonitoringBarangController::class)->group(function () {
+        Route::get('/admin/detail-monitoring-barang', 'index')->name('admin.detail-monitoring-barang.index');
+        Route::post('/admin/detail-monitoring-barang/sync', 'sync')->name('admin.detail-monitoring-barang.sync');
+        Route::post('/admin/detail-monitoring-barang/update-saldo', 'updateSaldo')->name('admin.detail-monitoring-barang.update-saldo');
+        Route::get('/admin/detail-monitoring-barang/export', 'export')->name('admin.detail-monitoring-barang.export');
+        Route::get('/admin/detail-monitoring-barang/{id}', 'show')->name('admin.detail-monitoring-barang.show');
+        Route::get('/admin/detail-monitoring-barang/{id}/edit', 'edit')->name('admin.detail-monitoring-barang.edit');
+        Route::put('/admin/detail-monitoring-barang/{id}', 'update')->name('admin.detail-monitoring-barang.update');
+        Route::delete('/admin/detail-monitoring-barang/{id}', 'destroy')->name('admin.detail-monitoring-barang.destroy');
     });
 
     // Route :-> API notifikasi

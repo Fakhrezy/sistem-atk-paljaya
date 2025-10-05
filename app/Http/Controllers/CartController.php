@@ -48,7 +48,7 @@ class CartController extends Controller
             if (config('app.debug')) {
                 Log::info('Cart index accessed', [
                     'user_id' => auth()->id(),
-                    'user_role' => auth()->user()->role,
+                    'user_role' => auth()->user()?->role,
                     'view_prefix' => $viewPrefix,
                     'cart_count' => $cartItems->count(),
                     'bidang_count' => $cartByBidang->count(),

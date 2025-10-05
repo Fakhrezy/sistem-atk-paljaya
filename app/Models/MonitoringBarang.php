@@ -26,7 +26,8 @@ class MonitoringBarang extends Model
         'saldo',
         'saldo_akhir',
         'kredit',
-        'status'
+        'status',
+        'keterangan'
     ];
 
     protected $casts = [

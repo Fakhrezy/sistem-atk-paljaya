@@ -327,7 +327,8 @@ class CartController extends Controller
                     'saldo' => $saldo,
                     'saldo_akhir' => $saldo_akhir,
                     'kredit' => $kredit,
-                    'status' => 'diajukan'
+                    'status' => 'diajukan',
+                    'keterangan' => $cartItem->keterangan
                 ]);
             }
 
