@@ -15,7 +15,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Detail Monitoring Barang</h2>
-                            <p class="mt-1 text-sm text-gray-600">Laporan gabungan monitoring pengambilan dan pengadaan
+                            <p class="mt-1 text-sm text-gray-600">Rekapitulasi monitoring pengambilan dan pengadaan
                                 barang</p>
                         </div>
                         <div class="flex items-center space-x-3">

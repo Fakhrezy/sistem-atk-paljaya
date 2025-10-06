@@ -82,7 +82,7 @@
                             <!-- Manajemen Barang Dropdown -->
                             <div class="relative">
                                 <button onclick="toggleDropdown('manajemenBarang')"
-                                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*', 'admin.monitoring-barang*', 'admin.monitoring-pengadaan*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
+                                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
                                     <div class="flex items-center">
                                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +100,7 @@
                                 </button>
 
                                 <div id="manajemenBarang-menu"
-                                    class="mt-2 ml-4 space-y-1 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*', 'admin.monitoring-barang*', 'admin.monitoring-pengadaan*') ? '' : 'hidden' }}">
+                                    class="mt-2 ml-4 space-y-1 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*') ? '' : 'hidden' }}">
                                     <!-- Data Barang -->
                                     <a href="{{ route('admin.barang') }}"
                                         class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
@@ -132,7 +132,31 @@
                                         </svg>
                                         Pengadaan Barang
                                     </a>
+                                </div>
+                            </div>
 
+                            <!-- Monitoring Barang Dropdown -->
+                            <div class="relative">
+                                <button onclick="toggleDropdown('monitoringBarang')"
+                                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*', 'admin.monitoring-pengadaan*', 'admin.detail-monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                            </path>
+                                        </svg>
+                                        <span class="truncate">Monitoring Barang</span>
+                                    </div>
+                                    <svg id="monitoringBarang-icon" class="w-4 h-4 transition-transform duration-200"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+
+                                <div id="monitoringBarang-menu"
+                                    class="mt-2 ml-4 space-y-1 {{ request()->routeIs('admin.monitoring-barang*', 'admin.monitoring-pengadaan*', 'admin.detail-monitoring-barang*') ? '' : 'hidden' }}">
                                     <!-- Monitoring Pengambilan -->
                                     <a href="{{ route('admin.monitoring-barang.index') }}"
                                         class="flex items-center justify-between px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
@@ -185,7 +209,7 @@
                                                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
                                             </path>
                                         </svg>
-                                        Detail Monitoring Barang
+                                        Detail Monitoring
                                     </a>
                                 </div>
                             </div>
@@ -261,14 +285,22 @@
                 // Auto-expand submenu if current route matches
         document.addEventListener('DOMContentLoaded', function() {
             const currentRoute = window.location.pathname;
+
+            // Routes for Manajemen Barang dropdown
             const manajemenBarangRoutes = [
                 '/admin/barang',
                 '/admin/pengambilan',
-                '/admin/usulan',
-                '/admin/monitoring-barang',
-                '/admin/monitoring-pengadaan'
+                '/admin/usulan'
             ];
 
+            // Routes for Monitoring Barang dropdown
+            const monitoringBarangRoutes = [
+                '/admin/monitoring-barang',
+                '/admin/monitoring-pengadaan',
+                '/admin/detail-monitoring-barang'
+            ];
+
+            // Check and expand Manajemen Barang dropdown
             const isManajemenBarangActive = manajemenBarangRoutes.some(route =>
                 currentRoute.startsWith(route)
             );
@@ -276,8 +308,24 @@
             if (isManajemenBarangActive) {
                 const menu = document.getElementById('manajemenBarang-menu');
                 const icon = document.getElementById('manajemenBarang-icon');
-                menu.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
+                if (menu && icon) {
+                    menu.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            }
+
+            // Check and expand Monitoring Barang dropdown
+            const isMonitoringBarangActive = monitoringBarangRoutes.some(route =>
+                currentRoute.startsWith(route)
+            );
+
+            if (isMonitoringBarangActive) {
+                const menu = document.getElementById('monitoringBarang-menu');
+                const icon = document.getElementById('monitoringBarang-icon');
+                if (menu && icon) {
+                    menu.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                }
             }
 
             // Refresh notification badges every 30 seconds

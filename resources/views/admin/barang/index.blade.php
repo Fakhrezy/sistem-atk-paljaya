@@ -169,8 +169,8 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         <thead>
                             <tr class="bg-gray-100">
                                 <th scope="col"
-                                    class="px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300 w-28">
-                                    ID Barang</th>
+                                    class="px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300 w-16">
+                                    No</th>
                                 <th scope="col"
                                     class="w-48 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">
                                     Nama Barang</th>
@@ -195,21 +195,20 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($barang as $item)
+                            @forelse ($barang as $index => $item)
                             <tr class="transition-colors duration-200 ease-in-out hover:bg-gray-50">
                                 <td
-                                    class="px-3 py-4 text-sm font-medium text-gray-900 border border-gray-300 whitespace-nowrap">
-                                    <span class="font-mono text-sm">{{ $item->id_barang }}</span>
+                                    class="px-3 py-4 text-sm font-medium text-gray-900 border border-gray-300 whitespace-nowrap text-center">
+                                    {{ ($barang->currentPage() - 1) * $barang->perPage() + $index + 1 }}
                                 </td>
                                 <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">{{ $item->nama_barang }}</div>
                                 </td>
                                 <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-sm text-gray-600 bg-gray-100 rounded-full">{{
-                                        $item->satuan }}</span>
+                                    <span class="text-sm text-gray-900">{{ $item->satuan }}</span>
                                 </td>
                                 <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
-                                    <span class="text-sm font-semibold text-green-600">
+                                    <span class="text-sm text-gray-900">
                                         Rp {{ number_format($item->harga_barang, 0, ',', '.') }}
                                     </span>
                                 </td>
@@ -250,10 +249,10 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             title="Edit Barang">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('admin.monitoring-barang.index', ['search' => $item->nama_barang]) }}"
+                                        <a href="{{ route('admin.detail-monitoring-barang.index', ['id_barang' => $item->id_barang]) }}"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
-                                            title="Monitor Barang">
-                                            <i class="fas fa-table"></i>
+                                            title="Detail Monitoring Barang">
+                                            <i class="fas fa-file-alt"></i>
                                         </a>
                                         <button onclick="deleteBarang('{{ route('admin.barang.destroy', $item) }}')"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600"

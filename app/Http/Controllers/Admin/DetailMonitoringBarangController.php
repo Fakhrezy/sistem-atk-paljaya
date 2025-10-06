@@ -98,7 +98,7 @@ class DetailMonitoringBarangController extends Controller
     }
 
     /**
-     * Ekspor data ke Excel/CSV
+     * Ekspor data ke Excel dengan format tabel yang sama
      */
     public function export(Request $request)
     {
@@ -112,53 +112,121 @@ class DetailMonitoringBarangController extends Controller
             ];
 
             $detailMonitoring = $this->detailMonitoringService->getDetailMonitoring($filters)->get();
+            $barangList = Barang::select('id_barang', 'nama_barang')->orderBy('nama_barang')->get();
 
-            $filename = 'detail-monitoring-barang-' . date('Y-m-d-H-i-s') . '.csv';
+            // Generate HTML table with exact styling
+            $html = $this->generateExcelHtml($detailMonitoring, $filters, $barangList);
 
-            $headers = [
-                'Content-Type' => 'text/csv',
+            $filename = 'detail-monitoring-barang-' . date('Y-m-d-H-i-s') . '.xls';
+
+            return response($html, 200, [
+                'Content-Type' => 'application/vnd.ms-excel',
                 'Content-Disposition' => "attachment; filename=\"$filename\"",
-            ];
-
-            $callback = function () use ($detailMonitoring) {
-                $file = fopen('php://output', 'w');
-
-                // Header CSV
-                fputcsv($file, [
-                    'No',
-                    'Tanggal',
-                    'Nama Barang',
-                    'Keterangan',
-                    'Bidang',
-                    'Pengambil',
-                    'Debit',
-                    'Kredit',
-                    'Saldo'
-                ]);
-
-                // Data
-                foreach ($detailMonitoring as $index => $item) {
-                    fputcsv($file, [
-                        $index + 1,
-                        $item->tanggal->format('d/m/Y'),
-                        $item->nama_barang,
-                        $item->keterangan ?? '-',
-                        $item->bidang ? ucfirst($item->bidang) : '-',
-                        $item->pengambil ?? '-',
-                        $item->debit ? number_format($item->debit, 0, ',', '.') : '0',
-                        $item->kredit ? number_format($item->kredit, 0, ',', '.') : '0',
-                        number_format($item->saldo, 0, ',', '.')
-                    ]);
-                }
-
-                fclose($file);
-            };
-
-            return response()->stream($callback, 200, $headers);
+                'Pragma' => 'no-cache',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires' => '0'
+            ]);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal mengekspor data: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Generate HTML untuk Excel dengan format tabel yang sama
+     */
+    private function generateExcelHtml($detailMonitoring, $filters, $barangList)
+    {
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Detail Monitoring Barang</title>
+    <style>
+        body { font-family: "Times New Roman", serif; font-size: 11px; }
+        .header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 20px; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 11px;
+        }
+        th {
+            background-color: #F3F4F6;
+            font-weight: bold;
+        }
+        .text-left { text-align: left; }
+        .text-center { text-align: center; }
+        .header-main { background-color: #E5E7EB; font-weight: bold; }
+        .header-sub { background-color: #F3F4F6; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        SISTEM INFORMASI MONITORING BARANG HABIS PAKAI<br>
+        Detail Monitoring Barang<br>
+        <small style="font-size: 12px;">Rekapitulasi monitoring pengambilan dan pengadaan barang</small>
+        <br><br>
+    </div>
+
+    <table>
+        <thead>
+            <!-- Header Utama dengan rowspan dan colspan yang sama -->
+            <tr class="header-main">
+                <th rowspan="2">No</th>
+                <th rowspan="2">Tanggal</th>
+                <th rowspan="2">Nama Barang</th>
+                <th colspan="3">Uraian</th>
+                <th colspan="3">Persediaan</th>
+            </tr>
+            <!-- Sub Header -->
+            <tr class="header-sub">
+                <th>Keterangan</th>
+                <th>Bidang</th>
+                <th>Pengambil</th>
+                <th>Debit</th>
+                <th>Kredit</th>
+                <th>Saldo</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+        foreach ($detailMonitoring as $index => $item) {
+            $html .= '<tr>
+                <td class="text-center">' . ($index + 1) . '</td>
+                <td class="text-center">' . $item->tanggal->format('d/m/Y') . '</td>
+                <td class="text-left">' . htmlspecialchars($item->barang->nama_barang ?? $item->nama_barang ?? '-') . '</td>
+                <td class="text-left">' . htmlspecialchars($item->keterangan ?? '-') . '</td>
+                <td class="text-center">' . ($item->bidang ? ucfirst($item->bidang) : '-') . '</td>
+                <td class="text-center">' . htmlspecialchars($item->pengambil ?? '-') . '</td>
+                <td class="text-center">' . ($item->debit ? number_format($item->debit, 0, ',', '.') : '0') . '</td>
+                <td class="text-center">' . ($item->kredit ? number_format($item->kredit, 0, ',', '.') : '0') . '</td>
+                <td class="text-center">' . number_format($item->saldo, 0, ',', '.') . '</td>
+            </tr>';
+        }
+
+        if ($detailMonitoring->isEmpty()) {
+            $html .= '<tr>
+                <td colspan="9" class="text-center" style="padding: 20px; font-style: italic;">
+                    Belum ada data monitoring
+                </td>
+            </tr>';
+        }
+
+        $html .= '</tbody>
+    </table>
+</body>
+</html>';
+
+        return $html;
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
