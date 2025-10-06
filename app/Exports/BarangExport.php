@@ -22,9 +22,9 @@ class BarangExport
         $writer = new Writer();
         $writer->openToFile($filename);
 
-        // Add header row
+        // Add header row - sesuai dengan tampilan tabel admin
         $writer->addRow(Row::fromValues([
-            'ID Barang',
+            'No',
             'Nama Barang',
             'Satuan',
             'Harga',
@@ -36,9 +36,9 @@ class BarangExport
         $query = Barang::query();
 
         if ($this->search) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('nama_barang', 'like', "%{$this->search}%")
-                  ->orWhere('id_barang', 'like', "%{$this->search}%");
+                    ->orWhere('id_barang', 'like', "%{$this->search}%");
             });
         }
 
@@ -48,10 +48,11 @@ class BarangExport
 
         $barangs = $query->get();
 
-        // Add data rows
+        // Add data rows - dengan nomor urut seperti di tabel admin
+        $no = 1;
         foreach ($barangs as $barang) {
             $writer->addRow(Row::fromValues([
-                $barang->id_barang,
+                $no++, // Nomor urut
                 $barang->nama_barang,
                 $barang->satuan,
                 'Rp ' . number_format($barang->harga_barang, 0, ',', '.'),

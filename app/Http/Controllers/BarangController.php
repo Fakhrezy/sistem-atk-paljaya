@@ -161,20 +161,122 @@ class BarangController extends Controller
 
     public function export(Request $request)
     {
-        $search = $request->input('search');
-        $jenis = $request->input('jenis');
+        try {
+            $search = $request->input('search');
+            $jenis = $request->input('jenis');
 
-        $filename = storage_path('app/public/exports/data-barang.xlsx');
+            // Get data with same filtering logic as index method
+            $query = Barang::query();
 
-        // Ensure the exports directory exists
-        if (!file_exists(dirname($filename))) {
-            mkdir(dirname($filename), 0777, true);
+            // Filter berdasarkan pencarian
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nama_barang', 'like', "%{$search}%")
+                        ->orWhere('id_barang', 'like', "%{$search}%");
+                });
+            }
+
+            // Filter berdasarkan jenis
+            if ($jenis) {
+                $query->where('jenis', $jenis);
+            }
+
+            $barang = $query->get();
+
+            // Generate HTML Excel with same styling as admin table
+            $html = $this->generateExcelHtml($barang, $search, $jenis);
+
+            $filename = 'daftar-barang-' . date('Y-m-d-H-i-s') . '.xls';
+
+            return response($html, 200, [
+                'Content-Type' => 'application/vnd.ms-excel',
+                'Content-Disposition' => "attachment; filename=\"$filename\"",
+                'Pragma' => 'no-cache',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires' => '0'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengekspor data: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Generate HTML untuk Excel dengan format yang sama dengan tabel admin
+     */
+    private function generateExcelHtml($barang, $search, $jenis)
+    {
+        $html = '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Daftar Barang</title>
+    <style>
+        body { font-family: "Times New Roman", serif; font-size: 11px; }
+        .header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 20px; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 11px;
+        }
+        th {
+            background-color: #F3F4F6;
+            font-weight: bold;
+            text-align: center;
+        }
+        .text-center { text-align: center; }
+        .no-column { text-align: center; width: 40px; }
+        .nama-column { width: 200px; }
+        .satuan-column { width: 80px; text-align: center; }
+        .harga-column { width: 120px; text-align: right; }
+        .stok-column { width: 60px; text-align: center; }
+        .jenis-column { width: 80px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        SISTEM INFORMASI MONITORING BARANG HABIS PAKAI<br>
+        Daftar Barang<br>
+        <br><br>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="no-column">No</th>
+                <th class="nama-column">Nama Barang</th>
+                <th class="satuan-column">Satuan</th>
+                <th class="harga-column">Harga</th>
+                <th class="stok-column">Stok</th>
+                <th class="jenis-column">Jenis</th>
+            </tr>
+        </thead>
+        <tbody>';
+
+        $no = 1;
+        foreach ($barang as $item) {
+            $html .= '<tr>
+                <td class="text-center">' . $no++ . '</td>
+                <td>' . htmlspecialchars($item->nama_barang) . '</td>
+                <td class="text-center">' . htmlspecialchars($item->satuan) . '</td>
+                <td class="harga-column">Rp ' . number_format($item->harga_barang, 0, ',', '.') . '</td>
+                <td class="text-center">' . $item->stok . '</td>
+                <td class="text-center">' . ucfirst($item->jenis) . '</td>
+            </tr>';
         }
 
-        $export = new BarangExport($search, $jenis);
-        $export->export($filename);
+        $html .= '</tbody>
+    </table>
+</body>
+</html>';
 
-        return response()->download($filename)->deleteFileAfterSend(true);
+        return $html;
     }
 
     /**

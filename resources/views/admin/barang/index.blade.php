@@ -138,10 +138,10 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
-                            Export Excel
+                            Ekspor Data
                         </a>
 
-                        <a href="{{ route('admin.barang.print') }}{{ request()->has('search') || request()->has('jenis') ? '?' . http_build_query(request()->all()) : '' }}"
+                        {{-- <a href="{{ route('admin.barang.print') }}{{ request()->has('search') || request()->has('jenis') ? '?' . http_build_query(request()->all()) : '' }}"
                             target="_blank"
                             class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-gray-600 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 hover:shadow">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-600" fill="none"
@@ -150,7 +150,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                             </svg>
                             Print
-                        </a>
+                        </a> --}}
 
                         <a href="{{ route('admin.barang.create') }}"
                             class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-green-600 transition duration-150 ease-in-out bg-white border border-green-500 rounded-md shadow-sm hover:bg-green-50 focus:bg-green-50 active:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 hover:shadow">
