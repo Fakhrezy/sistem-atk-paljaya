@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Keranjang Usulan')
+@section('title', 'Keranjang Penambahan')
 
 @section('header')
 SISTEM MONITORING BARANG HABIS PAKAI
@@ -22,13 +22,13 @@ SISTEM MONITORING BARANG HABIS PAKAI
                         </div>
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('admin.usulan.index') }}"
-                                class="inline-flex items-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 active:bg-gray-900">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-4 w-4" fill="none"
+                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 active:bg-gray-900">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
-                                Kembali ke Katalog
+                                Kembali
                             </a>
                         </div>
                     </div>
@@ -67,14 +67,14 @@ SISTEM MONITORING BARANG HABIS PAKAI
                 <div id="cart-container">
                     @if ($items->count() > 0)
                     <!-- Summary -->
-                    <div class="mb-6 border-l-4 border-blue-400 bg-blue-50 p-4">
+                    <div class="p-4 mb-6 border-l-4 border-blue-400 bg-blue-50">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <i class="fas fa-info-circle text-blue-400"></i>
+                                <i class="text-blue-400 fas fa-info-circle"></i>
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm text-blue-700">
-                                    Total {{ $items->count() }} item dalam usulan pengadaan
+                                    Total {{ $items->count() }} item dalam penambahan
                                 </p>
                             </div>
                         </div>
@@ -84,50 +84,50 @@ SISTEM MONITORING BARANG HABIS PAKAI
                     <div class="space-y-4">
                         @foreach ($items as $item)
                         <div
-                            class="flex items-center justify-between rounded-lg border border-gray-200 p-4 hover:bg-gray-50">
+                            class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                             <div class="flex-1">
                                 <div class="flex items-start justify-between">
                                     <div>
                                         <h4 class="flex items-center text-lg font-medium text-gray-900">
-                                            <i class="fas fa-box mr-2 text-gray-500"></i>{{ $item->barang->nama_barang
+                                            <i class="mr-2 text-gray-500 fas fa-box"></i>{{ $item->barang->nama_barang
                                             }}
                                         </h4>
-                                        <p class="mt-1 flex items-center text-sm text-gray-600">
+                                        <p class="flex items-center mt-1 text-sm text-gray-600">
                                             @switch($item->barang->jenis)
                                             @case('atk')
-                                            <i class="fas fa-pen mr-1 text-blue-500"></i>Jenis: ATK
+                                            <i class="mr-1 text-blue-500 fas fa-pen"></i>Jenis: ATK
                                             @break
 
                                             @case('cetak')
-                                            <i class="fas fa-print mr-1 text-green-500"></i>Jenis: Cetakan
+                                            <i class="mr-1 text-green-500 fas fa-print"></i>Jenis: Cetakan
                                             @break
 
                                             @case('tinta')
-                                            <i class="fas fa-tint mr-1 text-purple-500"></i>Jenis: Tinta
+                                            <i class="mr-1 text-purple-500 fas fa-tint"></i>Jenis: Tinta
                                             @break
 
                                             @default
-                                            <i class="fas fa-tag mr-1 text-gray-500"></i>Jenis:
+                                            <i class="mr-1 text-gray-500 fas fa-tag"></i>Jenis:
                                             {{ ucfirst($item->barang->jenis) }}
                                             @endswitch
                                         </p>
                                         <p class="flex items-center text-sm text-gray-500">
-                                            <i class="fas fa-ruler mr-1 text-gray-400"></i>Satuan:
+                                            <i class="mr-1 text-gray-400 fas fa-ruler"></i>Satuan:
                                             {{ $item->barang->satuan }}
                                         </p>
                                         @if ($item->keterangan)
-                                        <p class="mt-1 flex items-center text-sm text-gray-600">
-                                            <i class="fas fa-comment mr-1 text-blue-500"></i>{{ $item->keterangan }}
+                                        <p class="flex items-center mt-1 text-sm text-gray-600">
+                                            <i class="mr-1 text-blue-500 fas fa-comment"></i>{{ $item->keterangan }}
                                         </p>
                                         @endif
-                                        <p class="mt-1 flex items-center text-xs text-gray-400">
-                                            <i class="fas fa-clock mr-1"></i>Ditambahkan:
+                                        <p class="flex items-center mt-1 text-xs text-gray-400">
+                                            <i class="mr-1 fas fa-clock"></i>Ditambahkan:
                                             {{ $item->created_at->format('d/m/Y H:i') }}
                                         </p>
                                     </div>
                                     <div class="text-right">
                                         <span class="flex items-center justify-end text-lg font-semibold text-gray-900">
-                                            <i class="fas fa-shopping-cart mr-2 text-blue-500"></i>{{ $item->jumlah }}
+                                            <i class="mr-2 text-blue-500 fas fa-shopping-cart"></i>{{ $item->jumlah }}
                                             {{ $item->barang->satuan }}
                                         </span>
                                     </div>
@@ -135,13 +135,13 @@ SISTEM MONITORING BARANG HABIS PAKAI
                             </div>
 
                             <!-- Action Buttons -->
-                            <div class="ml-4 flex items-center space-x-2">
+                            <div class="flex items-center ml-4 space-x-2">
                                 <!-- Update Quantity -->
-                                <div class="flex items-center rounded border border-gray-300">
+                                <div class="flex items-center border border-gray-300 rounded">
                                     <button onclick="updateQuantity({{ $item->id }}, -1)"
                                         class="{{ $item->jumlah <= 1 ? 'opacity-50 cursor-not-allowed' : '' }} px-2 py-1 transition duration-150 ease-in-out hover:bg-gray-100"
                                         {{ $item->jumlah <= 1 ? 'disabled' : '' }} title="Kurangi jumlah">
-                                            <i class="fas fa-minus text-xs text-gray-600"></i>
+                                            <i class="text-xs text-gray-600 fas fa-minus"></i>
                                     </button>
                                     <span id="quantity-{{ $item->id }}"
                                         class="min-w-[3rem] border-l border-r border-gray-300 bg-gray-50 px-3 py-1 text-center text-sm font-medium">{{
@@ -149,21 +149,21 @@ SISTEM MONITORING BARANG HABIS PAKAI
                                     <button onclick="updateQuantity({{ $item->id }}, 1)"
                                         class="px-2 py-1 transition duration-150 ease-in-out hover:bg-gray-100"
                                         title="Tambah jumlah">
-                                        <i class="fas fa-plus text-xs text-gray-600"></i>
+                                        <i class="text-xs text-gray-600 fas fa-plus"></i>
                                     </button>
                                 </div>
 
                                 <!-- Edit Button -->
                                 <button
                                     onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->jumlah }}, '{{ addslashes($item->keterangan ?? '') }}', '{{ $item->barang->satuan }}')"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded bg-blue-500 text-white transition duration-150 ease-in-out hover:bg-blue-700"
+                                    class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-700"
                                     title="Edit usulan">
                                     <i class="fas fa-edit"></i>
                                 </button>
 
                                 <!-- Remove Button -->
                                 <button onclick="removeItem({{ $item->id }})"
-                                    class="inline-flex h-8 w-8 items-center justify-center rounded bg-gray-400 text-white transition duration-150 ease-in-out hover:bg-gray-500"
+                                    class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out bg-gray-400 rounded hover:bg-gray-500"
                                     title="Hapus usulan">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
@@ -173,31 +173,31 @@ SISTEM MONITORING BARANG HABIS PAKAI
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-6">
+                    <div class="flex items-center justify-between pt-6 mt-6 border-t border-gray-200">
                         <button onclick="clearCart()"
-                            class="inline-flex items-center rounded bg-red-500 px-4 py-2 font-bold text-white transition duration-150 ease-in-out hover:bg-red-700"
+                            class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out bg-red-500 rounded hover:bg-red-700"
                             title="Hapus semua usulan">
-                            <i class="fas fa-trash-alt mr-2"></i>Kosongkan Keranjang
+                            <i class="mr-2 fas fa-trash-alt"></i>Kosongkan Keranjang
                         </button>
                         <button onclick="submitUsulan()"
-                            class="inline-flex items-center rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white transition duration-150 ease-in-out hover:bg-blue-600"
+                            class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-blue-500 rounded-lg hover:bg-blue-600"
                             title="Ajukan semua usulan">
-                            <i class="fas fa-paper-plane mr-2"></i>Tambah Pengadaan
+                            <i class="mr-2 fas fa-paper-plane"></i>Catat Penambahan
                         </button>
                     </div>
                     @else
                     <!-- Empty Cart -->
                     <div class="py-12 text-center">
                         <div class="mb-4">
-                            <i class="fas fa-shopping-cart text-6xl text-gray-400"></i>
+                            <i class="text-6xl text-gray-400 fas fa-shopping-cart"></i>
                         </div>
-                        <h2 class="mb-2 flex items-center justify-center text-xl font-semibold text-gray-600">
-                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>Belum Ada Usulan
+                        <h2 class="flex items-center justify-center mb-2 text-xl font-semibold text-gray-600">
+                            <i class="mr-2 text-blue-500 fas fa-info-circle"></i>Belum Ada Penambahan
                         </h2>
-                        <p class="mb-6 text-gray-500">Anda belum menambahkan barang untuk diusulkan</p>
+                        <p class="mb-6 text-gray-500">Anda belum menambahkan barang</p>
                         <a href="{{ route('admin.usulan.index') }}"
-                            class="inline-flex items-center rounded bg-blue-500 px-4 py-2 font-bold text-white transition duration-150 ease-in-out hover:bg-blue-700">
-                            <i class="fas fa-plus mr-2"></i>Buat Usulan
+                            class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-700">
+                            <i class="mr-2 fas fa-plus"></i>Tambah Barang
                         </a>
                     </div>
                     @endif
@@ -208,14 +208,14 @@ SISTEM MONITORING BARANG HABIS PAKAI
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="fixed inset-0 hidden z-50 overflow-y-auto bg-black bg-opacity-50">
+<div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50">
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="relative w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg">
             <!-- Modal Header -->
-            <div class="bg-gray-600 px-6 py-4 rounded-t-lg">
+            <div class="px-6 py-4 bg-gray-600 rounded-t-lg">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-white">
-                        Edit Usulan
+                        Edit Pengadaan
                     </h3>
                     <button onclick="closeEditModal()" class="text-white">
                         <i class="fas fa-times"></i>
@@ -231,56 +231,56 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
                     <!-- Nama Barang Section -->
                     <div class="mb-4">
-                        <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-box text-gray-500 mr-2"></i>
+                        <label class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-box"></i>
                             Nama Barang
                         </label>
-                        <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                        <div class="p-3 border border-gray-300 rounded-md bg-gray-50">
                             <p class="font-medium text-gray-900" id="edit_nama_barang"></p>
                         </div>
                     </div>
 
                     <!-- Quantity Section -->
                     <div class="mb-4">
-                        <label for="edit_jumlah" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-calculator text-gray-500 mr-2"></i>
+                        <label for="edit_jumlah" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-calculator"></i>
                             Jumlah
                         </label>
                         <div class="flex items-center justify-center space-x-3">
                             <button type="button" onclick="editDecreaseQuantity()"
-                                class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
-                                <i class="fas fa-minus text-gray-500"></i>
+                                class="flex items-center justify-center w-8 h-8 text-white bg-gray-400 rounded-md">
+                                <i class="text-gray-500 fas fa-minus"></i>
                             </button>
                             <input type="number" id="edit_jumlah" name="jumlah" min="1" value="1"
-                                class="w-16 h-8 border border-gray-300 rounded-md text-center focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
+                                class="w-16 h-8 text-center border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
                             <button type="button" onclick="editIncreaseQuantity()"
-                                class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
-                                <i class="fas fa-plus text-gray-500"></i>
+                                class="flex items-center justify-center w-8 h-8 text-white bg-gray-400 rounded-md">
+                                <i class="text-gray-500 fas fa-plus"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- Keterangan Section -->
                     <div class="mb-4">
-                        <label for="edit_keterangan" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-sticky-note text-gray-500 mr-2"></i>
-                            Keterangan <span class="text-gray-400 text-xs">(opsional)</span>
+                        <label for="edit_keterangan" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-sticky-note"></i>
+                            Keterangan <span class="text-xs text-gray-400">(opsional)</span>
                         </label>
                         <textarea id="edit_keterangan" name="keterangan" rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 resize-none"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                             placeholder="Keterangan tambahan..."></textarea>
                     </div>
                 </form>
             </div>
 
             <!-- Modal Footer -->
-            <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex space-x-3">
+            <div class="flex px-6 py-4 space-x-3 rounded-b-lg bg-gray-50">
                 <button type="button" onclick="closeEditModal()"
-                    class="flex-1 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md">
+                    class="flex-1 px-4 py-2 font-semibold text-white bg-gray-500 rounded-md">
                     Batal
                 </button>
                 <button type="button" onclick="updateItem()"
-                    class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                    class="flex-1 px-4 py-2 font-semibold text-white bg-blue-600 rounded-md">
                     Simpan
                 </button>
             </div>
@@ -387,7 +387,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																								Swal.fire({
 																												icon: 'error',
 																												title: 'Gagal!',
-																												text: data.message || 'Terjadi kesalahan saat mengupdate usulan.'
+																												text: data.message || 'Terjadi kesalahan saat mengupdate pengadaan.'
 																								});
 																				}
 																})
@@ -396,7 +396,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																				Swal.fire({
 																								icon: 'error',
 																								title: 'Error!',
-																								text: 'Terjadi kesalahan saat mengupdate usulan.'
+																								text: 'Terjadi kesalahan saat mengupdate pengadaan.'
 																				});
 																});
 								}
@@ -441,7 +441,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																												Swal.fire({
 																																icon: 'success',
 																																title: 'Berhasil!',
-																																text: 'Usulan berhasil dihapus.',
+																																text: 'Penambahan berhasil dihapus.',
 																																showConfirmButton: false,
 																																timer: 1500
 																												}).then(() => {
@@ -451,7 +451,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																												Swal.fire({
 																																icon: 'error',
 																																title: 'Gagal!',
-																																text: data.message || 'Terjadi kesalahan saat menghapus usulan.',
+																																text: data.message || 'Terjadi kesalahan saat menghapus penambahan.',
 																																confirmButtonColor: '#d33'
 																												});
 																								}
@@ -461,7 +461,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																								Swal.fire({
 																												icon: 'error',
 																												title: 'Error!',
-																												text: 'Terjadi kesalahan saat menghapus usulan.',
+																												text: 'Terjadi kesalahan saat menghapus penambahan.',
 																												confirmButtonColor: '#d33'
 																								});
 																				});
@@ -484,7 +484,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																if (result.isConfirmed) {
 																				// Show loading state
 																				Swal.fire({
-																								title: 'Mengosongkan Usulan...',
+																								title: 'Mengosongkan Penambahan...',
 																								text: 'Mohon tunggu sebentar',
 																								allowOutsideClick: false,
 																								showConfirmButton: false,
@@ -520,7 +520,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																												} else {
 																																Swal.fire({
 																																				title: 'Gagal!',
-																																				text: data.message || 'Terjadi kesalahan saat mengosongkan usulan.',
+																																				text: data.message || 'Terjadi kesalahan saat mengosongkan penambahan.',
 																																				icon: 'error',
 																																				confirmButtonColor: '#dc2626',
 																																				confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
@@ -531,7 +531,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																												console.error('Error:', error);
 																												Swal.fire({
 																																title: 'Error!',
-																																text: 'Terjadi kesalahan saat mengosongkan usulan.',
+																																text: 'Terjadi kesalahan saat mengosongkan penambahan.',
 																																icon: 'error',
 																																confirmButtonColor: '#dc2626',
 																																confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
@@ -560,8 +560,8 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
 								function submitUsulan() {
 												Swal.fire({
-																title: 'Ajukan Usulan',
-																text: 'Yakin ingin mengajukan semua usulan ini?',
+																title: 'Catat Penambahan',
+																text: 'Yakin ingin menyimpan semua penambahan ini?',
 																icon: 'question',
 																showCancelButton: true,
 																confirmButtonColor: '#3085d6',
@@ -615,7 +615,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																																});
 																												} else {
 																																const errorMessage = typeof data.message === 'string' ? data.message :
-																																				'Terjadi kesalahan saat mengajukan usulan.';
+																																				'Terjadi kesalahan saat mengajukan penambahan.';
 																																Swal.fire({
 																																				title: 'Error!',
 																																				text: errorMessage,
@@ -626,7 +626,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																								})
 																								.catch(error => {
 																												console.error('Error:', error);
-																												const errorMessage = error.message || 'Terjadi kesalahan saat mengajukan usulan.';
+																												const errorMessage = error.message || 'Terjadi kesalahan saat mengajukan penambahan.';
 																												Swal.fire({
 																																title: 'Error!',
 																																text: errorMessage,

@@ -26,7 +26,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
-                                Kembali ke Katalog
+                                Kembali
                             </a>
                         </div>
                     </div>
@@ -72,11 +72,11 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 </div>
 
 <!-- Edit Item Modal -->
-<div id="editItemModal" class="fixed inset-0 hidden z-50 overflow-y-auto bg-black bg-opacity-50">
+<div id="editItemModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-50">
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="relative w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg">
             <!-- Modal Header -->
-            <div class="bg-gray-600 px-6 py-4 rounded-t-lg">
+            <div class="px-6 py-4 bg-gray-600 rounded-t-lg">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-white">
                         Edit Item Keranjang
@@ -95,56 +95,54 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 
                     <!-- Nama Barang Section -->
                     <div class="mb-4">
-                        <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-box text-gray-500 mr-2"></i>
+                        <label class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-box"></i>
                             Nama Barang
                         </label>
-                        <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                        <div class="p-3 border border-gray-300 rounded-md bg-gray-50">
                             <p class="font-medium text-gray-900" id="edit_barang_nama"></p>
                         </div>
                     </div>
 
                     <!-- Quantity Section -->
                     <div class="mb-4">
-                        <label for="edit_quantity" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-calculator text-gray-500 mr-2"></i>
+                        <label for="edit_quantity" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-calculator"></i>
                             Jumlah
                         </label>
                         <div class="flex items-center justify-center space-x-3">
                             <button type="button" onclick="editDecreaseQuantity()"
-                                class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
-                                <i class="fas fa-minus text-gray-500"></i>
+                                class="flex items-center justify-center w-8 h-8 text-white bg-gray-400 rounded-md">
+                                <i class="text-gray-500 fas fa-minus"></i>
                             </button>
                             <input type="number" id="edit_quantity" name="quantity" min="1" value="1"
-                                class="w-16 h-8 border border-gray-300 rounded-md text-center focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
+                                class="w-16 h-8 text-center border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
                             <button type="button" onclick="editIncreaseQuantity()"
-                                class="w-8 h-8 bg-gray-400 text-white rounded-md flex items-center justify-center">
-                                <i class="fas fa-plus text-gray-500"></i>
+                                class="flex items-center justify-center w-8 h-8 text-white bg-gray-400 rounded-md">
+                                <i class="text-gray-500 fas fa-plus"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- Bidang Section -->
                     <div class="mb-4">
-                        <label for="edit_bidang" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-building text-gray-500 mr-2"></i>
+                        <label for="edit_bidang" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-building"></i>
                             Bidang
                         </label>
                         <select id="edit_bidang" name="bidang" required
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
                             <option value="">Pilih Bidang</option>
-                            <option value="umum">Umum</option>
-                            <option value="perencanaan">Perencanaan</option>
-                            <option value="keuangan">Keuangan</option>
-                            <option value="operasional">Operasional</option>
-                            <option value="lainnya">Lainnya</option>
+                            @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
+                            <option value="{{ $key }}">{{ $label }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                     <!-- Nama Pengambil Section -->
                     <div class="mb-4">
-                        <label for="edit_pengambil" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-user text-gray-500 mr-2"></i>
+                        <label for="edit_pengambil" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-user"></i>
                             Nama Pengambil
                         </label>
                         <input type="text" id="edit_pengambil" name="pengambil" required
@@ -154,25 +152,25 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 
                     <!-- Keterangan Section -->
                     <div class="mb-4">
-                        <label for="edit_keterangan" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                            <i class="fas fa-sticky-note text-gray-500 mr-2"></i>
-                            Keterangan <span class="text-gray-400 text-xs">(opsional)</span>
+                        <label for="edit_keterangan" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                            <i class="mr-2 text-gray-500 fas fa-sticky-note"></i>
+                            Keterangan <span class="text-xs text-gray-400">(opsional)</span>
                         </label>
                         <textarea id="edit_keterangan" name="keterangan" rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400 resize-none"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
                             placeholder="Keterangan tambahan..."></textarea>
                     </div>
                 </form>
             </div>
 
             <!-- Modal Footer -->
-            <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex space-x-3">
+            <div class="flex px-6 py-4 space-x-3 rounded-b-lg bg-gray-50">
                 <button onclick="closeEditModal()"
-                    class="flex-1 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md">
+                    class="flex-1 px-4 py-2 font-semibold text-white bg-gray-500 rounded-md">
                     Batal
                 </button>
                 <button id="updateItemBtn" onclick="updateCartItem()"
-                    class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                    class="flex-1 px-4 py-2 font-semibold text-white bg-blue-600 rounded-md">
                     Simpan
                 </button>
             </div>
@@ -181,6 +179,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 </div>
 
 <script>
+    // Bidang constants for JavaScript
+const bidangNames = @json(\App\Constants\BidangConstants::getBidangList());
+
     // Load cart content when page loads
 document.addEventListener('DOMContentLoaded', function() {
     loadCartContent();
@@ -507,7 +508,7 @@ function submitPengambilanBidang(bidang) {
     // Tampilkan SweetAlert konfirmasi
     Swal.fire({
         title: 'Konfirmasi Pengambilan',
-        text: `Yakin ingin lakukan pengambilan untuk semua item di bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}?`,
+        text: `Yakin ingin lakukan pengambilan untuk semua item di bidang ${bidangNames[bidang] || bidang}?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3b82f6',

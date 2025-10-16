@@ -19,6 +19,9 @@ class DetailMonitoringBarangService
 
         if ($monitoringBarangId) {
             $query->where('id', $monitoringBarangId);
+        } else {
+            // Hanya ambil monitoring barang yang sudah disetujui/diterima
+            $query->whereIn('status', ['disetujui', 'terima', 'diterima']);
         }
 
         $monitoringItems = $query->get();
@@ -58,6 +61,9 @@ class DetailMonitoringBarangService
 
         if ($monitoringPengadaanId) {
             $query->where('id', $monitoringPengadaanId);
+        } else {
+            // Hanya ambil monitoring pengadaan yang sudah selesai
+            $query->where('status', 'selesai');
         }
 
         $monitoringItems = $query->get();
@@ -160,6 +166,32 @@ class DetailMonitoringBarangService
         foreach ($details as $detail) {
             if ($detail->barang) {
                 $detail->update(['saldo' => $detail->barang->stok]);
+            }
+        }
+    }
+
+    /**
+     * Sinkronisasi otomatis ketika status monitoring barang berubah
+     */
+    public function syncOnStatusChange($monitoringType, $monitoringId, $newStatus)
+    {
+        if ($monitoringType === 'barang') {
+            // Jika status menjadi disetujui/terima/diterima, tambahkan ke detail monitoring
+            if (in_array($newStatus, ['disetujui', 'terima', 'diterima'])) {
+                $this->syncFromMonitoringBarang($monitoringId);
+            }
+            // Jika status berubah dari disetujui/terima/diterima ke status lain, hapus dari detail monitoring
+            else {
+                $this->deleteByMonitoringBarang($monitoringId);
+            }
+        } elseif ($monitoringType === 'pengadaan') {
+            // Jika status menjadi selesai, tambahkan ke detail monitoring
+            if ($newStatus === 'selesai') {
+                $this->syncFromMonitoringPengadaan($monitoringId);
+            }
+            // Jika status berubah dari selesai ke status lain, hapus dari detail monitoring
+            else {
+                $this->deleteByMonitoringPengadaan($monitoringId);
             }
         }
     }

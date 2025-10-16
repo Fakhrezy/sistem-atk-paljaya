@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MonitoringBarang;
 use App\Models\Barang;
+use App\Services\DetailMonitoringBarangService;
 use Illuminate\Support\Facades\DB;
 
 class MonitoringBarangController extends Controller
 {
-    public function __construct()
+    protected $detailMonitoringService;
+
+    public function __construct(DetailMonitoringBarangService $detailMonitoringService)
     {
         $this->middleware(['auth']);
+        $this->detailMonitoringService = $detailMonitoringService;
     }
 
     /**
@@ -97,6 +101,9 @@ class MonitoringBarangController extends Controller
             $monitoringBarang->status = $newStatus;
             $monitoringBarang->save();
 
+            // Sinkronisasi ke detail monitoring barang berdasarkan status baru
+            $this->detailMonitoringService->syncOnStatusChange('barang', $id, $newStatus);
+
             DB::commit();
 
             // Generate appropriate success message based on status change
@@ -175,6 +182,9 @@ class MonitoringBarangController extends Controller
     public function destroy($id)
     {
         try {
+            // Hapus dari detail monitoring barang
+            $this->detailMonitoringService->deleteByMonitoringBarang($id);
+
             $monitoringBarang = MonitoringBarang::findOrFail($id);
             $monitoringBarang->delete();
 

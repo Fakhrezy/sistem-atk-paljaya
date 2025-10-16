@@ -65,7 +65,8 @@ SISTEM INFORMASI MONITORING BARANG ATK CETAKAN & TINTA
                     </div>
                     <div class="flex items-start justify-between py-2 border-b border-gray-100">
                         <span class="text-sm font-medium text-gray-600">Bidang</span>
-                        <span class="font-semibold text-right text-gray-900">{{ $monitoring->bidang }}</span>
+                        <span class="font-semibold text-right text-gray-900">{{
+                            \App\Constants\BidangConstants::getBidangName($monitoring->bidang) }}</span>
                     </div>
                     <div class="flex items-center justify-between py-2 border-b border-gray-100">
                         <span class="text-sm font-medium text-gray-600">Pengambil</span>

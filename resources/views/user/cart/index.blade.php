@@ -3,7 +3,7 @@
 @section('title', 'Keranjang Barang')
 
 @section('header')
-    Keranjang Barang
+Keranjang Barang
 @endsection
 
 @section('content')
@@ -18,9 +18,11 @@
                         </div>
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('user.pengambilan.index') }}"
-                               class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
                                 Kembali ke Katalog
                             </a>
@@ -29,15 +31,15 @@
                 </div>
 
                 @if(session('success'))
-                    <div class="relative p-4 mb-4 text-blue-700 bg-blue-100 border-l-4 border-blue-500 rounded">
-                        <span class="block sm:inline">{{ session('success') }}</span>
-                    </div>
+                <div class="relative p-4 mb-4 text-blue-700 bg-blue-100 border-l-4 border-blue-500 rounded">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="relative p-4 mb-4 text-red-700 bg-red-100 border-l-4 border-red-500 rounded">
-                        <span class="block sm:inline">{{ session('error') }}</span>
-                    </div>
+                <div class="relative p-4 mb-4 text-red-700 bg-red-100 border-l-4 border-red-500 rounded">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
                 @endif
 
                 <div id="cart-container">
@@ -67,41 +69,52 @@
                     <div class="mb-4">
                         <label for="edit_quantity" class="block mb-2 text-sm font-medium text-gray-700">Jumlah:</label>
                         <div class="flex items-center">
-                            <button type="button" onclick="editDecreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-l hover:bg-gray-300">-</button>
-                            <input type="number" id="edit_quantity" name="quantity" min="1" value="1" class="w-20 py-1 text-center transition duration-150 ease-in-out border-t border-b border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                            <button type="button" onclick="editIncreaseQuantity()" class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-r hover:bg-gray-300">+</button>
+                            <button type="button" onclick="editDecreaseQuantity()"
+                                class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-l hover:bg-gray-300">-</button>
+                            <input type="number" id="edit_quantity" name="quantity" min="1" value="1"
+                                class="w-20 py-1 text-center transition duration-150 ease-in-out border-t border-b border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                            <button type="button" onclick="editIncreaseQuantity()"
+                                class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-r hover:bg-gray-300">+</button>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">Maksimal: <span id="edit_max_stock"></span> <span id="edit_satuan"></span></p>
+                        <p class="mt-1 text-xs text-gray-500">Maksimal: <span id="edit_max_stock"></span> <span
+                                id="edit_satuan"></span></p>
                     </div>
 
                     <div class="mb-4">
                         <label for="edit_bidang" class="block mb-2 text-sm font-medium text-gray-700">Bidang:</label>
-                        <select id="edit_bidang" name="bidang" required class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <select id="edit_bidang" name="bidang" required
+                            class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Pilih Bidang</option>
-                            <option value="umum">Umum</option>
-                            <option value="perencanaan">Perencanaan</option>
-                            <option value="keuangan">Keuangan</option>
-                            <option value="operasional">Operasional</option>
-                            <option value="lainnya">Lainnya</option>
+                            @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
+                            <option value="{{ $key }}">{{ $label }}</option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="mb-4">
-                        <label for="edit_pengambil" class="block mb-2 text-sm font-medium text-gray-700">Nama Pengambil:</label>
-                        <input type="text" id="edit_pengambil" name="pengambil" required class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan nama pengambil...">
+                        <label for="edit_pengambil" class="block mb-2 text-sm font-medium text-gray-700">Nama
+                            Pengambil:</label>
+                        <input type="text" id="edit_pengambil" name="pengambil" required
+                            class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Masukkan nama pengambil...">
                     </div>
 
                     <div class="mb-4">
-                        <label for="edit_keterangan" class="block mb-2 text-sm font-medium text-gray-700">Keterangan (opsional):</label>
-                        <textarea id="edit_keterangan" name="keterangan" rows="3" class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Keterangan tambahan..."></textarea>
+                        <label for="edit_keterangan" class="block mb-2 text-sm font-medium text-gray-700">Keterangan
+                            (opsional):</label>
+                        <textarea id="edit_keterangan" name="keterangan" rows="3"
+                            class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Keterangan tambahan..."></textarea>
                     </div>
                 </form>
             </div>
             <div class="items-center px-4 py-3">
-                <button id="updateItemBtn" onclick="updateCartItem()" class="w-full px-4 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-blue-500 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                <button id="updateItemBtn" onclick="updateCartItem()"
+                    class="w-full px-4 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-blue-500 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
                     Update
                 </button>
-                <button onclick="closeEditModal()" class="w-full px-4 py-2 mt-3 text-base font-medium text-black transition duration-150 ease-in-out bg-gray-300 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                <button onclick="closeEditModal()"
+                    class="w-full px-4 py-2 mt-3 text-base font-medium text-black transition duration-150 ease-in-out bg-gray-300 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
                     Batal
                 </button>
             </div>
@@ -110,6 +123,9 @@
 </div>
 
 <script>
+    // Bidang constants for JavaScript
+const bidangNames = @json(\App\Constants\BidangConstants::getBidangList());
+
 // Load cart content when page loads
 document.addEventListener('DOMContentLoaded', function() {
     loadCartContent();
@@ -390,7 +406,7 @@ function submitPengambilanBidang(bidang) {
     // Tampilkan SweetAlert konfirmasi
     Swal.fire({
         title: 'Konfirmasi Pengambilan',
-        text: `Yakin ingin mengajukan pengambilan untuk semua item di bidang ${bidang.charAt(0).toUpperCase() + bidang.slice(1)}?`,
+        text: `Yakin ingin mengajukan pengambilan untuk semua item di bidang ${bidangNames[bidang] || bidang}?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3b82f6',

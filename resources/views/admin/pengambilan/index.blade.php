@@ -285,11 +285,9 @@ SISTEM MONITORING BARANG HABIS PAKAI
                     <select id="bidang" name="bidang" required
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-400 focus:border-gray-400">
                         <option value="">Pilih Bidang</option>
-                        <option value="umum">Umum</option>
-                        <option value="perencanaan">Perencanaan</option>
-                        <option value="keuangan">Keuangan</option>
-                        <option value="operasional">Operasional</option>
-                        <option value="lainnya">Lainnya</option>
+                        @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
+                        <option value="{{ $key }}">{{ $label }}</option>
+                        @endforeach
                     </select>
                 </div>
 

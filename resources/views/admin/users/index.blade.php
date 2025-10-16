@@ -207,10 +207,14 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                                 bg-purple-100 text-purple-800
                                             @elseif($user->bidang === 'keuangan')
                                                 bg-yellow-100 text-yellow-800
+                                            @elseif($user->bidang === 'strategi_korporasi')
+                                                bg-blue-100 text-blue-800
+                                            @elseif($user->bidang === 'op')
+                                                bg-red-100 text-red-800
                                             @else
                                                 bg-gray-100 text-gray-800
                                             @endif">
-                                        {{ ucfirst($user->bidang) }}
+                                        {{ \App\Constants\BidangConstants::getBidangName($user->bidang) }}
                                     </span>
                                 </td>
                                 <td class="px-3 py-4 border border-gray-300">

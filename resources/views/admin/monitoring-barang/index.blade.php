@@ -158,7 +158,8 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 </div>
                                 <div class="grid grid-cols-2 gap-2 mb-3 text-xs text-gray-600">
                                     <div><span class="font-medium">Pengambil:</span> {{ $item->nama_pengambil }}</div>
-                                    <div><span class="font-medium">Bidang:</span> {{ ucfirst($item->bidang) }}</div>
+                                    <div><span class="font-medium">Bidang:</span> {{
+                                        \App\Constants\BidangConstants::getBidangName($item->bidang) }}</div>
                                     <div><span class="font-medium">Tanggal:</span> {{
                                         \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}</div>
                                     <div><span class="font-medium">Kredit:</span> <span
@@ -243,7 +244,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         class="w-48 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Nama Barang</th>
                                     <th
-                                        class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Jenis</th>
                                     <th
                                         class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
@@ -267,7 +268,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Keterangan</th>
                                     <th
-                                        class="w-24 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Aksi</th>
                                 </tr>
                             </thead>
@@ -306,7 +307,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         {{ $item->nama_pengambil }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
-                                        {{ ucfirst($item->bidang) }}
+                                        {{ \App\Constants\BidangConstants::getBidangName($item->bidang) }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-right text-gray-900 border">
                                         {{ number_format($item->saldo, 0, ',', '.') }}

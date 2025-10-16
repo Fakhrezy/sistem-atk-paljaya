@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\DetailMonitoringBarang;
 use App\Models\Barang;
 use App\Services\DetailMonitoringBarangService;
+use App\Constants\BidangConstants;
 
 class DetailMonitoringBarangController extends Controller
 {
@@ -44,15 +45,24 @@ class DetailMonitoringBarangController extends Controller
             $query = $this->detailMonitoringService->getDetailMonitoring($filters);
             $detailMonitoring = $query->paginate(20)->appends($request->query());
 
+            // Hitung total kredit dan debit berdasarkan filter yang sama
+            $statsQuery = $this->detailMonitoringService->getDetailMonitoring($filters);
+            $statistics = [
+                'total_kredit' => (int) ($statsQuery->sum('kredit') ?? 0),
+                'total_debit' => (int) ($statsQuery->sum('debit') ?? 0),
+                'total_saldo' => (int) ($statsQuery->sum('saldo') ?? 0),
+            ];
+
             // Data untuk filter dropdown
             $barangList = Barang::select('id_barang', 'nama_barang')->orderBy('nama_barang')->get();
-            $bidangList = ['umum', 'perencanaan', 'keuangan', 'operasional', 'lainnya'];
+            $bidangList = BidangConstants::getBidangKeys();
 
             return view('admin.detail-monitoring-barang.index', compact(
                 'detailMonitoring',
                 'barangList',
                 'bidangList',
-                'filters'
+                'filters',
+                'statistics'
             ));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -74,6 +84,41 @@ class DetailMonitoringBarangController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal melakukan sinkronisasi: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get statistics for filtered data (AJAX)
+     */
+    public function getStatistics(Request $request)
+    {
+        try {
+            $filters = [
+                'id_barang' => $request->get('id_barang'),
+                'start_date' => $request->get('start_date'),
+                'end_date' => $request->get('end_date'),
+                'bidang' => $request->get('bidang'),
+                'jenis' => $request->get('jenis'),
+            ];
+
+            // Mendapatkan query yang sama dengan index
+            $statsQuery = $this->detailMonitoringService->getDetailMonitoring($filters);
+
+            $statistics = [
+                'total_kredit' => (int) ($statsQuery->sum('kredit') ?? 0),
+                'total_debit' => (int) ($statsQuery->sum('debit') ?? 0),
+                'total_saldo' => (int) ($statsQuery->sum('saldo') ?? 0),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $statistics
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil statistik: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -202,7 +247,7 @@ class DetailMonitoringBarangController extends Controller
                 <td class="text-center">' . $item->tanggal->format('d/m/Y') . '</td>
                 <td class="text-left">' . htmlspecialchars($item->barang->nama_barang ?? $item->nama_barang ?? '-') . '</td>
                 <td class="text-left">' . htmlspecialchars($item->keterangan ?? '-') . '</td>
-                <td class="text-center">' . ($item->bidang ? ucfirst($item->bidang) : '-') . '</td>
+                <td class="text-center">' . ($item->bidang ? BidangConstants::getBidangName($item->bidang) : '-') . '</td>
                 <td class="text-center">' . htmlspecialchars($item->pengambil ?? '-') . '</td>
                 <td class="text-center">' . ($item->debit ? number_format($item->debit, 0, ',', '.') : '0') . '</td>
                 <td class="text-center">' . ($item->kredit ? number_format($item->kredit, 0, ',', '.') : '0') . '</td>

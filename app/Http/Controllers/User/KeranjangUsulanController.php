@@ -219,6 +219,7 @@ class KeranjangUsulanController extends Controller
                     MonitoringPengadaan::create([
                         'user_id' => Auth::id(),
                         'barang_id' => $item->barang->id_barang,
+                        'saldo' => $item->barang->stok, // Set saldo sesuai stok saat pengadaan dibuat
                         'debit' => $item->jumlah,
                         'saldo_akhir' => $item->barang->stok, // Set saldo_akhir sesuai stok saat ini
                         'keterangan' => $item->keterangan,

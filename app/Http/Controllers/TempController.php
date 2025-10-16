@@ -1,55 +1,41 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Barang;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
+use App\Models\DetailMonitoringBarang;
+use App\Models\Barang;
+use App\Services\DetailMonitoringBarangService;
 
-class TempController extends Controller
+class DetailMonitoringBarangControllerTemp extends Controller
 {
-    public function temp()
-    {
-        return view('admin.temp');
+    protected $detailMonitoringBarangService;
 
+    public function __construct(DetailMonitoringBarangService $detailMonitoringBarangService)
+    {
+        $this->detailMonitoringBarangService = $detailMonitoringBarangService;
+        $this->middleware(['auth', 'role:admin']);
     }
 
-    public function tempStore(Request $request)
+    public function index(Request $request)
     {
-        $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'satuan' => 'required|string|max:100',
-            'harga_barang' => 'required|numeric',
-            'jenis' => 'required|in:atk,cetak,tinta',
-            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048'
+        try{
+            if($request->get('sync')){
+                $this->detailMonitoringBarangService->syncAllData();
+                return redirect()->route('admin.detail-monitoring-barang.index')->with('success', 'Data monitoring berhasil disinkronisasi!');
+            }
+            $filters = [
+                'id_barang' => $request->get('id_barang'),
+                'start_date' => $request->get('start_date'),
+                'end_date' => $request->get('end_date'),
+                'bidang' => $request->get('bidang'),
+                'jenis' => $request->get('jenis'),
+            ];
 
-        ]);
-    }
-
-    public function tempShow()
-    {
-        return view('admin.temp-show');
-    }
-
-    public function tempEdit()
-    {
-        return view('admin.temp-edit');
-
-    }
-
-    public function tempUpdate(Request $request)
-    {
-        $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'satuan' => 'required|string|max:100',
-            'harga_barang' => 'required|numeric|min:0',
-            'jenis' => 'required|in:atk,cetak,tinta',
-            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
-        ]);
-    }
-
-    public function tempDestroy()
-    {
-        return redirect()->route('admin.temp.index');
-    }
+            $query = $this->detailMonitoringBarangService->getDetailMonitoring($filters);
+            $detailMonitoring = $query->paginate(20)->appends($request->query());
+        }
+        catch(Exception $e){
+            return redirect()->route('admin.ba
+        }
 }
+

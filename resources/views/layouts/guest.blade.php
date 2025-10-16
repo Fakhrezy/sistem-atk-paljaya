@@ -25,7 +25,7 @@
                 </a>
                 <div class="mt-4">
                     <h1 class="text-lg font-semibold text-gray-800 leading-tight">
-                        SISTEM INFORMASI BARANG HABIS PAKAI
+                        SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     </h1>
                     <h2 class="text-lg font-semibold text-blue-800 leading-tight">PERUMDA PALJAYA</h2>
                 </div>

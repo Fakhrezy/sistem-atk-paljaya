@@ -94,6 +94,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/detail-monitoring-barang', 'index')->name('admin.detail-monitoring-barang.index');
         Route::post('/admin/detail-monitoring-barang/sync', 'sync')->name('admin.detail-monitoring-barang.sync');
         Route::post('/admin/detail-monitoring-barang/update-saldo', 'updateSaldo')->name('admin.detail-monitoring-barang.update-saldo');
+        Route::get('/admin/detail-monitoring-barang/statistics', 'getStatistics')->name('admin.detail-monitoring-barang.statistics');
         Route::get('/admin/detail-monitoring-barang/export', 'export')->name('admin.detail-monitoring-barang.export');
         Route::get('/admin/detail-monitoring-barang/{id}', 'show')->name('admin.detail-monitoring-barang.show');
         Route::get('/admin/detail-monitoring-barang/{id}/edit', 'edit')->name('admin.detail-monitoring-barang.edit');

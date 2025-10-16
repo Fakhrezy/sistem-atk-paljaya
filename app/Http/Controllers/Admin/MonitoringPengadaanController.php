@@ -7,11 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\MonitoringPengadaan;
 use App\Models\MonitoringBarang;
 use App\Models\Barang;
+use App\Services\DetailMonitoringBarangService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class MonitoringPengadaanController extends Controller
 {
+    protected $detailMonitoringService;
+
+    public function __construct(DetailMonitoringBarangService $detailMonitoringService)
+    {
+        $this->middleware(['auth']);
+        $this->detailMonitoringService = $detailMonitoringService;
+    }
+
     public function index(Request $request)
     {
         $query = MonitoringPengadaan::with(['barang'])
@@ -65,33 +74,34 @@ class MonitoringPengadaanController extends Controller
                 $pengadaan->barang->stok += $jumlahPengadaan;
                 $pengadaan->barang->save();
 
-                // Update saldo_akhir di monitoring pengadaan
-                $pengadaan->saldo_akhir = $pengadaan->barang->stok;
+                // Update saldo dan saldo_akhir di monitoring pengadaan
+                $pengadaan->saldo = $pengadaan->barang->stok - $jumlahPengadaan; // Saldo sebelum pengadaan
+                $pengadaan->saldo_akhir = $pengadaan->barang->stok; // Saldo setelah pengadaan
 
-                // Update saldo di tabel monitoring barang yang belum diterima
-                $this->updateMonitoringBarangSaldo($pengadaan->barang->id_barang, $pengadaan->barang->stok);
-
-                $message = 'Pengadaan berhasil diselesaikan, stok barang telah ditambahkan, dan saldo monitoring diperbarui';
+                $message = 'Pengadaan berhasil diselesaikan dan disimpan ke detail monitoring barang';
             } elseif ($oldStatus === 'selesai' && $newStatus === 'proses') {
-                // When reverting completion, decrease stock
+                // When reverting completion, decrease stock and saldo
                 if ($pengadaan->barang->stok < $jumlahPengadaan) {
                     throw new \Exception('Stok tidak mencukupi untuk pembatalan. Pastikan stok barang cukup.');
                 }
+
+                // Kurangi stok barang
                 $pengadaan->barang->stok -= $jumlahPengadaan;
                 $pengadaan->barang->save();
 
-                // Reset saldo_akhir karena kembali ke proses
+                // Update saldo di monitoring pengadaan (kembalikan ke nilai sebelum pengadaan)
+                $pengadaan->saldo -= $jumlahPengadaan;
                 $pengadaan->saldo_akhir = $pengadaan->barang->stok;
 
-                // Update saldo di tabel monitoring barang yang belum diterima
-                $this->updateMonitoringBarangSaldo($pengadaan->barang->id_barang, $pengadaan->barang->stok);
-
-                $message = 'Status pengadaan dikembalikan ke proses, stok barang telah dikurangi, dan saldo monitoring diperbarui';
+                $message = 'Status pengadaan dikembalikan ke ' . $newStatus . ', stok dan saldo telah dikurangi dengan debit: ' . $jumlahPengadaan;
             }
 
             // Update pengadaan status
             $pengadaan->status = $newStatus;
             $pengadaan->save();
+
+            // Sinkronisasi ke detail monitoring barang berdasarkan status baru
+            $this->detailMonitoringService->syncOnStatusChange('pengadaan', $id, $newStatus);
 
             DB::commit();
 
@@ -187,6 +197,9 @@ class MonitoringPengadaanController extends Controller
                 $barang->stok -= $pengadaan->debit;
                 $barang->save();
             }
+
+            // Hapus dari detail monitoring barang
+            $this->detailMonitoringService->deleteByMonitoringPengadaan($id);
 
             // Hapus data pengadaan
             $pengadaan->delete();

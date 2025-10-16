@@ -6,6 +6,46 @@
 SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 @endsection
 
+@push('styles')
+<style>
+    /* Statistics card animations */
+    .stat-card {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        border-left-width: 6px;
+    }
+
+    .stat-value {
+        transition: all 0.2s ease-in-out;
+    }
+
+    .loading-skeleton {
+        background: linear-gradient(90deg, transparent, rgba(156, 163, 175, 0.3), transparent);
+        background-size: 200% 100%;
+        animation: skeleton-loading 1.5s infinite;
+    }
+
+    @keyframes skeleton-loading {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .error-state {
+        color: #ef4444 !important;
+        font-style: italic;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="h-full">
     <div class="max-w-full">
@@ -17,6 +57,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             <h2 class="text-2xl font-semibold text-gray-800">Detail Monitoring Barang</h2>
                             <p class="mt-1 text-sm text-gray-600">Rekapitulasi monitoring pengambilan dan pengadaan
                                 barang</p>
+                            
                         </div>
                         <div class="flex items-center space-x-3">
                             <!-- Sync Button -->
@@ -43,6 +84,94 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 </svg>
                                 Ekspor Data
                             </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-3" id="statistics-container">
+                    <!-- Total Debit -->
+                    <div class="overflow-hidden bg-white rounded-lg shadow stat-card">
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full">
+                                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1 w-0 ml-5">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-600 truncate">Total Debit (Pengadaan)
+                                        </dt>
+                                        <dd class="text-lg font-medium text-gray-900 stat-value" id="total-debit">
+                                            {{ isset($statistics['total_debit']) ?
+                                            number_format($statistics['total_debit'], 0, ',', '.') : '0' }}
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Kredit -->
+                    <!-- Total Kredit -->
+                    <div class="overflow-hidden bg-white rounded-lg shadow stat-card">
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full">
+                                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M18 12H6"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1 w-0 ml-5">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-600 truncate">Total Kredit (Pemakaian)
+                                        </dt>
+                                        <dd class="text-lg font-medium text-gray-900 stat-value" id="total-kredit">
+                                            {{ isset($statistics['total_kredit']) ?
+                                            number_format($statistics['total_kredit'], 0, ',', '.') : '0' }}
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Total Saldo -->
+                    <div class="overflow-hidden bg-white rounded-lg shadow stat-card">
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full">
+                                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex-1 w-0 ml-5">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-600 truncate">Total Saldo
+                                        </dt>
+                                        <dd class="text-lg font-medium text-gray-900 stat-value" id="total-saldo">
+                                            @if(empty($filters['id_barang']))
+                                            -
+                                            @else
+                                            {{ isset($statistics['total_saldo']) ?
+                                            number_format($statistics['total_saldo'], 0, ',', '.') : '0' }}
+                                            @endif
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +214,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 <option value="">Semua Bidang</option>
                                 @foreach($bidangList as $bidang)
                                 <option value="{{ $bidang }}" {{ $filters['bidang']==$bidang ? 'selected' : '' }}>
-                                    {{ ucfirst($bidang) }}
+                                    {{ \App\Constants\BidangConstants::getBidangName($bidang) }}
                                 </option>
                                 @endforeach
                             </select>
@@ -104,7 +233,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         </div>
 
                         <div class="flex items-end space-x-2">
-                            <button type="submit"
+                            <button type="submit" id="filter-submit"
                                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1 text-gray-500" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
@@ -154,6 +283,10 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 
                 <!-- Data Table -->
                 <div class="bg-white rounded-lg shadow">
+                </div>
+
+                <!-- Data Table -->
+                <div class="bg-white rounded-lg shadow">
                     <!-- Mobile view -->
                     <div class="hidden lg:hidden">
                         <div class="p-4 space-y-4">
@@ -196,7 +329,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             <span class="font-medium text-gray-600">Bidang:</span>
                                             <span
                                                 class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded">
-                                                {{ ucfirst($item->bidang) }}
+                                                {{ \App\Constants\BidangConstants::getBidangName($item->bidang) }}
                                             </span>
                                         </div>
                                         @endif
@@ -326,7 +459,8 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     </td>
                                     <!-- Uraian: Bidang -->
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border">
-                                        {{ $item->bidang ? ucfirst($item->bidang) : '-' }}
+                                        {{ $item->bidang ? \App\Constants\BidangConstants::getBidangName($item->bidang)
+                                        : '-' }}
                                     </td>
                                     <!-- Uraian: Pengambil -->
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border">
@@ -378,7 +512,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 function syncData() {
     Swal.fire({
         title: 'Sinkronisasi Data?',
-        text: 'Proses ini akan menyinkronkan data dari monitoring barang dan pengadaan ke detail monitoring.',
+        html: 'Proses ini akan menyinkronkan data ke detail monitoring dari:<br>' +
+              '• <strong>Monitoring Barang</strong> dengan status <span class="text-green-600">Disetujui/Terima/Diterima</span><br>' +
+              '• <strong>Monitoring Pengadaan</strong> dengan status <span class="text-blue-600">Disetujui/Selesai</span>',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3b82f6',
@@ -443,5 +579,145 @@ function syncData() {
         }
     });
 }
+
+// Function to update statistics in real-time
+function updateStatistics() {
+    const form = document.querySelector('form[method="GET"]');
+    if (!form) return;
+
+    const formData = new FormData(form);
+    const params = new URLSearchParams();
+
+    // Convert FormData to URLSearchParams
+    for (let [key, value] of formData.entries()) {
+        if (value && value.trim() !== '') {
+            params.append(key, value);
+        }
+    }
+
+    // Show loading indicators
+    showLoadingState();
+
+    // Fetch updated statistics
+    fetch('{{ route('admin.detail-monitoring-barang.statistics') }}?' + params.toString(), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success && data.data) {
+            // Update statistics cards with error checking
+            updateStatCard('total-debit', data.data.total_debit);
+            updateStatCard('total-kredit', data.data.total_kredit);
+            updateStatCard('total-saldo', data.data.total_saldo);
+
+            // Add success animation
+            addUpdateAnimation();
+        } else {
+            throw new Error(data.message || 'Invalid data received');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating statistics:', error);
+        showErrorState(error.message);
+    })
+    .finally(() => {
+        hideLoadingState();
+    });
+}
+
+// Helper function to update individual stat card
+function updateStatCard(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        // Special case for total-saldo when no specific item is selected
+        if (elementId === 'total-saldo') {
+            const idBarangSelect = document.getElementById('id_barang');
+            if (idBarangSelect && idBarangSelect.value === '') {
+                element.textContent = '-';
+                return;
+            }
+        }
+        const formattedValue = numberFormat(value || 0);
+        element.textContent = formattedValue;
+    }
+}
+
+// Helper function to show loading state
+function showLoadingState() {
+    const statCards = ['total-debit', 'total-kredit', 'total-saldo'];
+    statCards.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.classList.add('opacity-50');
+        }
+    });
+}
+
+// Helper function to hide loading state
+function hideLoadingState() {
+    const statCards = ['total-debit', 'total-kredit', 'total-saldo'];
+    statCards.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.classList.remove('opacity-50');
+        }
+    });
+}
+
+// Helper function to add update animation
+function addUpdateAnimation() {
+    const statCards = ['total-debit', 'total-kredit', 'total-saldo'];
+    statCards.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.classList.add('animate-pulse');
+            setTimeout(() => {
+                element.classList.remove('animate-pulse');
+            }, 1000);
+        }
+    });
+}
+
+// Helper function to show error state
+function showErrorState(message) {
+    // Optional: Show a small error indicator
+    console.warn('Statistics update failed:', message);
+}
+
+// Number formatting function
+function numberFormat(number) {
+    return new Intl.NumberFormat('id-ID').format(number);
+}
+
+// Event listeners for real-time updates
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for changes in filter inputs
+    const filterInputs = document.querySelectorAll('#id_barang, #start_date, #end_date, #bidang, #jenis');
+
+    filterInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            // Small delay to allow user to finish typing
+            setTimeout(updateStatistics, 300);
+        });
+    });
+
+    // Listen for form submission to update statistics immediately
+    const filterForm = document.querySelector('form[method="GET"]');
+    if (filterForm) {
+        filterForm.addEventListener('submit', function(e) {
+            // Don't prevent default, but update statistics
+            setTimeout(updateStatistics, 100);
+        });
+    }
+});
 </script>
 @endsection
