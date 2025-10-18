@@ -15,7 +15,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Daftar Barang Tersedia</h2>
-                            <p class="mt-1 text-sm text-gray-600">Pilih barang untuk mengajukan usulan pengadaan</p>
+                            <p class="mt-1 text-sm text-gray-600">Pilih barang untuk menambahkan pengadaan</p>
                         </div>
                         <!-- Cart Link -->
                         <div class="flex items-center space-x-4">
@@ -406,7 +406,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                     });
                     form.reset();
                 } else {
-                    Swal.fire('Error!', data.message || 'Terjadi kesalahan saat mengajukan usulan', 'error');
+                    Swal.fire('Error!', data.message || 'Terjadi kesalahan saat menambahkan pengadaan', 'error');
                 }
 																})
                 .catch(error => {

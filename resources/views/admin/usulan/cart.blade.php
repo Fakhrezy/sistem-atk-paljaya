@@ -181,7 +181,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                         </button>
                         <button onclick="submitUsulan()"
                             class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-blue-500 rounded-lg hover:bg-blue-600"
-                            title="Ajukan semua usulan">
+                            title="Catat semua Penambahan">
                             <i class="mr-2 fas fa-paper-plane"></i>Catat Penambahan
                         </button>
                     </div>
@@ -566,7 +566,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																showCancelButton: true,
 																confirmButtonColor: '#3085d6',
 																cancelButtonColor: '#6B7280',
-																confirmButtonText: '<i class="mr-2 fas fa-check"></i>Ajukan!',
+																confirmButtonText: '<i class="mr-2 fas fa-check"></i>Simpan',
 																cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
 																reverseButtons: true
 												}).then((result) => {
@@ -615,7 +615,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																																});
 																												} else {
 																																const errorMessage = typeof data.message === 'string' ? data.message :
-																																				'Terjadi kesalahan saat mengajukan penambahan.';
+																																				'Terjadi kesalahan saat melakukan penambahan.';
 																																Swal.fire({
 																																				title: 'Error!',
 																																				text: errorMessage,
@@ -626,7 +626,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
 																								})
 																								.catch(error => {
 																												console.error('Error:', error);
-																												const errorMessage = error.message || 'Terjadi kesalahan saat mengajukan penambahan.';
+																												const errorMessage = error.message || 'Terjadi kesalahan saat melakukan penambahan.';
 																												Swal.fire({
 																																title: 'Error!',
 																																text: errorMessage,

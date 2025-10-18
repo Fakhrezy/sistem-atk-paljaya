@@ -232,6 +232,9 @@ class CartController extends Controller
 
         $request->validate([
             'quantity' => 'required|integer|min:1',
+            'bidang' => 'required|string',
+            'pengambil' => 'required|string|max:255',
+            'keterangan' => 'nullable|string',
         ]);
 
         $barang = $cart->barang;
@@ -243,14 +246,31 @@ class CartController extends Controller
             ]);
         }
 
+        // Check if another cart item exists with the same barang and bidang (excluding current cart)
+        $existingCart = Cart::where('user_id', auth()->id())
+            ->where('id_barang', $cart->id_barang)
+            ->where('bidang', $request->bidang)
+            ->where('id', '!=', $cart->id)
+            ->first();
+
+        if ($existingCart) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item dengan barang yang sama sudah ada di bidang "' . $request->bidang . '". Silakan hapus salah satu atau edit yang sudah ada.'
+            ]);
+        }
+
         $cart->update([
             'quantity' => $request->quantity,
+            'bidang' => $request->bidang,
+            'pengambil' => $request->pengambil,
+            'keterangan' => $request->keterangan,
             'jenis_barang' => $barang->jenis, // Update jenis barang dari tabel barang
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Jumlah item berhasil diupdate!'
+            'message' => 'Item keranjang berhasil diupdate!'
         ]);
     }
 

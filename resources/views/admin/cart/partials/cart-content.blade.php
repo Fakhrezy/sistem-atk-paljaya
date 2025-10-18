@@ -23,16 +23,16 @@
             <h3 class="flex items-center text-lg font-semibold text-gray-800">
                 @switch($bidang)
                 @case('umum')
-                <i class="mr-2 text-blue-600 fas fa-users"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @case('perencanaan')
-                <i class="mr-2 text-green-600 fas fa-chart-line"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @case('keuangan')
-                <i class="mr-2 text-yellow-600 fas fa-coins"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @case('operasional')
-                <i class="mr-2 text-purple-600 fas fa-cogs"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @default
                 <i class="mr-2 text-gray-600 fas fa-building"></i>
@@ -151,7 +151,7 @@
                     </div>
                     <button onclick="submitPengambilanBidang('{{ $bidang }}')"
                         class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-blue-500 rounded-lg hover:bg-blue-600"
-                        title="Ajukan pengambilan untuk bidang {{ \App\Constants\BidangConstants::getBidangName($bidang) }}">
+                        title="Catat pengambilan untuk bidang {{ \App\Constants\BidangConstants::getBidangName($bidang) }}">
                         <i class="mr-2 fas fa-paper-plane"></i>Catat Pengambilan
                     </button>
                 </div>

@@ -102,6 +102,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::delete('/admin/detail-monitoring-barang/{id}', 'destroy')->name('admin.detail-monitoring-barang.destroy');
     });
 
+    // Route :-> laporan triwulan
+    Route::controller(App\Http\Controllers\Admin\LaporanTriwulanController::class)->group(function () {
+        Route::get('/admin/laporan-triwulan', 'index')->name('admin.laporan-triwulan.index');
+        Route::post('/admin/laporan-triwulan/generate', 'generate')->name('admin.laporan-triwulan.generate');
+        Route::post('/admin/laporan-triwulan/generate-current', 'generateCurrent')->name('admin.laporan-triwulan.generate-current');
+        Route::delete('/admin/laporan-triwulan/delete', 'delete')->name('admin.laporan-triwulan.delete');
+        Route::get('/admin/laporan-triwulan/export', 'export')->name('admin.laporan-triwulan.export');
+        Route::get('/admin/laporan-triwulan/statistik', 'statistik')->name('admin.laporan-triwulan.statistik');
+        Route::get('/admin/laporan-triwulan/{id}', 'show')->name('admin.laporan-triwulan.show');
+        Route::put('/admin/laporan-triwulan/{id}/update', 'updateItem')->name('admin.laporan-triwulan.update-item');
+        Route::delete('/admin/laporan-triwulan/{id}', 'destroy')->name('admin.laporan-triwulan.destroy');
+    });
+
     // Route :-> API notifikasi
     Route::get('/admin/notifications/count', function () {
         try {

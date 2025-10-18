@@ -499,7 +499,7 @@ function updateCartItem() {
     })
     .finally(() => {
         updateBtn.disabled = false;
-        updateBtn.textContent = 'Update Item';
+        updateBtn.textContent = 'Simpan';
     });
 }
 
@@ -513,7 +513,7 @@ function submitPengambilanBidang(bidang) {
         showCancelButton: true,
         confirmButtonColor: '#3b82f6',
         cancelButtonColor: '#9ca3af',
-        confirmButtonText: '<i class="mr-2 fas fa-check"></i>Ajukan!',
+        confirmButtonText: '<i class="mr-2 fas fa-check"></i>Simpan',
         cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
         reverseButtons: true
     }).then((result) => {
@@ -573,7 +573,7 @@ function processCheckoutDirect(bidang) {
         console.error('Error:', error);
         Swal.fire({
             title: 'Error!',
-            text: 'Terjadi kesalahan saat mengajukan pengambilan.',
+            text: 'Terjadi kesalahan saat melakukan pengambilan.',
             icon: 'error',
             confirmButtonColor: '#dc2626',
             confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'

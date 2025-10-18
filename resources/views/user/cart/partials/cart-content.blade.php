@@ -23,16 +23,16 @@
             <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                 @switch($bidang)
                 @case('umum')
-                <i class="fas fa-users mr-2 text-blue-600"></i>
+                <i class="fas fa-building mr-2 text-gray-600"></i>
                 @break
                 @case('perencanaan')
-                <i class="fas fa-chart-line mr-2 text-green-600"></i>
+                <i class="fas fa-building mr-2 text-gray-600"></i>
                 @break
                 @case('keuangan')
-                <i class="fas fa-coins mr-2 text-yellow-600"></i>
+                <i class="fas fa-building mr-2 text-gray-600"></i>
                 @break
                 @case('operasional')
-                <i class="fas fa-cogs mr-2 text-purple-600"></i>
+                <i class="fas fa-building mr-2 text-gray-600"></i>
                 @break
                 @default
                 <i class="fas fa-building mr-2 text-gray-600"></i>

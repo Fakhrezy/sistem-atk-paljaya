@@ -118,13 +118,13 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     <div class="overflow-hidden bg-white border border-gray-200 shadow-sm sm:rounded-lg">
                         <div class="p-6">
                             <div class="mb-6">
-                                <h3 class="text-xl font-semibold text-gray-800">Stok Rendah
+                                <h3 class="text-xl font-semibold text-gray-800">Informasi stok barang terendah
                                 </h3>
                                 {{-- <p class="text-sm text-gray-600 mt-1">10 barang dengan stok terendah yang
                                     perludiperhatikan</p> --}}
 
                                 <!-- Legend -->
-                                <div class="flex flex-wrap gap-4 mt-3">
+                                {{-- <div class="flex flex-wrap gap-4 mt-3">
                                     <div class="flex items-center">
                                         <div class="w-4 h-4 bg-green-500 rounded mr-2"></div>
                                         <span class="text-sm text-gray-600">ATK</span>
@@ -138,7 +138,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             style="background-color: rgba(147, 51, 234, 0.8);"></div>
                                         <span class="text-sm text-gray-600">Tinta</span>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <!-- Chart Container -->
@@ -263,11 +263,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 text: 'Barang'
                             },
                             ticks: {
-                                maxRotation: 45,
-                                minRotation: 45,
-                                font: {
-                                    size: 11
-                                }
+                                display: false
                             },
                             grid: {
                                 display: false

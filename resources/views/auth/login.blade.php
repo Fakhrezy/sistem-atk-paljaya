@@ -44,13 +44,14 @@
             </x-primary-button>
         </div>
 
-        <div class="text-center mt-4">
+        {{-- <div class="text-center mt-4">
             <p class="text-sm text-gray-600">
                 {{ __('Belum memiliki akun?') }}
                 <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
                     {{ __('Register disini') }}
                 </a>
             </p>
-        </div>
+        </div> --}}
+
     </form>
 </x-guest-layout>
