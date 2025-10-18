@@ -141,7 +141,8 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             Ekspor Data
                         </a>
 
-                        {{-- <a href="{{ route('admin.barang.print') }}{{ request()->has('search') || request()->has('jenis') ? '?' . http_build_query(request()->all()) : '' }}"
+                        {{-- <a
+                            href="{{ route('admin.barang.print') }}{{ request()->has('search') || request()->has('jenis') ? '?' . http_build_query(request()->all()) : '' }}"
                             target="_blank"
                             class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-gray-600 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 hover:shadow">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-600" fill="none"
@@ -219,9 +220,12 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     </span>
                                 </td>
                                 <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">
+                                    <span class="text-sm text-gray-900">
+                                        @if($item->jenis === 'atk')
+                                        ATK
+                                        @else
                                         {{ ucfirst($item->jenis) }}
+                                        @endif
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 border border-gray-300 whitespace-nowrap">
@@ -250,9 +254,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="{{ route('admin.detail-monitoring-barang.index', ['id_barang' => $item->id_barang]) }}"
-                                            class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
+                                            class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-800 rounded hover:bg-blue-900"
                                             title="Detail Monitoring Barang">
-                                            <i class="fas fa-file-alt"></i>
+                                            <i class="fas fa-eye"></i>
                                         </a>
                                         <button onclick="deleteBarang('{{ route('admin.barang.destroy', $item) }}')"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600"

@@ -139,12 +139,21 @@
                                 <button onclick="toggleDropdown('monitoringBarang')"
                                     class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*', 'admin.monitoring-pengadaan*', 'admin.detail-monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
                                     <div class="flex items-center">
-                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                                            </path>
-                                        </svg>
+                                        <div class="relative">
+                                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                            @if((isset($notifications['monitoring_pengambilan']) &&
+                                            $notifications['monitoring_pengambilan'] > 0) ||
+                                            (isset($notifications['monitoring_pengadaan']) &&
+                                            $notifications['monitoring_pengadaan'] > 0))
+                                            <span
+                                                class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full shadow-lg notification-badge"></span>
+                                            @endif
+                                        </div>
                                         <span class="truncate">Monitoring Barang</span>
                                     </div>
                                     <svg id="monitoringBarang-icon" class="w-4 h-4 transition-transform duration-200"
@@ -360,6 +369,7 @@
                 if (data.success) {
                     updateBadge('monitoring-pengambilan', data.notifications.monitoring_pengambilan);
                     updateBadge('monitoring-pengadaan', data.notifications.monitoring_pengadaan);
+                    updateMonitoringHeaderBadge(data.notifications.monitoring_pengambilan, data.notifications.monitoring_pengadaan);
                 }
             })
             .catch(error => {
@@ -386,6 +396,25 @@
                     badge.remove();
                 }
             });
+        }
+
+        // Update monitoring header badge
+        function updateMonitoringHeaderBadge(pengambilanCount, pengadaanCount) {
+            const monitoringButton = document.querySelector('button[onclick="toggleDropdown(\'monitoringBarang\')"]');
+            if (!monitoringButton) return;
+
+            const iconContainer = monitoringButton.querySelector('.relative');
+            let headerBadge = iconContainer.querySelector('.notification-badge');
+
+            if ((pengambilanCount > 0) || (pengadaanCount > 0)) {
+                if (!headerBadge) {
+                    headerBadge = document.createElement('span');
+                    headerBadge.className = 'absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full shadow-lg notification-badge';
+                    iconContainer.appendChild(headerBadge);
+                }
+            } else if (headerBadge) {
+                headerBadge.remove();
+            }
         }
     </script>
 </body>

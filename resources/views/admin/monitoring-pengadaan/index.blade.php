@@ -145,12 +145,14 @@ SISTEM MONITORING BARANG HABIS PAKAI
                                     {{ $pengadaan->barang->satuan }}
                                 </td>
                                 <td class="px-3 py-3 text-sm text-right text-gray-900 border">
-                                    <span class="font-medium text-blue-600">
+                                    <span class="font-medium text-black">
                                         {{ number_format($pengadaan->saldo ?? $pengadaan->barang->stok, 0, ',', '.') }}
                                     </span>
                                 </td>
                                 <td class="px-3 py-3 text-sm text-right text-gray-900 border">
-                                    {{ $pengadaan->debit }}
+                                    <span class="font-medium text-blue-600">
+                                        {{ $pengadaan->debit }}
+                                    </span>
                                 </td>
                                 <td class="px-3 py-3 text-sm text-right border">
                                     <span class="font-medium text-gray-900">
