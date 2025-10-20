@@ -57,7 +57,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             <h2 class="text-2xl font-semibold text-gray-800">Detail Monitoring Barang</h2>
                             <p class="mt-1 text-sm text-gray-600">Rekapitulasi monitoring pengambilan dan pengadaan
                                 barang</p>
-                            
+
                         </div>
                         <div class="flex items-center space-x-3">
                             <!-- Sync Button -->
@@ -512,9 +512,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 function syncData() {
     Swal.fire({
         title: 'Sinkronisasi Data?',
-        html: 'Proses ini akan menyinkronkan data ke detail monitoring dari:<br>' +
-              '• <strong>Monitoring Barang</strong> dengan status <span class="text-green-600">Disetujui/Terima/Diterima</span><br>' +
-              '• <strong>Monitoring Pengadaan</strong> dengan status <span class="text-blue-600">Disetujui/Selesai</span>',
+        html: 'Proses ini akan menyinkronkan data ke detail monitoring dari:<br>',
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3b82f6',

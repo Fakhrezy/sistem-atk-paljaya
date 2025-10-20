@@ -59,4 +59,10 @@ class Barang extends Model
     {
         return $this->hasMany(MonitoringBarang::class, 'id_barang', 'id_barang');
     }
+
+    // Relationship dengan tabel triwulan
+    public function triwulan()
+    {
+        return $this->hasMany(Triwulan::class, 'id_barang', 'id_barang');
+    }
 }

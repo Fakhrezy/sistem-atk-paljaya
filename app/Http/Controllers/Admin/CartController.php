@@ -344,7 +344,7 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Pengambilan ATK {$messageDetail} berhasil diajukan dan sedang menunggu persetujuan!"
+                'message' => "Pencatatan pengambilan berhasil disimpan"
             ]);
         } catch (\Exception $e) {
             DB::rollback();

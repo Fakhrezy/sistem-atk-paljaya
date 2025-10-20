@@ -107,23 +107,6 @@
 
                     <!-- Action Buttons -->
                     <div class="flex items-center space-x-2 ml-4">
-                        <!-- Update Quantity -->
-                        <div class="flex items-center border border-gray-300 rounded">
-                            <button onclick="updateQuantity({{ $item->id }}, -1)"
-                                class="px-2 py-1 hover:bg-gray-100 transition ease-in-out duration-150 {{ $item->quantity <= 1 ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                {{ $item->quantity <= 1 ? 'disabled' : '' }} title="Kurangi jumlah">
-                                    <i class="fas fa-minus text-xs text-gray-600"></i>
-                            </button>
-                            <span id="quantity-{{ $item->id }}"
-                                class="px-3 py-1 text-sm border-l border-r border-gray-300 bg-gray-50 font-medium min-w-[3rem] text-center">{{
-                                $item->quantity }}</span>
-                            <button onclick="updateQuantity({{ $item->id }}, 1)"
-                                class="px-2 py-1 hover:bg-gray-100 transition ease-in-out duration-150"
-                                title="Tambah jumlah">
-                                <i class="fas fa-plus text-xs text-gray-600"></i>
-                            </button>
-                        </div>
-
                         <!-- Edit Button -->
                         <button
                             onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->quantity }}, '{{ $item->bidang }}', '{{ addslashes($item->keterangan ?? '') }}', '{{ addslashes($item->pengambil ?? '') }}', {{ $item->barang->stok }}, '{{ $item->barang->satuan }}')"

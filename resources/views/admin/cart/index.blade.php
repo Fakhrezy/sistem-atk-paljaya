@@ -20,7 +20,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         </div>
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('admin.pengambilan.index') }}"
-                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -508,12 +508,12 @@ function submitPengambilanBidang(bidang) {
     // Tampilkan SweetAlert konfirmasi
     Swal.fire({
         title: 'Konfirmasi Pengambilan',
-        text: `Yakin ingin lakukan pengambilan untuk semua item di bidang ${bidangNames[bidang] || bidang}?`,
+        text: `Yakin ingin lakukan pengambilan untuk bidang ${bidangNames[bidang] || bidang}?`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#3b82f6',
         cancelButtonColor: '#9ca3af',
-        confirmButtonText: '<i class="mr-2 fas fa-check"></i>Simpan',
+        confirmButtonText: '<i class="mr-2 fas fa-check"></i>Ya',
         cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
         reverseButtons: true
     }).then((result) => {

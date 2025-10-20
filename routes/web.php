@@ -115,6 +115,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::delete('/admin/laporan-triwulan/{id}', 'destroy')->name('admin.laporan-triwulan.destroy');
     });
 
+    // Route :-> data triwulan
+    Route::controller(App\Http\Controllers\Admin\TriwulanController::class)->group(function () {
+        Route::get('/admin/triwulan', 'index')->name('admin.triwulan.index');
+        Route::get('/admin/triwulan/create', 'create')->name('admin.triwulan.create');
+        Route::post('/admin/triwulan/generate', 'generateData')->name('admin.triwulan.generate');
+        Route::post('/admin/triwulan/sync', 'syncData')->name('admin.triwulan.sync');
+        Route::post('/admin/triwulan/syncall', 'syncAllData')->name('admin.triwulan.syncall');
+        Route::get('/admin/triwulan/{id}/edit', 'edit')->name('admin.triwulan.edit');
+        Route::put('/admin/triwulan/{id}', 'update')->name('admin.triwulan.update');
+        Route::delete('/admin/triwulan/{id}', 'destroy')->name('admin.triwulan.destroy');
+    });
+
     // Route :-> API notifikasi
     Route::get('/admin/notifications/count', function () {
         try {

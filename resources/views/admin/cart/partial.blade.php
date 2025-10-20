@@ -48,31 +48,6 @@
                         </div>
                     </div>
 
-                    <!-- Quantity Controls -->
-                    <div class="flex items-center space-x-3">
-                        <div class="flex items-center border border-gray-300 rounded-lg">
-                            <button onclick="updateQuantity({{ $item->id }}, -1)"
-                                class="p-2 rounded-l-lg hover:bg-gray-100" {{ $item->quantity <= 1 ? 'disabled' : '' }}>
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M20 12H4" />
-                                    </svg>
-                            </button>
-                            <span id="quantity-{{ $item->id }}" class="px-4 py-2 text-sm font-medium">
-                                {{ $item->quantity }}
-                            </span>
-                            <button onclick="updateQuantity({{ $item->id }}, 1)"
-                                class="p-2 rounded-r-lg hover:bg-gray-100" {{ $item->quantity >= $item->barang->stok ?
-                                'disabled' : '' }}>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                            </button>
-                        </div>
-                        <span class="text-sm text-gray-500">{{ $item->barang->satuan }}</span>
-                    </div>
-
                     <!-- Actions -->
                     <div class="flex items-center space-x-2">
                         <button
