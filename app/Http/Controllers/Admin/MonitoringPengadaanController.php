@@ -78,7 +78,7 @@ class MonitoringPengadaanController extends Controller
                 $pengadaan->saldo = $pengadaan->barang->stok - $jumlahPengadaan; // Saldo sebelum pengadaan
                 $pengadaan->saldo_akhir = $pengadaan->barang->stok; // Saldo setelah pengadaan
 
-                $message = 'Pengadaan berhasil diselesaikan dan disimpan ke detail monitoring barang';
+                $message = 'Pengadaan selesai';
             } elseif ($oldStatus === 'selesai' && $newStatus === 'proses') {
                 // When reverting completion, decrease stock and saldo
                 if ($pengadaan->barang->stok < $jumlahPengadaan) {

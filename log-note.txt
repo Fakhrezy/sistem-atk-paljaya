@@ -1,26 +1,11 @@
 todo-logic-note:
 
-
-- buatkan tabel triwulan yang berisi:
-    - no
-    - nama_barang (referensi dari tabel_barang[nama_barang])
-    - satuan (referensi dari tabel_barang[satuan])
-    - harga_satuan (referensi dari tabel_barang[harga_satuan])
-    - saldo_awal_triwulan (stok barang pada awal triwulan dari referensi tabel detail_monitoring_barang)
-    - total_kredit_triwulan (jumlah kredit barang selama 1 triwulan dari referensi tabel detail_monitoring_barang)
-    - total_harga_kredit (harga_satuan * total_kredit_triwulan)
-    - total_debit_triwulan (jumlah debit barang selama 1 triwulan dari referensi tabel detail_monitoring_barang)
-    - total_harga_debit (harga_satuan * total_debit_triwulan)
-    - total_persediaan_triwulan (saldo_awal_triwulan + total_debit_triwulan - total_kredit_triwulan)
-    - total_harga_persediaan (harga_satuan * total_persediaan_triwulan)
-
-    dengan catatan input data saldo_awal_triwulan, total_kredit_triwulan, total_debit_triwulan, total_harga_persediaan berasal dari tabel detail_monitoring_barang yaitu (saldo, kredit, debit)
-
-
-- ubah warna tombol kembali pada keranjang jadi putih
-- hilangkan icon pada isi kolom keterangan detail_monitoring_barang
 - analisa file yang tidak digunakan
 - buat fitur ekspor data triwulan
-- buat kartu statistik harga pengeluaran/debit per triwulan
-- perbaiki beberapa pesan alert
-- hilangkan +- kuantiti pada keranjang pengambilan dan pengadaan
+- buat kartu statistik
+    jumlah total kredit
+    jumlah total debit
+    jumlah total persediaan
+    jumlah total harga debit
+    jumlah total harga persediaan
+    dan akan otomatis menyesuaikan totalnya sesuai filter per triwulan

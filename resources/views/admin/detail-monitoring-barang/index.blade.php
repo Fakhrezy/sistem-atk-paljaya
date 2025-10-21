@@ -315,12 +315,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <h4 class="mb-2 text-xs font-semibold text-gray-700 uppercase">Uraian</h4>
                                     <div class="space-y-2 text-xs">
                                         @if($item->keterangan)
-                                        <div class="flex items-start space-x-2">
-                                            <i class="mt-0.5 text-blue-500 fas fa-sticky-note"></i>
-                                            <div>
-                                                <span class="font-medium text-gray-600">Keterangan:</span>
-                                                <p class="text-gray-700">{{ $item->keterangan }}</p>
-                                            </div>
+                                        <div>
+                                            <span class="font-medium text-gray-600">Keterangan:</span>
+                                            <p class="text-gray-700">{{ $item->keterangan }}</p>
                                         </div>
                                         @endif
                                         @if($item->bidang)
@@ -447,12 +444,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <!-- Uraian: Keterangan -->
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         @if($item->keterangan)
-                                        <div class="flex items-start space-x-2">
-                                            <i class="mt-1 text-xs text-blue-500 fas fa-sticky-note"></i>
-                                            <span title="{{ $item->keterangan }}">
-                                                {{ Str::limit($item->keterangan, 30) }}
-                                            </span>
-                                        </div>
+                                        <span title="{{ $item->keterangan }}">
+                                            {{ Str::limit($item->keterangan, 30) }}
+                                        </span>
                                         @else
                                         <span class="text-gray-400">-</span>
                                         @endif

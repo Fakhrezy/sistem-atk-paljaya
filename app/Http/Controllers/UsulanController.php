@@ -59,12 +59,12 @@ class UsulanController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Usulan pengadaan berhasil diajukan'
+                    'message' => 'Pengadaan berhasil dicatat'
                 ]);
             }
 
             return redirect()->route('user.usulan.index')
-                        ->with('success', 'Usulan pengadaan berhasil diajukan');
+                        ->with('success', 'Pengadaan berhasil dicatat');
 
         } catch (\Exception $e) {
             DB::rollBack();

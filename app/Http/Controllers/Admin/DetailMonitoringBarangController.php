@@ -132,7 +132,7 @@ class DetailMonitoringBarangController extends Controller
             $this->detailMonitoringService->updateSaldoFromBarang();
             return response()->json([
                 'success' => true,
-                'message' => 'Saldo berhasil diperbarui berdasarkan stok terkini!'
+                'message' => 'Saldo berhasil diperbarui!'
             ]);
         } catch (\Exception $e) {
             return response()->json([

@@ -109,9 +109,9 @@ class MonitoringBarangController extends Controller
             // Generate appropriate success message based on status change
             $message = 'Status berhasil diperbarui!';
             if ($currentStatus === 'diterima' && $newStatus === 'diajukan') {
-                $message = 'Status dikembalikan ke diajukan dan stok berhasil dipulihkan!';
+                $message = 'Status dikembalikan';
             } elseif ($newStatus === 'diterima' && $currentStatus !== 'diterima') {
-                $message = 'Status diterima dan stok berhasil dikurangi!';
+                $message = 'Status diterima';
             }
 
             return response()->json([

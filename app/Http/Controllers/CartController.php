@@ -291,7 +291,7 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Item berhasil dihapus dari daftar pengambilan!'
+            'message' => 'Item berhasil dihapus'
         ]);
     }
 

@@ -128,7 +128,7 @@ class CartController extends Controller
                     'pengambil' => $request->pengambil,
                 ]);
 
-                $message = 'Item berhasil diupdate untuk pengambilan bidang "' . $request->bidang . '"! Total: ' . $newQuantity;
+                $message = 'Item berhasil diupdate untuk pengambilan"' . $request->bidang . '"! Total: ' . $newQuantity;
             } else {
                 // Check total quantity across all bidang for this item
                 $totalExistingQuantity = Cart::where('user_id', auth()->id())
@@ -138,7 +138,7 @@ class CartController extends Controller
                 if ($barang->stok < ($totalExistingQuantity + $request->quantity)) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Total quantity akan melebihi stok. Stok tersedia: ' . $barang->stok . ', sudah di cart (semua bidang): ' . $totalExistingQuantity
+                        'message' => 'Total quantity akan melebihi stok. Stok tersedia: ' . $barang->stok . ', sudah di keranjang: ' . $totalExistingQuantity
                     ]);
                 }
 
@@ -152,7 +152,7 @@ class CartController extends Controller
                     'jenis_barang' => $barang->jenis, // Simpan jenis barang dari tabel barang
                 ]);
 
-                $message = 'Item berhasil ditambahkan untuk pengambilan bidang "' . $request->bidang . '"!';
+                $message = 'Item berhasil ditambahkan untuk pengambilan"' . $request->bidang . '"!';
             }
 
             return response()->json([

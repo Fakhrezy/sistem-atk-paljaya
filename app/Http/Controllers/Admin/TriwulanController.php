@@ -275,7 +275,7 @@ class TriwulanController extends Controller
             $processedPeriods++;
         }
 
-        $message = "Berhasil sinkronkan semua data triwulan. ";
+        $message = "Sinkronisasi berhasil. ";
         $message .= "Periode yang diproses: {$processedPeriods}, ";
         $message .= "Data baru: {$totalSynced}, Data diperbarui: {$totalUpdated}";
 

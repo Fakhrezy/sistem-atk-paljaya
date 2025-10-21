@@ -78,7 +78,7 @@ class UsulanController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Usulan pengadaan berhasil diajukan'
+                'message' => 'pengadaan berhasil dicatat'
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {

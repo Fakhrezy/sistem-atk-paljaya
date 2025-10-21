@@ -116,7 +116,7 @@ class BarangController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('admin.barang')->with('success', 'Barang berhasil diupdate dan saldo monitoring telah diperbarui');
+            return redirect()->route('admin.barang')->with('success', 'Barang berhasil diperbarui');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('admin.barang')->with('error', 'Gagal mengupdate barang: ' . $e->getMessage());
