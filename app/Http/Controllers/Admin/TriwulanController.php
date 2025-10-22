@@ -8,6 +8,8 @@ use App\Models\Barang;
 use App\Models\DetailMonitoringBarang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use OpenSpout\Writer\XLSX\Writer as XLSXWriter;
+use OpenSpout\Common\Entity\Row;
 use Carbon\Carbon;
 
 class TriwulanController extends Controller
@@ -39,7 +41,133 @@ class TriwulanController extends Controller
         // Ambil data untuk filter
         $tahuns = Triwulan::distinct()->orderBy('tahun', 'desc')->pluck('tahun');
 
-        return view('admin.triwulan.index', compact('triwulans', 'tahuns'));
+        // Hitung statistik berdasarkan filter yang sama
+        $statistics = $this->calculateStatistics($request);
+
+        return view('admin.triwulan.index', compact('triwulans', 'tahuns', 'statistics'));
+    }
+
+
+
+    /**
+     * Export triwulan data as Excel (XLSX) with current filters applied
+     */
+    public function exportExcel(Request $request)
+    {
+        $query = Triwulan::query();
+
+        if ($request->has('tahun') && !empty($request->tahun)) {
+            $query->where('tahun', $request->tahun);
+        }
+
+        if ($request->has('triwulan') && !empty($request->triwulan)) {
+            $query->where('triwulan', $request->triwulan);
+        }
+
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('nama_barang', 'LIKE', '%' . $request->search . '%');
+        }
+
+        $filename = 'triwulan_export_' . now()->format('Ymd_His') . '.xlsx';
+
+        $tempFile = storage_path('app/' . $filename);
+        $writer = new XLSXWriter();
+        $writer->openToFile($tempFile);
+
+        // Header row
+        $headerRow = Row::fromValues([
+            'ID',
+            'ID Barang',
+            'Nama Barang',
+            'Satuan',
+            'Harga Satuan',
+            'Tahun',
+            'Triwulan',
+            'Saldo Awal',
+            'Total Kredit',
+            'Total Harga Kredit',
+            'Total Debit',
+            'Total Harga Debit',
+            'Total Persediaan',
+            'Total Harga Persediaan'
+        ]);
+        $writer->addRow($headerRow);
+
+        $query->orderBy('tahun', 'desc')->orderBy('triwulan', 'desc')->orderBy('nama_barang', 'asc')
+            ->chunk(200, function ($rows) use ($writer) {
+                foreach ($rows as $row) {
+                    $writer->addRow(Row::fromValues([
+                        $row->id,
+                        $row->id_barang,
+                        $row->nama_barang,
+                        $row->satuan,
+                        $row->harga_satuan,
+                        $row->tahun,
+                        $row->triwulan,
+                        $row->saldo_awal_triwulan,
+                        $row->total_kredit_triwulan,
+                        $row->total_harga_kredit,
+                        $row->total_debit_triwulan,
+                        $row->total_harga_debit,
+                        $row->total_persediaan_triwulan,
+                        $row->total_harga_persediaan,
+                    ]));
+                }
+            });
+
+        $writer->close();
+
+        return response()->download($tempFile, $filename)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Calculate statistics based on current filters
+     */
+    private function calculateStatistics(Request $request)
+    {
+        $query = Triwulan::query();
+
+        // Apply same filters as index
+        if ($request->has('tahun') && !empty($request->tahun)) {
+            $query->where('tahun', $request->tahun);
+        }
+
+        if ($request->has('triwulan') && !empty($request->triwulan)) {
+            $query->where('triwulan', $request->triwulan);
+        }
+
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('nama_barang', 'LIKE', '%' . $request->search . '%');
+        }
+
+        $result = $query->selectRaw('
+            COALESCE(SUM(total_kredit_triwulan), 0) as total_kredit,
+            COALESCE(SUM(total_debit_triwulan), 0) as total_debit,
+            COALESCE(SUM(total_persediaan_triwulan), 0) as total_persediaan,
+            COALESCE(SUM(total_harga_debit), 0) as total_harga_debit,
+            COALESCE(SUM(total_harga_persediaan), 0) as total_harga_persediaan
+        ')->first();
+
+        return [
+            'total_kredit' => $result->total_kredit ?? 0,
+            'total_debit' => $result->total_debit ?? 0,
+            'total_persediaan' => $result->total_persediaan ?? 0,
+            'total_harga_debit' => $result->total_harga_debit ?? 0,
+            'total_harga_persediaan' => $result->total_harga_persediaan ?? 0,
+        ];
+    }
+
+    /**
+     * API endpoint untuk mendapatkan statistik berdasarkan filter
+     */
+    public function getStatistics(Request $request)
+    {
+        $statistics = $this->calculateStatistics($request);
+
+        return response()->json([
+            'success' => true,
+            'data' => $statistics
+        ]);
     }
 
     public function create()

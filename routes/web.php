@@ -122,6 +122,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/admin/triwulan/generate', 'generateData')->name('admin.triwulan.generate');
         Route::post('/admin/triwulan/sync', 'syncData')->name('admin.triwulan.sync');
         Route::post('/admin/triwulan/syncall', 'syncAllData')->name('admin.triwulan.syncall');
+
+        Route::get('/admin/triwulan/export-excel', 'exportExcel')->name('admin.triwulan.export.excel');
+        Route::get('/admin/triwulan/statistics', 'getStatistics')->name('admin.triwulan.statistics');
         Route::get('/admin/triwulan/{id}/edit', 'edit')->name('admin.triwulan.edit');
         Route::put('/admin/triwulan/{id}', 'update')->name('admin.triwulan.update');
         Route::delete('/admin/triwulan/{id}', 'destroy')->name('admin.triwulan.destroy');
@@ -163,7 +166,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
     // Route :-> keranjang usulan (using User controller with middleware)
     Route::controller(App\Http\Controllers\User\KeranjangUsulanController::class)->group(function () {
-        Route::get('/admin/usulan/cart', 'index')->name('admin.usulan.cart.index');
         Route::post('/admin/usulan/cart/add', 'add')->name('admin.usulan.cart.add');
         Route::post('/admin/usulan/cart/update/{cart}', 'update')->name('admin.usulan.cart.update');
         Route::delete('/admin/usulan/cart/remove/{cart}', 'remove')->name('admin.usulan.cart.remove');

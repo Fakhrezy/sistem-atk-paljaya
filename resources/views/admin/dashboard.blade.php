@@ -283,4 +283,6 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
         });
 </script>
 @endif
+
+
 @endsection
