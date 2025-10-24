@@ -13,10 +13,12 @@ $data = [
 
         ]
     ],
-    'items' => ['buku', 'pena', 'penghapus'],
-
 ];
 
+function logDebugInfo($message){
+    error_log("[DEBUG] $message");
+}
+logDebugInfo("Debug chart data generated");
 
 echo json_encode($data);
 

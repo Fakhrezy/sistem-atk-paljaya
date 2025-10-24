@@ -412,7 +412,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 function updateStatus(id, status) {
     const actionText = status === 'diterima' ? 'menerima' : 'membatalkan penerimaan';
     const confirmTitle = status === 'diterima' ? 'Terima Pengambilan?' : 'Batalkan Penerimaan?';
-    const confirmText = `Apakah Anda yakin ingin ${actionText} pengambilan barang ini?`;
+    const confirmText = `Yakin ingin ${actionText} pengambilan barang ini?`;
     const confirmButtonText = status === 'diterima' ? '<i class="mr-2 fas fa-check"></i>Terima!' : '<i class="mr-2 fas fa-check"></i>Ya, Batalkan!';
     const confirmButtonColor = status === 'diterima' ? '#16a34a' : '#f59e0b';
 
@@ -494,7 +494,7 @@ function deleteMonitoring(id) {
         showCancelButton: true,
         confirmButtonColor: '#dc2626',
         cancelButtonColor: '#6b7280',
-        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Hapus!',
+        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Hapus',
         cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
         reverseButtons: true
     }).then((result) => {

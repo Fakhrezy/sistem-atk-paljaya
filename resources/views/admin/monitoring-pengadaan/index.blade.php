@@ -83,10 +83,10 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     class="w-12 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                     No</th>
                                 <th
-                                    class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-24">
+                                    class="w-24 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                     Tanggal</th>
                                 <th
-                                    class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-48">
+                                    class="w-48 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                     Barang</th>
                                 <th
                                     class="w-24 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
@@ -110,7 +110,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                     Keterangan</th>
                                 <th
-                                    class="w-28 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                    class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-28">
                                     Aksi</th>
                             </tr>
                         </thead>
@@ -123,7 +123,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 <td class="px-3 py-3 text-sm text-gray-900 border">
                                     {{ $pengadaan->tanggal->format('d/m/Y') }}
                                 </td>
-                                <td class="px-3 py-3 text-sm font-medium text-gray-900 border break-words">
+                                <td class="px-3 py-3 text-sm font-medium text-gray-900 break-words border">
                                     {{ $pengadaan->barang->nama_barang }}
                                 </td>
                                 <td class="px-3 py-3 text-sm text-gray-900 border">
@@ -447,9 +447,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
     window.updateStatus = function(id, status) {
         const confirmTitle = status === 'selesai' ? 'Selesaikan Pengadaan?' : 'Kembalikan ke Proses?';
     const confirmText = status === 'selesai' ?
-        'Yakin ingin menyelesaikan pengadaan ini? Stok dan saldo barang akan ditambahkan sesuai jumlah debit.' :
-        'Yakin ingin mengembalikan status pengadaan ke proses? Stok dan saldo barang akan dikurangi sesuai jumlah debit.';
-    const confirmButtonText = status === 'selesai' ? '<i class="mr-2 fas fa-check"></i>Selesaikan!' : '<i class="mr-2 fas fa-undo"></i>Kembalikan!';
+        'Apakah pengadaan selesai?' :
+        'Kembalikan proses pengadaan?';
+    const confirmButtonText = status === 'selesai' ? '<i class="mr-2 fas fa-check"></i>Selesai' : '<i class="mr-2 fas fa-undo"></i>Kembalikan';
     const confirmButtonColor = status === 'selesai' ? '#16a34a' : '#f59e0b';
 
     Swal.fire({

@@ -82,7 +82,7 @@ class MonitoringPengadaanController extends Controller
             } elseif ($oldStatus === 'selesai' && $newStatus === 'proses') {
                 // When reverting completion, decrease stock and saldo
                 if ($pengadaan->barang->stok < $jumlahPengadaan) {
-                    throw new \Exception('Stok tidak mencukupi untuk pembatalan. Pastikan stok barang cukup.');
+                    throw new \Exception('Stok tidak mencukupi untuk pembatalan.');
                 }
 
                 // Kurangi stok barang
@@ -224,8 +224,7 @@ class MonitoringPengadaanController extends Controller
      */
     private function updateMonitoringBarangSaldo($idBarang, $newStok)
     {
-        // Update saldo untuk monitoring barang dengan status 'diajukan' (belum diterima)
-        // Karena ketika status 'diterima', saldo_akhir sudah dihitung berdasarkan pengambilan
+
         MonitoringBarang::where('id_barang', $idBarang)
             ->where('status', 'diajukan')
             ->update([
