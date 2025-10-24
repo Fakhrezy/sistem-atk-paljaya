@@ -19,7 +19,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                 <!-- Statistics Cards -->
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <!-- Total Barang -->
-                    <div class="overflow-hidden rounded-lg shadow bg-white">
+                    <div class="overflow-hidden bg-white rounded-lg shadow">
                         <div class="p-5">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
@@ -43,7 +43,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     </div>
 
                     <!-- ATK -->
-                    <div class="overflow-hidden rounded-lg shadow bg-white">
+                    <div class="overflow-hidden bg-white rounded-lg shadow">
                         <div class="p-5">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
@@ -67,7 +67,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     </div>
 
                     <!-- Cetak -->
-                    <div class="overflow-hidden rounded-lg shadow bg-white">
+                    <div class="overflow-hidden bg-white rounded-lg shadow">
                         <div class="p-5">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
@@ -91,7 +91,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     </div>
 
                     <!-- Tinta -->
-                    <div class="overflow-hidden rounded-lg shadow bg-white">
+                    <div class="overflow-hidden bg-white rounded-lg shadow">
                         <div class="p-5">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
@@ -120,21 +120,21 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             <div class="mb-6">
                                 <h3 class="text-xl font-semibold text-gray-800">Informasi stok barang terendah
                                 </h3>
-                                {{-- <p class="text-sm text-gray-600 mt-1">10 barang dengan stok terendah yang
+                                {{-- <p class="mt-1 text-sm text-gray-600">10 barang dengan stok terendah yang
                                     perludiperhatikan</p> --}}
 
                                 <!-- Legend -->
                                 {{-- <div class="flex flex-wrap gap-4 mt-3">
                                     <div class="flex items-center">
-                                        <div class="w-4 h-4 bg-green-500 rounded mr-2"></div>
+                                        <div class="w-4 h-4 mr-2 bg-green-500 rounded"></div>
                                         <span class="text-sm text-gray-600">ATK</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <div class="w-4 h-4 bg-yellow-500 rounded mr-2"></div>
+                                        <div class="w-4 h-4 mr-2 bg-yellow-500 rounded"></div>
                                         <span class="text-sm text-gray-600">Cetakan</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <div class="w-4 h-4 rounded mr-2"
+                                        <div class="w-4 h-4 mr-2 rounded"
                                             style="background-color: rgba(147, 51, 234, 0.8);"></div>
                                         <span class="text-sm text-gray-600">Tinta</span>
                                     </div>
@@ -146,7 +146,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 @if($lowStockItems->count() > 0)
                                 <canvas id="lowStockChart" width="400" height="200"></canvas>
                                 @else
-                                <div class="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-center h-64 rounded-lg bg-gray-50">
                                     <div class="text-center">
                                         <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -192,10 +192,10 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
             // Color mapping for different categories
             const getBarColor = (jenis) => {
                 switch(jenis) {
-                    case 'atk': return 'rgba(34, 197, 94, 0.8)'; // Green
-                    case 'cetak': return 'rgba(251, 191, 36, 0.8)'; // Yellow
-                    case 'tinta': return 'rgba(147, 51, 234, 0.8)'; // Purple
-                    default: return 'rgba(156, 163, 175, 0.8)'; // Gray for unknown
+                    case 'atk': return 'rgba(34, 197, 94, 0.8)';
+                    case 'cetak': return 'rgba(251, 191, 36, 0.8)';
+                    case 'tinta': return 'rgba(147, 51, 234, 0.8)';
+                    default: return 'rgba(156, 163, 175, 0.8)';
                 }
             };
 
