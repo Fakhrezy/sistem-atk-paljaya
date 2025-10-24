@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use OpenSpout\Writer\XLSX\Writer as XLSXWriter;
 use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Common\Entity\Style\Border;
+use OpenSpout\Common\Entity\Style\BorderPart;
+use OpenSpout\Common\Entity\Style\Color;
 use Carbon\Carbon;
 
 class TriwulanController extends Controller
@@ -69,15 +73,49 @@ class TriwulanController extends Controller
         }
 
         $filename = 'triwulan_export_' . now()->format('Ymd_His') . '.xlsx';
-
         $tempFile = storage_path('app/' . $filename);
+
         $writer = new XLSXWriter();
         $writer->openToFile($tempFile);
 
-        // Header row
-        $headerRow = Row::fromValues([
-            'ID',
-            'ID Barang',
+        // Create border style
+        $border = new Border(
+            new BorderPart(Border::BOTTOM, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::LEFT, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::RIGHT, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID),
+            new BorderPart(Border::TOP, Color::BLACK, Border::WIDTH_THIN, Border::STYLE_SOLID)
+        );
+
+        // Style for header with border
+        $headerStyle = new Style();
+        $headerStyle->setFontName('Arial')
+            ->setFontSize(11)
+            ->setFontBold()
+            ->setBackgroundColor(Color::rgb(68, 114, 196)) // Blue background (#4472C4)
+            ->setFontColor(Color::WHITE)
+            ->setBorder($border);
+
+        // Style for data rows with border
+        $dataStyle = new Style();
+        $dataStyle->setFontName('Arial')
+            ->setFontSize(11)
+            ->setBorder($border);
+
+
+        // Create title style
+        $titleStyle = (new Style())
+            ->setFontName('Arial')
+            ->setFontSize(14)
+            ->setFontBold()
+            ->setBackgroundColor(Color::rgb(242, 242, 242)) // Light gray background
+            ->setBorder($border);
+
+        // Add title row
+        $writer->addRow(Row::fromValues(['LAPORAN DATA TRIWULAN'], $titleStyle));
+        $writer->addRow(Row::fromValues([''])); // Empty row for spacing
+
+        // Create header values (without ID column and Total Harga Kredit)
+        $headerValues = [
             'Nama Barang',
             'Satuan',
             'Harga Satuan',
@@ -85,20 +123,28 @@ class TriwulanController extends Controller
             'Triwulan',
             'Saldo Awal',
             'Total Kredit',
-            'Total Harga Kredit',
             'Total Debit',
             'Total Harga Debit',
             'Total Persediaan',
             'Total Harga Persediaan'
-        ]);
-        $writer->addRow($headerRow);
+        ];
 
+        // Update header style with gray background
+        $headerStyle = (new Style())
+            ->setFontName('Arial')
+            ->setFontSize(11)
+            ->setFontBold()
+            ->setBackgroundColor(Color::rgb(217, 217, 217)) // Gray background (#D9D9D9)
+            ->setFontColor(Color::BLACK)
+            ->setBorder($border);
+
+        // Create header row with style
+        $headerRow = Row::fromValues($headerValues, $headerStyle);
+        $writer->addRow($headerRow);
         $query->orderBy('tahun', 'desc')->orderBy('triwulan', 'desc')->orderBy('nama_barang', 'asc')
-            ->chunk(200, function ($rows) use ($writer) {
+            ->chunk(200, function ($rows) use ($writer, $dataStyle) {
                 foreach ($rows as $row) {
-                    $writer->addRow(Row::fromValues([
-                        $row->id,
-                        $row->id_barang,
+                    $values = [
                         $row->nama_barang,
                         $row->satuan,
                         $row->harga_satuan,
@@ -106,12 +152,14 @@ class TriwulanController extends Controller
                         $row->triwulan,
                         $row->saldo_awal_triwulan,
                         $row->total_kredit_triwulan,
-                        $row->total_harga_kredit,
                         $row->total_debit_triwulan,
                         $row->total_harga_debit,
                         $row->total_persediaan_triwulan,
                         $row->total_harga_persediaan,
-                    ]));
+                    ];
+
+                    // Create data row using fromValues static method
+                    $writer->addRow(Row::fromValues($values, $dataStyle));
                 }
             });
 
