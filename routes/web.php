@@ -166,6 +166,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
     // Route :-> keranjang usulan (using User controller with middleware)
     Route::controller(App\Http\Controllers\User\KeranjangUsulanController::class)->group(function () {
+        Route::get('/admin/usulan/cart', 'index')->name('admin.usulan.cart.index');
         Route::post('/admin/usulan/cart/add', 'add')->name('admin.usulan.cart.add');
         Route::post('/admin/usulan/cart/update/{cart}', 'update')->name('admin.usulan.cart.update');
         Route::delete('/admin/usulan/cart/remove/{cart}', 'remove')->name('admin.usulan.cart.remove');
