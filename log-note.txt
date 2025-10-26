@@ -1,16 +1,3 @@
 todo-logic-note:
 
-- analisa file yang tidak digunakan
-- buat fitur ekspor data triwulan
-- buat kartu statistik
-    jumlah total kredit
-    jumlah total debit
-    jumlah total persediaan
-    jumlah total harga debit
-    jumlah total harga persediaan
-    dan akan otomatis menyesuaikan totalnya sesuai filter per triwulan
-
-tolong hapus id_barang pada ekspor data dan tambahkan garis pada format tabel yang didownload ekspor data, serta berikan warna pada header dan perbesar ukuran teksnya sebesar 11 dan tipe fontnya arial, apakah bisa?
-
-- memperbaiki filter bidang di monitoring pengambilan
-- perbaiki agar tidak ada minus pada data triwulan dengan sinkronisasi data secara realtime dengan detail monitoring barang
+- aplikasi dalam docker

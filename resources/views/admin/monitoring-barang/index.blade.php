@@ -48,15 +48,11 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             <select id="bidang" name="bidang"
                                 class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Semua Bidang</option>
-                                <option value="umum" {{ request('bidang')=='umum' ? 'selected' : '' }}>Umum</option>
-                                <option value="perencanaan" {{ request('bidang')=='perencanaan' ? 'selected' : '' }}>
-                                    Perencanaan</option>
-                                <option value="keuangan" {{ request('bidang')=='keuangan' ? 'selected' : '' }}>Keuangan
+                                @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
+                                <option value="{{ $key }}" {{ request('bidang')==$key ? 'selected' : '' }}>
+                                    {{ $label }}
                                 </option>
-                                <option value="operasional" {{ request('bidang')=='operasional' ? 'selected' : '' }}>
-                                    Operasional</option>
-                                <option value="lainnya" {{ request('bidang')=='lainnya' ? 'selected' : '' }}>Lainnya
-                                </option>
+                                @endforeach
                             </select>
                         </div>
 

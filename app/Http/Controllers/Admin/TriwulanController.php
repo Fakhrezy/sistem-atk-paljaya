@@ -328,6 +328,8 @@ class TriwulanController extends Controller
             $totals = $this->calculateTriwulanTotals($idBarang, $startDate, $endDate);
 
             // Update atau create data triwulan
+            $persediaan = max(0, $saldoAwal + $totals['total_debit'] - $totals['total_kredit']);
+
             $triwulanData = Triwulan::updateOrCreate(
                 [
                     'id_barang' => $idBarang,
@@ -343,8 +345,8 @@ class TriwulanController extends Controller
                     'total_harga_kredit' => $barang->harga_barang * $totals['total_kredit'],
                     'total_debit_triwulan' => $totals['total_debit'],
                     'total_harga_debit' => $barang->harga_barang * $totals['total_debit'],
-                    'total_persediaan_triwulan' => $saldoAwal + $totals['total_debit'] - $totals['total_kredit'],
-                    'total_harga_persediaan' => $barang->harga_barang * ($saldoAwal + $totals['total_debit'] - $totals['total_kredit'])
+                    'total_persediaan_triwulan' => $persediaan,
+                    'total_harga_persediaan' => $barang->harga_barang * $persediaan
                 ]
             );
 
@@ -421,6 +423,8 @@ class TriwulanController extends Controller
                 $totals = $this->calculateTriwulanTotals($idBarang, $startDate, $endDate);
 
                 // Update atau create data triwulan
+                $persediaan = max(0, $saldoAwal + $totals['total_debit'] - $totals['total_kredit']);
+
                 $triwulanData = Triwulan::updateOrCreate(
                     [
                         'id_barang' => $idBarang,
@@ -436,8 +440,8 @@ class TriwulanController extends Controller
                         'total_harga_kredit' => $barang->harga_barang * $totals['total_kredit'],
                         'total_debit_triwulan' => $totals['total_debit'],
                         'total_harga_debit' => $barang->harga_barang * $totals['total_debit'],
-                        'total_persediaan_triwulan' => $saldoAwal + $totals['total_debit'] - $totals['total_kredit'],
-                        'total_harga_persediaan' => $barang->harga_barang * ($saldoAwal + $totals['total_debit'] - $totals['total_kredit'])
+                        'total_persediaan_triwulan' => $persediaan,
+                        'total_harga_persediaan' => $barang->harga_barang * $persediaan
                     ]
                 );
 
@@ -509,17 +513,28 @@ class TriwulanController extends Controller
 
     private function calculateTriwulanTotals($idBarang, $startDate, $endDate)
     {
+        $saldoAwal = $this->getSaldoAwalTriwulan($idBarang, $startDate);
+
         $result = DetailMonitoringBarang::where('id_barang', $idBarang)
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->selectRaw('
-                                          COALESCE(SUM(kredit), 0) as total_kredit,
-                                          COALESCE(SUM(debit), 0) as total_debit
-                                      ')
+                COALESCE(SUM(kredit), 0) as total_kredit,
+                COALESCE(SUM(debit), 0) as total_debit
+            ')
             ->first();
 
+        $totalKredit = $result->total_kredit ?? 0;
+        $totalDebit = $result->total_debit ?? 0;
+
+        // Pastikan kredit tidak melebihi persediaan yang tersedia
+        $availableStock = $saldoAwal + $totalDebit;
+        if ($totalKredit > $availableStock) {
+            $totalKredit = $availableStock;
+        }
+
         return [
-            'total_kredit' => $result->total_kredit ?? 0,
-            'total_debit' => $result->total_debit ?? 0
+            'total_kredit' => $totalKredit,
+            'total_debit' => $totalDebit
         ];
     }
 

@@ -32,7 +32,10 @@ class MonitoringBarangController extends Controller
 
         // Filter by bidang if provided
         if ($request->bidang) {
-            $query->where('bidang', $request->bidang);
+            // Validasi bidang menggunakan BidangConstants
+            if (\App\Constants\BidangConstants::isValidBidang($request->bidang)) {
+                $query->where('bidang', $request->bidang);
+            }
         }
 
         // Filter by jenis_barang if provided
