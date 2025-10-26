@@ -161,7 +161,7 @@ docker-compose restart
 ```
 
 
-## Admin
+## Login
 
 - **Email:** `admin@paljaya.com`
 - **Password:** `password`
