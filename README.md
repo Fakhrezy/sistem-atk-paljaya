@@ -70,10 +70,16 @@ sudo chmod +x /usr/local/bin/docker-compose
 DB_CONNECTION=mysql
 DB_HOST=db
 DB_PORT=3306
-DB_DATABASE=sistem_atk
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+DB_DATABASE=sistem-atk-paljaya
+DB_USERNAME=root
+DB_PASSWORD=root123
 ```
+
+**Catatan Penting**:
+
+-   Gunakan `DB_HOST=db` karena ini adalah nama service database di docker-compose.yml
+-   Port database di host adalah 3307, tapi di dalam container tetap 3306
+-   Gunakan username `root` karena kita menggunakan root user di MySQL container
 
 ## Menjalankan Aplikasi
 
@@ -109,11 +115,11 @@ php artisan db:seed
 
 ## Mengakses Aplikasi
 
--   Aplikasi dapat diakses di: http://localhost:8000
--   Database dapat diakses di:
-    -   Host: localhost
-    -   Port: 3306
-    -   Username: sesuai DB_USERNAME di .env
+-   Aplikasi dapat diakses di: `http://localhost:8000`
+-   Database dapat diakses melalui phpMyAdmin di: `http://localhost:8080`
+    -   Server: db
+    -   Port: 3306 (di container) / 3307 (di host)
+    -   Username: root
     -   Password: sesuai DB_PASSWORD di .env
 
 ## Perintah Berguna
@@ -152,16 +158,33 @@ docker-compose exec app php artisan optimize:clear
 
 3. Jika database tidak dapat diakses:
 
--   Pastikan service MySQL sudah berjalan
--   Cek kredensial di file .env
--   Coba restart container:
+-   Pastikan service MySQL sudah berjalan dengan `docker-compose ps`
+-   Cek log database dengan `docker-compose logs db`
+-   Pastikan kredensial di file .env sesuai dengan yang disebutkan di atas
+-   Jika database belum terinisialisasi, jalankan:
+    ```powershell
+    docker-compose exec app php artisan migrate:fresh --seed
+    ```
+-   Jika masih bermasalah, coba restart container:
+    ```powershell
+    docker-compose restart
+    ```
 
-```powershell
-docker-compose restart
-```
+4. Jika gambar tidak muncul:
 
+-   Pastikan symlink storage sudah dibuat:
+    ```powershell
+    docker-compose exec app php artisan storage:link
+    ```
+-   Periksa permission folder storage:
+    ```powershell
+    docker-compose exec app chmod -R 775 storage
+    ```
 
-## Login
+## Akun Default
 
-- **Email:** `admin@paljaya.com`
-- **Password:** `password`
+Setelah menjalankan database migration dan seeder, Anda dapat login dengan akun default:
+
+-   **Email:** `admin@paljaya.com`
+-   **Password:** `password`
+
