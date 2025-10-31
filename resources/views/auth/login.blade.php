@@ -44,6 +44,7 @@
             </x-primary-button>
         </div>
 
+        {{-- register line --}}
         {{-- <div class="mt-4 text-center">
             <p class="text-sm text-gray-600">
                 {{ __('Belum memiliki akun?') }}

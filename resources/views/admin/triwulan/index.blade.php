@@ -269,35 +269,35 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     class="w-12 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     No</th>
                                 <th
-                                    class="w-36 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">
+                                    class="w-36 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Periode</th>
                                 <th
-                                    class="w-56 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">
+                                    class="w-56 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Nama Barang</th>
                                 <th
-                                    class="w-20 px-3 py-3 text-xs font-semibold tracking-wider text-left text-gray-900 uppercase border border-gray-300">
+                                    class="w-24 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Satuan</th>
                                 <th
-                                    class="w-24 px-3 py-3 text-xs font-semibold tracking-wider text-right text-gray-900 uppercase border border-gray-300">
+                                    class="w-24 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Harga Satuan</th>
                                 <th
-                                    class="w-20 px-3 py-3 text-xs font-semibold tracking-wider text-right text-gray-900 uppercase border border-gray-300">
+                                    class="w-16 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Saldo Awal</th>
                                 <th
-                                    class="w-20 px-3 py-3 text-xs font-semibold tracking-wider text-right text-gray-900 uppercase border border-gray-300">
+                                    class="w-16 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Total Kredit</th>
                                 <!-- Hidden: Total Harga Kredit -->
                                 <th
-                                    class="w-20 px-3 py-3 text-xs font-semibold tracking-wider text-right text-gray-900 uppercase border border-gray-300">
+                                    class="w-16 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Total Debit</th>
                                 <th
-                                    class="w-32 px-3 py-3 text-xs font-semibold tracking-wider text-right text-gray-900 uppercase border border-gray-300">
+                                    class="w-32 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Total Harga Debit</th>
                                 <th
-                                    class="w-32 px-3 py-3 text-xs font-semibold tracking-wider text-right text-gray-900 uppercase border border-gray-300">
+                                    class="w-32 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Total Persediaan</th>
                                 <th
-                                    class="w-36 px-3 py-3 text-xs font-semibold tracking-wider text-right text-gray-900 uppercase border border-gray-300">
+                                    class="w-36 px-3 py-3 text-xs font-semibold tracking-wider text-center text-gray-900 uppercase border border-gray-300">
                                     Total Harga Persediaan</th>
                                 <!-- Hidden: Aksi column -->
                             </tr>

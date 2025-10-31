@@ -165,12 +165,14 @@ docker-compose exec app php artisan optimize:clear
     ```powershell
     docker-compose exec app php artisan migrate:fresh --seed
     ```
+-   atau buat database sistem-atk-paljaya dan ekspor database dari file SQL
+
 -   Jika masih bermasalah, coba restart container:
     ```powershell
     docker-compose restart
     ```
 
-4. Jika gambar tidak muncul:
+1. Jika gambar tidak muncul:
 
 -   Pastikan symlink storage sudah dibuat:
     ```powershell
@@ -182,8 +184,6 @@ docker-compose exec app php artisan optimize:clear
     ```
 
 ## Akun Default
-
-Setelah menjalankan database migration dan seeder, Anda dapat login dengan akun default:
 
 -   **Email:** `admin@paljaya.com`
 -   **Password:** `password`

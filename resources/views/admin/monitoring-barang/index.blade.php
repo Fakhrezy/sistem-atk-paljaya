@@ -226,61 +226,61 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     </div>
 
                     <!-- Desktop view (hidden on mobile) -->
-                    <div class="hidden md:block">
-                        <table class="w-full table-fixed">
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full">
                             <thead>
                                 <tr class="bg-gray-50">
                                     <th
-                                        class="w-12 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[50px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         No</th>
                                     <th
-                                        class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border w-28">
+                                        class="min-w-[100px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Tanggal</th>
                                     <th
-                                        class="w-48 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[200px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Nama Barang</th>
                                     <th
-                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Jenis</th>
                                     <th
-                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[150px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Pengambil</th>
                                     <th
-                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[150px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Bidang</th>
                                     <th
-                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Saldo</th>
                                     <th
-                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Kredit</th>
                                     <th
-                                        class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[100px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Saldo Akhir</th>
                                     <th
-                                        class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[100px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Status</th>
                                     <th
-                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[150px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Keterangan</th>
                                     <th
-                                        class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[120px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($monitoringBarang as $index => $item)
                                 <tr class="transition-colors duration-200 hover:bg-gray-50">
-                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                    <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         {{ $monitoringBarang->firstItem() + $index }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                    <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 break-words border">
+                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 border">
                                         {{ $item->nama_barang }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-900 border">
+                                    <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         @if($item->jenis_barang)
                                         @switch($item->jenis_barang)
                                         @case('atk')
@@ -299,19 +299,21 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         Tidak diketahui
                                         @endif
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-900 break-words border">
+                                    <td class="px-3 py-3 text-sm text-gray-900 border">
                                         {{ $item->nama_pengambil }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         {{ \App\Constants\BidangConstants::getBidangName($item->bidang) }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-right text-gray-900 border">
+                                    <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         {{ number_format($item->saldo, 0, ',', '.') }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm font-medium text-right text-red-600 border">
+                                    <td
+                                        class="px-3 py-3 text-sm font-medium text-center text-red-600 border whitespace-nowrap">
                                         {{ number_format($item->kredit, 0, ',', '.') }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm font-medium text-right text-gray-900 border">
+                                    <td
+                                        class="px-3 py-3 text-sm font-medium text-center text-gray-900 border whitespace-nowrap">
                                         {{ number_format($item->saldo_akhir, 0, ',', '.') }}
                                     </td>
                                     <td class="px-3 py-3 text-sm border">
