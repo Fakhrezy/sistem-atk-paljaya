@@ -1,190 +1,242 @@
-# Panduan Sistem
+# Sistem Monitoring Barang Habis Pakai (MBP)
 
-## Instalasi Docker
+Sistem informasi untuk monitoring dan manajemen barang habis pakai berbasis web menggunakan Laravel dan Docker.
 
-### Metode 1: Menggunakan Docker Desktop
+## Persyaratan Sistem
 
-1. Download dan install Docker Desktop dari https://www.docker.com/products/docker-desktop
-2. Ikuti panduan instalasi default
-3. Pastikan WSL 2 terinstal jika menggunakan Windows
+-   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+-   [Git](https://git-scm.com/downloads)
+-   [Composer](https://getcomposer.org/download/) (opsional, jika ingin development di lokal)
+-   [PHP 8.2](https://www.php.net/downloads.php) (opsional, jika ingin development di lokal)
 
-### Metode 2: Instalasi Manual via WSL2
+## Langkah Instalasi
 
-1. Install WSL2:
-
-```powershell
-wsl --install
-```
-
-2. Install Ubuntu di WSL2:
-
-```powershell
-wsl --install -d Ubuntu
-```
-
-3. Setelah Ubuntu terinstal, buka Ubuntu terminal dan jalankan:
+### 1. Clone Repository
 
 ```bash
-# Update package list
-sudo apt-get update
+# Clone repository
+git clone https://github.com/Fakhrezy/sistem-mbp-paljaya.git
 
-# Install prerequisites
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
-
-# Add Docker's official GPG key
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-# Set up stable repository
-echo \
-  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-# Install Docker Engine
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-
-# Start Docker service
-sudo service docker start
-
-# Add your user to docker group
-sudo usermod -aG docker $USER
-
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+# Masuk ke direktori project
+cd sistem-mbp-paljaya
 ```
 
-4. Restart terminal Ubuntu atau logout/login kembali
+### 2. Setup Environment
 
-## Persiapan Project
+```bash
+# Copy file environment
+cp .env.example .env
 
-1. Clone repository ini
-2. Copy file `.env.example` menjadi `.env` dan sesuaikan konfigurasi database:
-
-```env
+# Sesuaikan konfigurasi database di file .env:
 DB_CONNECTION=mysql
-DB_HOST=db
+DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=sistem-atk-paljaya
-DB_USERNAME=root
-DB_PASSWORD=root123
+DB_USERNAME=sail
+DB_PASSWORD=password
+
+# Tambahkan konfigurasi port:
+APP_PORT=8081                    # Port untuk aplikasi web
+FORWARD_DB_PORT=3307            # Port untuk MySQL
+FORWARD_PHPMYADMIN_PORT=8082    # Port untuk phpMyAdmin
+
+# Sesuaikan URL aplikasi:
+APP_URL=http://localhost:8081
+
+# Tambahkan konfigurasi user:
+WWWGROUP=1000
+WWWUSER=1000
 ```
 
-**Catatan Penting**:
-
--   Gunakan `DB_HOST=db` karena ini adalah nama service database di docker-compose.yml
--   Port database di host adalah 3307, tapi di dalam container tetap 3306
--   Gunakan username `root` karena kita menggunakan root user di MySQL container
-
-## Menjalankan Aplikasi
-
-1. Build dan jalankan container:
-
-```powershell
-docker-compose up -d --build
-```
-
-2. Tunggu proses selesai, lalu cek status container:
-
-```powershell
-docker-compose ps
-```
-
-3. Masuk ke container app untuk menjalankan perintah artisan:
-
-```powershell
-docker-compose exec app bash
-```
-
-4. Di dalam container, jalankan migrasi database:
+### 3. Install Dependencies
 
 ```bash
-php artisan migrate
+# Install composer dependencies
+composer install
+
+# Install npm dependencies & build assets (opsional)
+npm install
+npm run build
 ```
 
-5. (Opsional) Jalankan seeder jika diperlukan:
+### 4. Setup Docker dan Menjalankan Aplikasi
 
 ```bash
-php artisan db:seed
+# Start Docker Desktop
+# Pastikan Docker Desktop sudah berjalan
+
+# Jalankan container Docker
+docker compose up -d
+
+# Tunggu proses build selesai...
+
+# Jalankan migrasi database
+docker exec atk-app php artisan migrate
+
+# Generate application key
+docker exec atk-app php artisan key:generate
+
+# Create storage link
+docker exec atk-app php artisan storage:link
+
+# Cache configuration
+docker exec atk-app php artisan config:cache
+docker exec atk-app php artisan route:cache
+docker exec atk-app php artisan view:cache
 ```
 
 ## Mengakses Aplikasi
 
--   Aplikasi dapat diakses di: `http://localhost:8000`
--   Database dapat diakses melalui phpMyAdmin di: `http://localhost:8080`
-    -   Server: db
-    -   Port: 3306 (di container) / 3307 (di host)
-    -   Username: root
-    -   Password: sesuai DB_PASSWORD di .env
+Setelah instalasi selesai, Anda dapat mengakses:
 
-## Perintah Berguna
+-   Aplikasi Web: [http://localhost:8081](http://localhost:8081)
+-   phpMyAdmin: [http://localhost:8082](http://localhost:8082)
 
--   Menghentikan container:
+Login default:
 
-```powershell
-docker-compose down
+-   Email: [admin@paljaya.com](mailto:admin@paljaya.com)
+-   Password: password
+
+## Perintah Docker yang Sering Digunakan
+
+```bash
+# Menjalankan container
+docker compose up -d
+
+# Menghentikan container
+docker compose down
+
+# Melihat log aplikasi
+docker logs atk-app
+
+# Menjalankan perintah artisan
+docker exec atk-app php artisan <command>
+
+# Masuk ke shell container
+docker exec -it atk-app bash
 ```
 
--   Melihat log aplikasi:
+## Database Management
 
-```powershell
-docker-compose logs -f
-```
+Anda dapat mengelola database melalui phpMyAdmin:
 
--   Mengakses database MySQL:
+1. Buka [http://localhost:8082](http://localhost:8082)
+2. Login dengan kredensial yang diset di .env:
+    - Server: mysql
+    - Username: sail
+    - Password: password
 
-```powershell
-docker-compose exec db mysql -u root -p
-```
+Database dapat diakses dari host machine dengan:
+
+-   Host: localhost
+-   Port: 3307
+-   Username: sail
+-   Password: password
 
 ## Troubleshooting
 
-1. Jika terjadi masalah permission:
+### 1. Masalah Port
 
-```powershell
-docker-compose exec app chown -R www-data:www-data storage bootstrap/cache
+Jika ada error "port is already allocated" atau port sudah digunakan:
+
+```bash
+# 1. Cek port yang digunakan dan PID prosesnya
+netstat -ano | findstr :8081
+netstat -ano | findstr :8082
+netstat -ano | findstr :3307
+
+# 2. Matikan proses yang menggunakan port (ganti PID dengan nomor yang didapat)
+taskkill /PID <PID> /F
+
+# 3. Atau ubah port di file .env jika ingin menggunakan port lain:
+APP_PORT=8083                    # Untuk aplikasi web (default: 8081)
+FORWARD_DB_PORT=3308            # Untuk MySQL (default: 3307)
+FORWARD_PHPMYADMIN_PORT=8084    # Untuk phpMyAdmin (default: 8082)
+
+# 4. Sesuaikan juga APP_URL jika mengubah APP_PORT:
+APP_URL=http://localhost:8083    # Sesuaikan dengan APP_PORT
+
+# 5. Restart containers setelah mengubah port
+docker compose down
+docker compose up -d
 ```
 
-2. Jika perlu clear cache:
+Tips: Pastikan tidak ada aplikasi lain yang menggunakan port yang sama seperti Laragon, XAMPP, atau instance Laravel lain.
 
-```powershell
-docker-compose exec app php artisan optimize:clear
+### 2. Masalah Permission
+
+Jika ada masalah permission di storage:
+
+```bash
+docker exec atk-app chown -R www-data:www-data storage
+docker exec atk-app chmod -R 775 storage
 ```
 
-3. Jika database tidak dapat diakses:
+### 3. Masalah Cache
 
--   Pastikan service MySQL sudah berjalan dengan `docker-compose ps`
--   Cek log database dengan `docker-compose logs db`
--   Pastikan kredensial di file .env sesuai dengan yang disebutkan di atas
--   Jika database belum terinisialisasi, jalankan:
-    ```powershell
-    docker-compose exec app php artisan migrate:fresh --seed
-    ```
--   atau buat database sistem-atk-paljaya dan ekspor database dari file SQL
+Jika ada masalah cache:
 
--   Jika masih bermasalah, coba restart container:
-    ```powershell
-    docker-compose restart
-    ```
+```bash
+docker exec atk-app php artisan config:clear
+docker exec atk-app php artisan cache:clear
+docker exec atk-app php artisan view:clear
+```
 
-1. Jika gambar tidak muncul:
+### 4. Container Tidak Berjalan
 
--   Pastikan symlink storage sudah dibuat:
-    ```powershell
-    docker-compose exec app php artisan storage:link
-    ```
--   Periksa permission folder storage:
-    ```powershell
-    docker-compose exec app chmod -R 775 storage
-    ```
+```bash
+# Cek status container
+docker ps -a
 
-## Akun Default
+# Cek logs
+docker logs atk-app
+docker logs atk-db
+docker logs atk-phpmyadmin
 
--   **Email:** `admin@paljaya.com`
--   **Password:** `password`
+# Rebuild containers
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+```
 
+## Development Lokal (Tanpa Docker)
+
+Jika ingin development tanpa Docker:
+
+```bash
+# Install dependencies
+composer install
+npm install
+
+# Setup database di .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sistem-atk-paljaya
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Migrasi database
+php artisan migrate
+
+# Run development server
+php artisan serve
+
+# Build assets
+npm run dev
+```
+
+## Struktur Direktori
+
+```plaintext
+sistem-mbp-paljaya/
+├── app/                    # Logic aplikasi
+├── config/                 # Konfigurasi
+├── database/              # Migrasi & seeders
+├── public/                # Asset publik
+├── resources/             # Views & assets
+├── routes/                # Route definition
+├── storage/               # File uploads & logs
+├── tests/                 # Unit/Feature tests
+└── vendor/                # Dependencies
+```
